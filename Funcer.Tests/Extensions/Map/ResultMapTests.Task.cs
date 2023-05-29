@@ -1,16 +1,18 @@
+using Funcer.Generator.Attributes;
 using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Map;
 
-public partial class ResultMapTests
+[ValueTaskVariantGenerator]
+public class ResultMapTests_Task
 {
     public static IEnumerable<object[]> TaskTestData1 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.Success.WithTask.Void, Assertions.ResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.Failure.WithTask.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Success.WithTask.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Failure.WithTask.Void, Assertions.ResultFailure },
+            new object[] { Results.Success.Nothing, Tasks.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Nothing, Tasks.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Tasks.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Tasks.Returns.Failure.Empty, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TaskTestData1))]
@@ -25,10 +27,10 @@ public partial class ResultMapTests
     public static IEnumerable<object[]> TaskTestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.Success.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.Failure.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Success.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Failure.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Nothing, Tasks.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Nothing, Tasks.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Nothing, Tasks.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Nothing, Tasks.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
 
     [Theory, MemberData(nameof(TaskTestData2))]
@@ -48,7 +50,7 @@ public partial class ResultMapTests
         };
 
     [Theory, MemberData(nameof(TaskTestData3))]
-    public async ValueTask Should_Return_Result_When_Map_On_Result_With_Action_Task(Result first, Func<Task> next, Action<Result> validate)
+    public async Task Should_Return_Result_When_Map_On_Result_With_Action_Task(Result first, Func<Task> next, Action<Result> validate)
     {
         var result = await first
             .Map(next);

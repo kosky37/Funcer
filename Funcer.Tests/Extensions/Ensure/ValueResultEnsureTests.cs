@@ -2,7 +2,7 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Ensure;
 
-public partial class ValueResultEnsureTests
+public class ValueResultEnsureTests
 {
     public static IEnumerable<object[]> TestData1 => 
         new List<object[]>
@@ -25,10 +25,10 @@ public partial class ValueResultEnsureTests
     public static IEnumerable<object[]> TestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.True.WithDefault, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.False.WithDefault, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.True.WithDefault, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.False.WithDefault, Assertions.ValueResultFailure }
+            new object[] { Results.Success.Alpha1, Functions.Returns.True, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Alpha1, Functions.Returns.False, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Returns.True, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Returns.False, Assertions.ValueResultFailure }
         };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -43,12 +43,12 @@ public partial class ValueResultEnsureTests
     public static IEnumerable<object[]> TestData3 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Bool.IsTrue, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Alpha2, FunctionsOld.Bool.IsFalse, Values.Alpha2, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Bool.IsFalse, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Success.Alpha2, FunctionsOld.Bool.IsTrue, Values.Alpha2, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Bool.IsTrue, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Bool.IsFalse, Values.Alpha1, Assertions.ValueResultFailure }
+            new object[] { Results.Success.Alpha1, Functions.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Alpha2, Functions.Takes.Alpha.Returns.IsFalse, Values.Alpha2, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Alpha1, Functions.Takes.Alpha.Returns.IsFalse, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Alpha2, Functions.Takes.Alpha.Returns.IsTrue, Values.Alpha2, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Takes.Alpha.Returns.IsFalse, Values.Alpha1, Assertions.ValueResultFailure }
         };
 
     [Theory, MemberData(nameof(TestData3))]

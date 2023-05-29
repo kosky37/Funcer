@@ -2,15 +2,15 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Tap;
 
-public partial class ResultTapTests
+public class ResultTapTests
 {
     public static IEnumerable<object[]> TestData1 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.Success.WithDefault.Void, Assertions.ResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.Failure.WithDefault.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Success.WithDefault.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Failure.WithDefault.Void, Assertions.ResultFailure },
+            new object[] { Results.Success.Nothing, Functions.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Nothing, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData1))]
@@ -25,10 +25,10 @@ public partial class ResultTapTests
     public static IEnumerable<object[]> TestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.Success.WithDefault.Alpha, Assertions.ResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.Failure.WithDefault.Alpha, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Success.WithDefault.Alpha, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Failure.WithDefault.Alpha, Assertions.ResultFailure },
+            new object[] { Results.Success.Nothing, Functions.Returns.Success.Alpha1, Assertions.ResultSuccess },
+            new object[] { Results.Success.Nothing, Functions.Returns.Failure.Alpha, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Success.Alpha1, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Failure.Alpha, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData2))]

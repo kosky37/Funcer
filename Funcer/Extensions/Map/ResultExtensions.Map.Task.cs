@@ -1,29 +1,31 @@
+using Funcer.Generator.Attributes;
+
 namespace Funcer;
 
-public static partial class ResultExtensions
+[ValueTaskVariantGenerator]
+public static class ResultExtensions_Map_Task
 {
-    public static async Task<Result> Map(this Result result, Func<Task<Result>> next)
+    public static async Task<Result> Map(this Task<Result> resultTask, Func<Task<Result>> next)
     {
-        return result.IsFailure ? result : await next();
+        var result = await resultTask;
+        return await result.Map(next);
     }
     
-    public static async Task<Result<TValue>> Map<TValue>(this Result result, Func<Task<Result<TValue>>> next)
+    public static async Task<Result<TValue>> Map<TValue>(this Task<Result> resultTask, Func<Task<Result<TValue>>> next)
     {
-        return result.IsFailure ? Result<TValue>.Failure(result.Errors) : await next();
+        var result = await resultTask;
+        return await result.Map(next);
     }
     
-    public static async Task<Result> Map(this Result result, Func<Task> next)
+    public static async Task<Result> Map(this Task<Result> resultTask, Func<Task> next)
     {
-        if (result.IsSuccess)
-        {
-            await next();
-        }
-        
-        return result;
+        var result = await resultTask;
+        return await result.Map(next);
     }
     
-    public static async Task<Result<TValue>> Map<TValue>(this Result result, Func<Task<TValue>> next)
+    public static async Task<Result<TValue>> Map<TValue>(this Task<Result> resultTask, Func<Task<TValue>> next)
     {
-        return result.IsFailure ? Result<TValue>.Failure(result.Errors) : Result.Success(await next());
+        var result = await resultTask;
+        return await result.Map(next);
     }
 }

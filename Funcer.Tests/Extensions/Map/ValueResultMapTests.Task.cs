@@ -1,16 +1,18 @@
+using Funcer.Generator.Attributes;
 using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Map;
 
-public partial class ValueResultMapTests
+[ValueTaskVariantGenerator]
+public class ValueResultMapTests_Task
 {
     public static IEnumerable<object[]> TaskTestData1 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Success.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Failure.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Success.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Failure.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Alpha1, Tasks.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Alpha1, Tasks.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Tasks.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Tasks.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
 
     [Theory, MemberData(nameof(TaskTestData1))]
@@ -26,10 +28,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TaskTestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Success.WithTask.Void, Assertions.ResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Failure.WithTask.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Success.WithTask.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Failure.WithTask.Void, Assertions.ResultFailure },
+            new object[] { Results.Success.Alpha1, Tasks.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Alpha1, Tasks.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Tasks.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Tasks.Returns.Failure.Empty, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TaskTestData2))]
@@ -45,10 +47,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TaskTestData3 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Beta1, FunctionsOld.Success.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Beta1, FunctionsOld.Failure.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Success.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Failure.WithTask.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Beta1, Tasks.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Beta1, Tasks.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Tasks.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Tasks.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
     
     [Theory, MemberData(nameof(TaskTestData3))]
@@ -64,10 +66,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TaskTestData4 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Beta1, FunctionsOld.Success.WithTask.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Beta1, FunctionsOld.Failure.WithTask.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Success.WithTask.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Failure.WithTask.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Beta1, Tasks.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Beta1, Tasks.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Tasks.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Tasks.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
     
     [Theory, MemberData(nameof(TaskTestData4))]
@@ -83,10 +85,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TaskTestData5 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Success.WithTask.VoidWithAlphaParam, Assertions.ResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Failure.WithTask.VoidWithAlphaParam, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Success.WithTask.VoidWithAlphaParam, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Failure.WithTask.VoidWithAlphaParam, Assertions.ResultFailure },
+            new object[] { Results.Success.Alpha1, Tasks.Takes.Alpha.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Alpha1, Tasks.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Tasks.Takes.Alpha.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Tasks.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
         };
     
     [Theory, MemberData(nameof(TaskTestData5))]

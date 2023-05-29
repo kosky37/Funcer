@@ -2,15 +2,15 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Map;
 
-public partial class ValueResultMapTests
+public class ValueResultMapTests
 {
     public static IEnumerable<object[]> TestData1 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Success.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Failure.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Success.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Failure.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Alpha1, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Alpha1, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData1))]
@@ -26,10 +26,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Success.WithDefault.Void, Assertions.ResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Failure.WithDefault.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Success.WithDefault.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Failure.WithDefault.Void, Assertions.ResultFailure },
+            new object[] { Results.Success.Alpha1, Functions.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Alpha1, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -45,10 +45,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TestData3 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Beta1, FunctionsOld.Success.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Beta1, FunctionsOld.Failure.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Success.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Failure.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Beta1, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Beta1, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
     
     [Theory, MemberData(nameof(TestData3))]
@@ -64,10 +64,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TestData4 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Beta1, FunctionsOld.Success.WithDefault.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Beta1, FunctionsOld.Failure.WithDefault.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Success.WithDefault.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Beta, FunctionsOld.Failure.WithDefault.AlphaWithBetaParam, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Beta1, Functions.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Beta1, Functions.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Functions.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Beta, Functions.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
     
     [Theory, MemberData(nameof(TestData4))]
@@ -83,10 +83,10 @@ public partial class ValueResultMapTests
     public static IEnumerable<object[]> TestData5 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Alpha1, FunctionsOld.Success.WithDefault.VoidWithAlphaParam, Assertions.ResultSuccess },
-            new object[] { Results.Success.Alpha1, FunctionsOld.Failure.WithDefault.VoidWithAlphaParam, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Success.WithDefault.VoidWithAlphaParam, Assertions.ResultFailure },
-            new object[] { Results.Failure.Alpha, FunctionsOld.Failure.WithDefault.VoidWithAlphaParam, Assertions.ResultFailure },
+            new object[] { Results.Success.Alpha1, Functions.Takes.Alpha.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Alpha1, Functions.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Takes.Alpha.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Alpha, Functions.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
         };
     
     [Theory, MemberData(nameof(TestData5))]

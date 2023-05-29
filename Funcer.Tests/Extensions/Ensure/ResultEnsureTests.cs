@@ -2,7 +2,7 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Ensure;
 
-public partial class ResultEnsureTests
+public class ResultEnsureTests
 {
     public static IEnumerable<object[]> TestData1 => 
         new List<object[]>
@@ -25,10 +25,10 @@ public partial class ResultEnsureTests
     public static IEnumerable<object[]> TestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.True.WithDefault, Assertions.ResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.False.WithDefault, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.True.WithDefault, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.False.WithDefault, Assertions.ResultFailure },
+            new object[] { Results.Success.Nothing, Functions.Returns.True, Assertions.ResultSuccess },
+            new object[] { Results.Success.Nothing, Functions.Returns.False, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.True, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.False, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData2))]

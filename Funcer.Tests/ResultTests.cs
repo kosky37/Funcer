@@ -13,6 +13,29 @@ public partial class ResultTests
         _testOutputHelper = testOutputHelper;
     }
 
+    private Task<Result> Abc()
+    {
+        return Task.FromResult(Results.Success.Nothing);
+    }
+    
+    private Result Cde()
+    {
+        return Results.Success.Nothing;
+    }
+    
+    public async Task zzz()
+    {
+        var x = await Result.Create(true, Values.TestError)
+            .Map(Abc)
+            .Map(Abc)
+            .Map(async () =>
+            {
+                await Abc();
+                return Result.Success();
+            })
+            .Map(Cde);
+    }
+
     [Fact]
     public void Should_Return_Success()
     {
@@ -25,7 +48,7 @@ public partial class ResultTests
             .Map(x => { _testOutputHelper.WriteLine(x.ToString()); })
             .Tap(() => { })
             .Map(() => "abc")
-            .Ensure(FunctionsOld.True.WithDefault, Values.TestError)
+            .Ensure(Functions.Returns.True, Values.TestError)
             .Map(x => x + "def")
             .Ensure(x => x is "abcdef", Values.TestError)
             .Tap(() => "abc")

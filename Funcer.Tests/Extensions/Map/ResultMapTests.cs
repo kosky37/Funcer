@@ -2,15 +2,15 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Map;
 
-public partial class ResultMapTests
+public class ResultMapTests
 {
     public static IEnumerable<object[]> TestData1 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.Success.WithDefault.Void, Assertions.ResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.Failure.WithDefault.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Success.WithDefault.Void, Assertions.ResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Failure.WithDefault.Void, Assertions.ResultFailure },
+            new object[] { Results.Success.Nothing, Functions.Returns.Success.Empty, Assertions.ResultSuccess },
+            new object[] { Results.Success.Nothing, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Success.Empty, Assertions.ResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData1))]
@@ -25,10 +25,10 @@ public partial class ResultMapTests
     public static IEnumerable<object[]> TestData2 => 
         new List<object[]>
         {
-            new object[] { Results.Success.Nothing, FunctionsOld.Success.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultSuccess },
-            new object[] { Results.Success.Nothing, FunctionsOld.Failure.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Success.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-            new object[] { Results.Failure.Nothing, FunctionsOld.Failure.WithDefault.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Success.Nothing, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+            new object[] { Results.Success.Nothing, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+            new object[] { Results.Failure.Nothing, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
         };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -36,7 +36,7 @@ public partial class ResultMapTests
     {
         var result = first
             .Map(next);
-
+            
         validate(result, expectedValue);
     }
     
