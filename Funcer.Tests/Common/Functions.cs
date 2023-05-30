@@ -20,7 +20,7 @@ public static class Functions
             public static Func<Result<Types.Beta>> Beta => () => Results.Failure.Beta;
         }
         public static Func<bool> True => () => true;
-        public static Func<bool> False => () => true;
+        public static Func<bool> False => () => false;
     }
     
     public static class Takes
