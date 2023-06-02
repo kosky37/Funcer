@@ -15,7 +15,6 @@
       <Folder Include="Extensions\HandleError\" />
       <Folder Include="Extensions\HandleWarning\" />
       <Folder Include="Extensions\Suppress\" />
-      <Folder Include="Extensions\WarnIf\" />
     </ItemGroup>
 
 </Project>
