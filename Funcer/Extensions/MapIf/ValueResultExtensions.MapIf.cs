@@ -1,7 +1,5 @@
 namespace Funcer;
 
-//TODO: add tests
-//TODO: add Task and ValueTask variants
 public static class ValueResultExtensions_MapIf
 {
     public static Result<TValue> MapIf<TValue>(this Result<TValue> result, bool condition, Func<Result<TValue>> next)

@@ -2,7 +2,6 @@ using Funcer.Generator.Attributes;
 
 namespace Funcer;
 
-//TODO: add tests
 [ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Ensure_Task_Left
 {

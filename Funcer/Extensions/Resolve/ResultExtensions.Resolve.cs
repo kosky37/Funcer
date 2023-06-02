@@ -1,6 +1,5 @@
 namespace Funcer;
 
-//TODO: add tests
 public static class ResultExtensions_Resolve
 {
     public static void Resolve(this Result result, Action onSuccess, Action<IList<Error>> onFailure)

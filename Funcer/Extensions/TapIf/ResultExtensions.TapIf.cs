@@ -1,7 +1,5 @@
 namespace Funcer;
 
-//TODO: add tests
-//TODO: add Task and ValueTask variants
 public static class ResultExtensions_TapIf
 {
     public static Result TapIf(this Result result, bool condition, Func<Result> next)
