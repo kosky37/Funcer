@@ -1,11 +1,12 @@
 using Funcer.Generator.Attributes;
+using Funcer.Messages;
 
 namespace Funcer;
 
 [ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Compel_Task
 {
-    public static async Task<TResult> Compel<TResult>(this Task<Result<TResult>> resultTask)
+    public static async Task<TValue> Compel<TValue>(this Task<Result<TValue>> resultTask)
     {
         var result = await resultTask;
         if (result.IsFailure) throw new FailureResultException(result.Errors);
@@ -13,7 +14,7 @@ public static class ValueResultExtensions_Compel_Task
         return result.Value!;
     }
     
-    public static async Task<TResult> Compel<TResult>(this Task<Result<TResult>> resultTask, Func<IList<Error>, Exception> exception)
+    public static async Task<TValue> Compel<TValue>(this Task<Result<TValue>> resultTask, Func<IReadOnlyCollection<Error>, Exception> exception)
     {
         var result = await resultTask;
         if (result.IsFailure) throw exception(result.Errors);

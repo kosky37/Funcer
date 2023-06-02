@@ -1,3 +1,5 @@
+using Funcer.Messages;
+
 namespace Funcer;
 
 public static partial class ResultExtensions_Ensure

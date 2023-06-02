@@ -7,7 +7,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition) return result;
         var nextResult = next();
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue> TapIf<TValue>(this Result<TValue> result, Func<bool> condition, Func<Result<TValue>> next)
@@ -15,7 +15,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition()) return result;
         var nextResult = next();
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue> TapIf<TValue>(this Result<TValue> result,  Func<TValue, bool> condition, Func<Result<TValue>> next)
@@ -23,7 +23,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition(result.Value!)) return result;
         var nextResult = next();
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue> TapIf<TValue>(this Result<TValue> result, bool condition, Func<TValue, Result> next)
@@ -31,7 +31,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition) return result;
         var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue> TapIf<TValue>(this Result<TValue> result, Func<bool> condition, Func<TValue, Result> next)
@@ -39,7 +39,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition()) return result;
         var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue> TapIf<TValue>(this Result<TValue> result,  Func<TValue, bool> condition, Func<TValue, Result> next)
@@ -47,7 +47,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition(result.Value!)) return result;
         var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue> TapIf<TValue>(this Result<TValue> result, bool condition, Action next)
@@ -97,7 +97,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition) return result;
         var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue1> TapIf<TValue1, TValue2>(this Result<TValue1> result, Func<bool> condition, Func<TValue1, Result<TValue2>> next)
@@ -105,7 +105,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition()) return result;
         var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue1> TapIf<TValue1, TValue2>(this Result<TValue1> result,  Func<TValue1, bool> condition, Func<TValue1, Result<TValue2>> next)
@@ -113,7 +113,7 @@ public static class ValueResultExtensions_TapIf
         if (result.IsFailure || !condition(result.Value!)) return result;
         var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result<TValue1> TapIf<TValue1, TValue2>(this Result<TValue1> result, bool condition, Func<TValue2> next)

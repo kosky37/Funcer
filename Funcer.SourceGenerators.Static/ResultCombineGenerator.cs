@@ -46,7 +46,7 @@ public class ResultCombineGenerator : StaticSourceGenerator
         return $$"""
                     public static Result<({{outputTupleTypes}})> Combine<{{outputTupleTypes}}>({{inputValueResults}}, params Result[] results)
                     {
-                        var errors = new List<IResult> { {{valueResults}} }
+                        var errors = new List<BaseResult> { {{valueResults}} }
                             .Concat(results)
                             .Where(result => result.IsFailure)
                             .SelectMany(result => result.Errors)

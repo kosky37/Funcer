@@ -1,3 +1,5 @@
+using Funcer.Messages;
+
 namespace Funcer;
 
 public partial class Result<TValue>
@@ -7,7 +9,7 @@ public partial class Result<TValue>
         return new Result<TValue>(error);
     }
     
-    public static Result<TValue> Failure(IList<Error> errors)
+    public static Result<TValue> Failure(IEnumerable<Error> errors)
     {
         return new Result<TValue>(errors);
     }

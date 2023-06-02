@@ -1,27 +1,29 @@
+using Funcer.Messages;
+
 namespace Funcer;
 
-public partial class Result<TValue> : IResult
+public partial class Result<TValue> : BaseResult
 {
     private Result(TValue value)
     {
         Value = value;
     }
     
-    private Result(Error error)
-    {
-        IsFailure = true;
-        Errors.Add(error);
-    }
-    
-    private Result(IList<Error> errors)
-    {
-        IsFailure = true;
-        Errors = errors;
-    }
-    
-    public bool IsFailure { get; }
-    public bool IsSuccess => !IsFailure;
+    private Result(Error error) : base(error) { }
 
+    private Result(IEnumerable<Error> errors) : base(errors) { }
+    
     public TValue? Value { get; }
-    public IList<Error> Errors { get; } = new List<Error>();
+    
+    internal Result<TValue> WithWarning(Warning warning)
+    {
+        AddWarning(warning);
+        return this;
+    }
+    
+    internal Result<TValue> WithWarnings(IEnumerable<Warning> warnings)
+    {
+        AddWarnings(warnings);
+        return this;
+    }
 }

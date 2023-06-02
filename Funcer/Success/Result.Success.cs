@@ -6,4 +6,9 @@ public partial class Result
     {
         return new Result();
     }
+    
+    public static Result<TValue> Success<TValue>(TValue value)
+    {
+        return Result<TValue>.Success(value);
+    }
 }

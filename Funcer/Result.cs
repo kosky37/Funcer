@@ -1,23 +1,24 @@
-﻿namespace Funcer;
+﻿using Funcer.Messages;
 
-public partial class Result : IResult
+namespace Funcer;
+
+public partial class Result : BaseResult
 {
     private Result() { }
 
-    private Result(Error error)
-    {
-        IsFailure = true;
-        Errors.Add(error);
-    }
+    private Result(Error error) : base(error) { }
     
-    private Result(IList<Error> errors)
+    private Result(IEnumerable<Error> errors) : base(errors) { }
+    
+    internal Result WithWarning(Warning warning)
     {
-        IsFailure = true;
-        Errors = errors;
+        AddWarning(warning);
+        return this;
     }
 
-    public bool IsFailure { get; }
-    public bool IsSuccess => !IsFailure;
-
-    public IList<Error> Errors { get; } = new List<Error>();
+    internal Result WithWarnings(IEnumerable<Warning> warnings)
+    {
+        AddWarnings(warnings);
+        return this;
+    }
 }

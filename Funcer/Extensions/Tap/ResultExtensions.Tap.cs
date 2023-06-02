@@ -4,7 +4,7 @@ public static class ResultExtensions_Tap
 {
     public static Result Tap(this Result result, Func<Result> next)
     {
-        return result.IsFailure ? result : next();
+        return result.IsFailure ? result : next().WithContext(result);
     }
     
     public static Result Tap<TValue>(this Result result, Func<Result<TValue>> next)
@@ -12,7 +12,7 @@ public static class ResultExtensions_Tap
         if (result.IsFailure) return result;
         var nextResult = next();
         
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : Result.Success();
+        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : Result.Success().WithContext(result).WithContext(nextResult);
     }
     
     public static Result Tap(this Result result, Action next)
@@ -27,6 +27,6 @@ public static class ResultExtensions_Tap
         if (result.IsFailure) return result;
         next();
         
-        return Result.Success();
+        return Result.Success().WithContext(result);
     }
 }

@@ -1,3 +1,5 @@
+using Funcer.Messages;
+
 namespace Funcer.Tests.Common;
 
 public static class Values

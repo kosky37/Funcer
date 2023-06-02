@@ -1,15 +1,17 @@
+using Funcer.Messages;
+
 namespace Funcer;
 
 public static class ValueResultExtensions_Compel
 {
-    public static TResult Compel<TResult>(this Result<TResult> result)
+    public static TValue Compel<TValue>(this Result<TValue> result)
     {
         if (result.IsFailure) throw new FailureResultException(result.Errors);
 
         return result.Value!;
     }
     
-    public static TResult Compel<TResult>(this Result<TResult> result, Func<IList<Error>, Exception> exception)
+    public static TValue Compel<TValue>(this Result<TValue> result, Func<IReadOnlyCollection<Error>, Exception> exception)
     {
         if (result.IsFailure) throw exception(result.Errors);
 

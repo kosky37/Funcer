@@ -1,3 +1,5 @@
+using Funcer.Messages;
+
 namespace Funcer;
 
 public partial class Result<TValue>

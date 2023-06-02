@@ -53,10 +53,12 @@ public partial class ResultTests
             .Ensure(x => x is "abcdef", Values.TestError)
             .Tap(() => "abc")
             .Roll(Result.Success("ghi"))
+            .Side(() => Result.Failure(Values.TestError))
             .Map(x => x.Item1 + x.Item2);
             
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().Be("abcdefghi");
+        result.Warnings.Should().Contain(x => x.Type == Values.TestError.Type);
     }
 }

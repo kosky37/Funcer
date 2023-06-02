@@ -10,7 +10,7 @@ public static class ValueResultExtensions_Tap_Task_Right
         if (result.IsFailure) return result;
         var nextResult = await next();
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static async Task<Result<TValue>> Tap<TValue>(this Result<TValue> result, Func<TValue, Task<Result>> next)
@@ -18,7 +18,7 @@ public static class ValueResultExtensions_Tap_Task_Right
         if (result.IsFailure) return result;
         var nextResult = await next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static async Task<Result<TValue>> Tap<TValue>(this Result<TValue> result, Func<Task> next)
@@ -40,7 +40,7 @@ public static class ValueResultExtensions_Tap_Task_Right
         if (result.IsFailure) return result;
         var nextResult = await next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result;
+        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static async Task<Result<TValue1>> Tap<TValue1, TValue2>(this Result<TValue1> result, Func<Task<TValue2>> next)

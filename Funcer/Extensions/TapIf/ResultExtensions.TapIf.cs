@@ -4,12 +4,18 @@ public static class ResultExtensions_TapIf
 {
     public static Result TapIf(this Result result, bool condition, Func<Result> next)
     {
-        return result.IsFailure || !condition ? result : next();
+        if (result.IsFailure || !condition) return result;
+        var nextResult = next();
+        
+        return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
     }
     
     public static Result TapIf(this Result result, Func<bool> condition, Func<Result> next)
     {
-        return result.IsFailure || !condition() ? result : next();
+        if (result.IsFailure || !condition()) return result;
+        var nextResult = next();
+        
+        return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
     }
     
     public static Result TapIf<TValue>(this Result result, bool condition, Func<Result<TValue>> next)
@@ -17,7 +23,7 @@ public static class ResultExtensions_TapIf
         if (result.IsFailure || !condition) return result;
         var nextResult = next();
         
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : Result.Success();
+        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result TapIf<TValue>(this Result result, Func<bool> condition, Func<Result<TValue>> next)
@@ -25,7 +31,7 @@ public static class ResultExtensions_TapIf
         if (result.IsFailure || !condition()) return result;
         var nextResult = next();
         
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : Result.Success();
+        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
     }
     
     public static Result TapIf(this Result result, bool condition, Action next)
@@ -47,7 +53,7 @@ public static class ResultExtensions_TapIf
         if (result.IsFailure || !condition) return result;
         next();
         
-        return Result.Success();
+        return Result.Success().WithContext(result);
     }
     
     public static Result TapIf<TValue>(this Result result, Func<bool> condition, Func<TValue> next)
@@ -55,6 +61,6 @@ public static class ResultExtensions_TapIf
         if (result.IsFailure || !condition()) return result;
         next();
         
-        return Result.Success();
+        return Result.Success().WithContext(result);
     }
 }

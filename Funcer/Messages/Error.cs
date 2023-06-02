@@ -1,6 +1,6 @@
-namespace Funcer;
+namespace Funcer.Messages;
 
-public class Error
+public class Error : IResultMessage
 {
     public string Type { get; }
     public string Message { get; }
