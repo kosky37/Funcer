@@ -1,8 +1,7 @@
 namespace Funcer;
 
 //TODO: add tests
-//TODO: add Task and ValueTask variants
-public static partial class ResultExtensions
+public static class ResultExtensions_Resolve
 {
     public static void Resolve(this Result result, Action onSuccess, Action<IList<Error>> onFailure)
     {

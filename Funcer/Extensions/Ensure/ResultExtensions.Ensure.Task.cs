@@ -1,12 +1,14 @@
+using Funcer.Generator.Attributes;
+
 namespace Funcer;
 
 //TODO: add tests
-public static partial class ResultExtensions
+[ValueTaskVariantGenerator]
+public static class ResultExtensions_Ensure_Task
 {
-    public static async Task<Result> Ensure(this Result result, Func<Task<bool>> condition, Error error)
+    public static async Task<Result> Ensure(this Task<Result> resultTask, Func<Task<bool>> condition, Error error)
     {
-        return result.IsFailure 
-            ? result 
-            : await condition() ? result : Result.Failure(error);
+        var result = await resultTask;
+        return await result.Ensure(condition, error);
     }
 }

@@ -1,6 +1,6 @@
 namespace Funcer;
 
-public static partial class ResultExtensions
+public static partial class ResultExtensions_Ensure
 {
     public static Result Ensure(this Result result, bool condition, Error error)
     {

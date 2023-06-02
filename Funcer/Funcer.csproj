@@ -11,8 +11,4 @@
         <ProjectReference Include="..\Funcer.SourceGenerators.Static\Funcer.SourceGenerators.Static.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extensions\Compel\" />
-    </ItemGroup>
-
 </Project>

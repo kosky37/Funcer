@@ -1,6 +1,6 @@
 namespace Funcer;
 
-public static partial class ValueResultExtensions
+public static class ValueResultExtensions_Ensure
 {
     public static Result<TValue> Ensure<TValue>(this Result<TValue> result, bool condition, Error error)
     {

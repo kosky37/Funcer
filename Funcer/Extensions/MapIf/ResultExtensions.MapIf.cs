@@ -2,7 +2,7 @@ namespace Funcer;
 
 //TODO: add tests
 //TODO: add Task and ValueTask variants
-public static partial class ResultExtensions
+public static class ResultExtensions_MapIf
 {
     public static Result MapIf(this Result result, bool condition, Func<Result> next)
     {
