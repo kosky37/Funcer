@@ -25,22 +25,22 @@ public static class ResultExtensions_Resolve
         if (result.IsFailure) onFailure();
     }
     
-    public static TValue Resolve<TValue>(this Result result, Func<TValue> onSuccess, Func<IList<Error>, TValue> onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<TReturnValue> onSuccess, Func<IList<Error>, TReturnValue> onFailure)
     {
         return result.IsFailure ? onFailure(result.Errors) : onSuccess();
     }
     
-    public static TValue Resolve<TValue>(this Result result, TValue onSuccess, Func<IList<Error>, TValue> onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, TReturnValue onSuccess, Func<IList<Error>, TReturnValue> onFailure)
     {
         return result.IsFailure ? onFailure(result.Errors) : onSuccess;
     }
     
-    public static TValue Resolve<TValue>(this Result result, TValue onSuccess, TValue onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, TReturnValue onSuccess, TReturnValue onFailure)
     {
         return result.IsFailure ? onFailure : onSuccess;
     }
     
-    public static TValue Resolve<TValue>(this Result result, Func<TValue> onSuccess, TValue onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<TReturnValue> onSuccess, TReturnValue onFailure)
     {
         return result.IsFailure ? onFailure : onSuccess();
     }

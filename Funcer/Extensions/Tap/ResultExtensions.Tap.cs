@@ -1,6 +1,5 @@
 namespace Funcer;
 
-//TODO: add Task and ValueTask variants
 public static class ResultExtensions_Tap
 {
     public static Result Tap(this Result result, Func<Result> next)
