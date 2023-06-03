@@ -24,7 +24,7 @@ public class ValueResultExtensionsRollGenerator : StaticSourceGenerator
                         ? Result.Failure<(TValue1, TValue2)>(result.Errors) 
                         : next.IsFailure 
                             ? Result.Failure<(TValue1, TValue2)>(next.Errors) 
-                            : Result.Success((result.Value!, next.Value!));
+                            : Result.Success((result.Value!, next.Value!)).WithContext(result).WithContext(next);
                     }
                 
                 """);
@@ -60,7 +60,7 @@ public class ValueResultExtensionsRollGenerator : StaticSourceGenerator
                             ? Result.Failure<({{outputTupleTypes}})>(result.Errors) 
                             : next.IsFailure 
                                 ? Result.Failure<({{outputTupleTypes}})>(next.Errors) 
-                                : Result.Success(({{outputTupleValues}}, next.Value!));
+                                : Result.Success(({{outputTupleValues}}, next.Value!)).WithContext(result).WithContext(next);
                     }
 
                 """;
