@@ -36,4 +36,9 @@ public abstract class BaseResult
     {
         _warnings.AddRange(warnings);
     }
+    
+    internal void RemoveWarning(Warning warning)
+    {
+        _warnings.Remove(warning);
+    }
 }

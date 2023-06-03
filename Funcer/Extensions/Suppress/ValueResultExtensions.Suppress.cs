@@ -8,6 +8,6 @@ public static class ValueResultExtensions_Suppress
 
         var remainingErrors = result.Errors.Where(e => !errorTypes.Contains(e.Type)).ToList();
 
-        return remainingErrors.Any() ? Result.Failure(remainingErrors) : Result.Success().WithContext(result);
+        return remainingErrors.Any() ? Result.Failure(remainingErrors) : Result.Success();
     }
 }
