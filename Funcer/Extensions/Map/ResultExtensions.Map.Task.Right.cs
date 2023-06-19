@@ -1,5 +1,3 @@
-using Funcer.Generator.Attributes;
-
 namespace Funcer;
 
 [ValueTaskVariantGenerator]

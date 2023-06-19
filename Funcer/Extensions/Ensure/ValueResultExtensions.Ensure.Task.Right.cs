@@ -1,4 +1,3 @@
-using Funcer.Generator.Attributes;
 using Funcer.Messages;
 
 namespace Funcer;

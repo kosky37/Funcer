@@ -1,0 +1,1 @@
+global using Funcer.Generator.Attributes;
