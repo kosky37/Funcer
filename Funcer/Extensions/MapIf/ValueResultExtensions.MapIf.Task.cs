@@ -66,21 +66,21 @@ public static class ValueResultExtensions_MapIf_Task
         return await result.MapIf(condition, next);
     }
 
-    public static async Task<Result> MapIf<TValue>(this Task<Result<TValue>> resultTask, bool condition, Func<Task<TValue>> next)
+    public static async Task<Result> MapIf<TValue>(this Task<Result<TValue>> resultTask, bool condition, Func<TValue, Task> next)
     {
         var result = await resultTask;
 
         return await result.MapIf(condition, next);
     }
     
-    public static async Task<Result> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<bool> condition, Func<Task<TValue>> next)
+    public static async Task<Result> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<bool> condition, Func<TValue, Task> next)
     {
         var result = await resultTask;
 
         return await result.MapIf(condition, next);
     }
     
-    public static async Task<Result> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, bool> condition, Func<Task<TValue>> next)
+    public static async Task<Result> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, bool> condition, Func<TValue, Task> next)
     {
         var result = await resultTask;
 

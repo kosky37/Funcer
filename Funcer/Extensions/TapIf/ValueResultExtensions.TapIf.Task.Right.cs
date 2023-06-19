@@ -53,7 +53,7 @@ public static class ValueResultExtensions_TapIf_Task_Right
     
     public static async Task<Result<TValue>> TapIf<TValue>(this Result<TValue> result, bool condition, Func<Task> next)
     {
-        if (result.IsSuccess && condition) next();
+        if (result.IsSuccess && condition) await next();
     
         return result;
     }

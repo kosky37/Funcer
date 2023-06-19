@@ -7,7 +7,6 @@ public partial struct Result : IResult
     private readonly List<ErrorMessage> _errors = new();
     private readonly List<WarningMessage> _warnings = new();
     
-    [Obsolete("Don't use the default constructor directly")]
     public Result() { }
 
     private Result(ErrorMessage error)
