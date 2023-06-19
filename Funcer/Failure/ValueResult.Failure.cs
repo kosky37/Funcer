@@ -2,14 +2,14 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-public partial class Result<TValue>
+public partial struct Result<TValue>
 {
-    public static Result<TValue> Failure(Error error)
+    public static Result<TValue> Failure(ErrorMessage error)
     {
         return new Result<TValue>(error);
     }
     
-    public static Result<TValue> Failure(IEnumerable<Error> errors)
+    public static Result<TValue> Failure(IEnumerable<ErrorMessage> errors)
     {
         return new Result<TValue>(errors);
     }

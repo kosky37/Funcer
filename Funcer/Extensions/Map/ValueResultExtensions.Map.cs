@@ -6,7 +6,7 @@ public static class ValueResultExtensions_Map
     {
         return result.IsFailure ? result : next().WithContext(result);
     }
-    
+
     public static Result Map<TValue>(this Result<TValue> result, Func<TValue, Result> next)
     {
         return result.IsFailure ? Result.Failure(result.Errors) : next(result.Value!).WithContext(result);

@@ -4,13 +4,13 @@ namespace Funcer;
 
 public static class ResultExtensions_Resolve
 {
-    public static void Resolve(this Result result, Action onSuccess, Action<IEnumerable<Error>> onFailure)
+    public static void Resolve(this Result result, Action onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
     {
         if (result.IsFailure) onFailure(result.Errors);
         else onSuccess();
     }
     
-    public static void Resolve(this Result result, Action<IEnumerable<Warning>> onSuccess, Action<IEnumerable<Error>> onFailure)
+    public static void Resolve(this Result result, Action<IEnumerable<WarningMessage>> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
     {
         if (result.IsFailure) onFailure(result.Errors);
         else onSuccess(result.Warnings);
@@ -22,23 +22,23 @@ public static class ResultExtensions_Resolve
         else onSuccess();
     }
     
-    public static void Resolve(this Result result, Action<IEnumerable<Warning>> onSuccess, Action onFailure)
+    public static void Resolve(this Result result, Action<IEnumerable<WarningMessage>> onSuccess, Action onFailure)
     {
         if (result.IsFailure) onFailure();
         else onSuccess(result.Warnings);
     }
     
-    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<TReturnValue> onSuccess, Func<IEnumerable<Error>, TReturnValue> onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
     {
         return result.IsFailure ? onFailure(result.Errors) : onSuccess();
     }
     
-    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<IEnumerable<Warning>, TReturnValue> onSuccess, Func<IEnumerable<Error>, TReturnValue> onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<IEnumerable<WarningMessage>, TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
     {
         return result.IsFailure ? onFailure(result.Errors) : onSuccess(result.Warnings);
     }
     
-    public static TReturnValue Resolve<TReturnValue>(this Result result, TReturnValue onSuccess, Func<IEnumerable<Error>, TReturnValue> onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, TReturnValue onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
     {
         return result.IsFailure ? onFailure(result.Errors) : onSuccess;
     }
@@ -53,7 +53,7 @@ public static class ResultExtensions_Resolve
         return result.IsFailure ? onFailure : onSuccess();
     }
     
-    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<IEnumerable<Warning>, TReturnValue> onSuccess, TReturnValue onFailure)
+    public static TReturnValue Resolve<TReturnValue>(this Result result, Func<IEnumerable<WarningMessage>, TReturnValue> onSuccess, TReturnValue onFailure)
     {
         return result.IsFailure ? onFailure : onSuccess(result.Warnings);
     }

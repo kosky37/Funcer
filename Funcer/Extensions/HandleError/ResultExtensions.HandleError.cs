@@ -4,7 +4,7 @@ namespace Funcer;
 
 public static class ResultExtensions_HandleError
 {
-    public static Result HandleError(this Result result, string errorType, Action<IEnumerable<Error>> onError)
+    public static Result HandleError(this Result result, string errorType, Action<IEnumerable<ErrorMessage>> onError)
     {
         if (result.IsSuccess) return result;
         

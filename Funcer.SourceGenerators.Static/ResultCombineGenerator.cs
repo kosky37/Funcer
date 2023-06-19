@@ -16,7 +16,7 @@ public class ResultCombineGenerator : StaticSourceGenerator
         sourceBuilder.Append("""
                 namespace Funcer;
                 
-                public partial class Result
+                public partial struct Result
                 {
                 
                 """);
@@ -44,9 +44,9 @@ public class ResultCombineGenerator : StaticSourceGenerator
         var outputTupleValue = string.Join(", ", Enumerable.Range(1, outputTupleSize).Select(i => $"result{i}.Value!"));
             
         return $$"""
-                    public static Result<({{outputTupleTypes}})> Combine<{{outputTupleTypes}}>({{inputValueResults}}, params Result[] results)
+                    public static Result<({{outputTupleTypes}})> Combine<{{outputTupleTypes}}>({{inputValueResults}}, params IResult[] results)
                     {
-                        var errors = new List<BaseResult> { {{valueResults}} }
+                        var errors = new List<IResult> { {{valueResults}} }
                             .Concat(results)
                             .Where(result => result.IsFailure)
                             .SelectMany(result => result.Errors)

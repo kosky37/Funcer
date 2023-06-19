@@ -10,7 +10,7 @@ public static class ValueResultExtensions_Side
 
         var nextResult = next();
 
-        return nextResult.IsFailure ? result.Warn(nextResult.Errors.Select(error => new Warning(error))) : result.WithContext(nextResult);
+        return nextResult.IsFailure ? result.Warn(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
     }
     
     public static Result<TValue1> Side<TValue1, TValue2>(this Result<TValue1> result, Func<Result<TValue2>> next)
@@ -19,6 +19,6 @@ public static class ValueResultExtensions_Side
         
         var nextResult = next();
 
-        return nextResult.IsFailure ? result.Warn(nextResult.Errors.Select(error => new Warning(error))) : result.WithContext(nextResult);
+        return nextResult.IsFailure ? result.Warn(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
     }
 }

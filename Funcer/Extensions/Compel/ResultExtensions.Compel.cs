@@ -9,7 +9,7 @@ public static class ResultExtensions_Compel
         if (result.IsFailure) throw new FailureResultException(result.Errors);
     }
     
-    public static void Compel(this Result result, Func<IReadOnlyCollection<Error>, Exception> exception)
+    public static void Compel(this Result result, Func<IReadOnlyCollection<ErrorMessage>, Exception> exception)
     {
         if (result.IsFailure) throw exception(result.Errors);
     }

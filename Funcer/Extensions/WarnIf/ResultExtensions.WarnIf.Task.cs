@@ -6,25 +6,25 @@ namespace Funcer;
 [ValueTaskVariantGenerator]
 public static class ResultExtensions_WarnIf_Task
 {
-    public static async Task<Result> WarnIf(this Task<Result> resultTask, bool condition, Warning warning)
+    public static async Task<Result> WarnIf(this Task<Result> resultTask, bool condition, WarningMessage warning)
     {
         var result = await resultTask;
         return result.WarnIf(condition, warning);
     }
     
-    public static async Task<Result> WarnIf(this Task<Result> resultTask, Func<bool> condition, Warning warning)
+    public static async Task<Result> WarnIf(this Task<Result> resultTask, Func<bool> condition, WarningMessage warning)
     {
         var result = await resultTask;
         return result.WarnIf(condition, warning);
     }
     
-    public static async Task<Result> WarnIf(this Task<Result> resultTask, bool condition, IEnumerable<Warning> warnings)
+    public static async Task<Result> WarnIf(this Task<Result> resultTask, bool condition, IEnumerable<WarningMessage> warnings)
     {
         var result = await resultTask;
         return result.WarnIf(condition, warnings);
     }
     
-    public static async Task<Result> WarnIf(this Task<Result> resultTask, Func<bool> condition, IEnumerable<Warning> warnings)
+    public static async Task<Result> WarnIf(this Task<Result> resultTask, Func<bool> condition, IEnumerable<WarningMessage> warnings)
     {
         var result = await resultTask;
         return result.WarnIf(condition, warnings);

@@ -1,6 +1,6 @@
 namespace Funcer;
 
-public partial class Result<TValue>
+public partial struct Result<TValue>
 {
     public static Result<IEnumerable<TValue>> Combine(IEnumerable<Result<TValue>> results)
     {

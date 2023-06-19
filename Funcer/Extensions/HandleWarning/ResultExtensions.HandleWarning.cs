@@ -4,7 +4,7 @@ namespace Funcer;
 
 public static class ResultExtensions_HandleWarning
 {
-    public static Result HandleWarning(this Result result, string errorType, Action<IEnumerable<Warning>> onWarning)
+    public static Result HandleWarning(this Result result, string errorType, Action<IEnumerable<WarningMessage>> onWarning)
     {
         if (result.IsFailure) return result;
         

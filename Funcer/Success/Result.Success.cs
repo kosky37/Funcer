@@ -1,6 +1,6 @@
 namespace Funcer;
 
-public partial class Result
+public partial struct Result
 {
     public static Result Success()
     {

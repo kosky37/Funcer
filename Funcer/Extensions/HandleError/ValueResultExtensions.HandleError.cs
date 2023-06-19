@@ -4,7 +4,7 @@ namespace Funcer;
 
 public static class ValueResultExtensions_HandleError
 {
-    public static Result<TValue> HandleError<TValue>(this Result<TValue> result, string errorType, Func<IEnumerable<Error>, TValue> onError)
+    public static Result<TValue> HandleError<TValue>(this Result<TValue> result, string errorType, Func<IEnumerable<ErrorMessage>, TValue> onError)
     {
         if (result.IsSuccess) return result;
         
@@ -34,7 +34,7 @@ public static class ValueResultExtensions_HandleError
         return remainingErrors.Any() ? Result<TValue>.Failure(remainingErrors) : Result.Success(newValue);
     }
     
-    public static Result HandleError<TValue>(this Result<TValue> result, string errorType, Action<IEnumerable<Error>> onError)
+    public static Result HandleError<TValue>(this Result<TValue> result, string errorType, Action<IEnumerable<ErrorMessage>> onError)
     {
         if (result.IsSuccess) return Result.Success().WithContext(result);
         
