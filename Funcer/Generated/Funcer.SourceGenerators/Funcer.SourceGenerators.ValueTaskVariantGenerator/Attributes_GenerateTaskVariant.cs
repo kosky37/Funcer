@@ -1,4 +1,4 @@
 ﻿namespace Funcer.Generator.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class ValueTaskVariantGeneratorAttribute : Attribute { }
+internal class ValueTaskVariantGeneratorAttribute : Attribute { }
