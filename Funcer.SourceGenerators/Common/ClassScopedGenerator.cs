@@ -24,7 +24,7 @@ public abstract class ClassScopedGenerator : ISourceGenerator
                 namespace Funcer.Generator.Attributes;
                 
                 [AttributeUsage(AttributeTargets.Class)]
-                public class {{AttributeName}}Attribute : Attribute { }
+                internal class {{AttributeName}}Attribute : Attribute { }
                 """, Encoding.UTF8));
         });
         
