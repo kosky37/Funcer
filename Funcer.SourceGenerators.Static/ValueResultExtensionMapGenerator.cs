@@ -49,7 +49,7 @@ public class ValueResultExtensionMapGenerator : StaticSourceGenerator
 
                     public static Result<TValue> Map<{{inputTypes}}, TValue>(this Result<({{inputTypes}})> result, Func<{{inputTypes}}, TValue> next)
                     {
-                        return result.IsFailure ? Result<TValue>.Failure(result.Errors) : Result.Success(next({{outputValues}}));
+                        return result.IsFailure ? Result<TValue>.Failure(result.Errors) : Result.Success(next({{outputValues}})).WithContext(result);
                     }
 
                 """;

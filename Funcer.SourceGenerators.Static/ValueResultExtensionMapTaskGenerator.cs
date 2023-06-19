@@ -78,7 +78,7 @@ public class ValueResultExtensionMapTaskGenerator : StaticSourceGenerator
 
                     public static async Task<Result<TValue>> Map<{{inputTypes}}, TValue>(this Result<({{inputTypes}})> result, Func<{{inputTypes}}, Task<TValue>> next)
                     {
-                        return result.IsFailure ? Result<TValue>.Failure(result.Errors) : Result.Success(await next({{outputValues}}));
+                        return result.IsFailure ? Result<TValue>.Failure(result.Errors) : Result.Success(await next({{outputValues}})).WithContext(result);
                     }
 
                 """;
