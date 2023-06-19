@@ -7,11 +7,7 @@ public partial struct Result<TValue> : IResult
     private readonly List<ErrorMessage> _errors = new();
     private readonly List<WarningMessage> _warnings = new();
 
-    [Obsolete("Don't use the default constructor directly")]
-    public Result()
-    {
-        Value = default;
-    }
+    public Result() { }
     
     private Result(TValue value)
     {
@@ -23,16 +19,16 @@ public partial struct Result<TValue> : IResult
         IsFailure = true;
         _errors.Add(error);
     }
-    
+
     private Result(IEnumerable<ErrorMessage> errors)
     {
         IsFailure = true;
         _errors = errors.ToList();
     }
 
-    public bool IsFailure { get; }
+    public bool IsFailure { get; } = false;
     public bool IsSuccess => !IsFailure;
-    public TValue? Value { get; }
+    public TValue? Value { get; } = default;
 
     public IReadOnlyCollection<ErrorMessage> Errors => _errors.AsReadOnly();
     public IReadOnlyCollection<WarningMessage> Warnings => _warnings.AsReadOnly();

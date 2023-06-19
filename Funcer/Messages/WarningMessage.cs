@@ -28,5 +28,5 @@ public struct WarningMessage
     public string Type { get; }
     public string Message { get; }
     public MessageType MessageType { get; }
-    public string? Field { get; }
+    public string? Field { get; } = default;
 }

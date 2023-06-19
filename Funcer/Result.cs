@@ -6,7 +6,7 @@ public partial struct Result : IResult
 {
     private readonly List<ErrorMessage> _errors = new();
     private readonly List<WarningMessage> _warnings = new();
-    
+
     public Result() { }
 
     private Result(ErrorMessage error)
@@ -21,7 +21,7 @@ public partial struct Result : IResult
         _errors = errors.ToList();
     }
 
-    public bool IsFailure { get; }
+    public bool IsFailure { get; } = false;
     public bool IsSuccess => !IsFailure;
 
     public IReadOnlyCollection<ErrorMessage> Errors => _errors.AsReadOnly();
