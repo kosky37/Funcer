@@ -2,7 +2,6 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ResultExtensions_Side_Task_Right
 {
     public static async Task<Result> Side(this Result result, Func<Task<Result>> next)

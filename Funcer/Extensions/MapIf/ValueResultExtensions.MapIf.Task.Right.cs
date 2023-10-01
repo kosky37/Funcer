@@ -1,6 +1,5 @@
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ValueResultExtensions_MapIf_Task_Right
 {
     public static async Task<Result<TValue>> MapIf<TValue>(this Result<TValue> result, bool condition, Func<Task<Result<TValue>>> next)

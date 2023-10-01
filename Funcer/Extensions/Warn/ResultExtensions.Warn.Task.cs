@@ -2,7 +2,6 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ResultExtensions_Warn_Task
 {
     public static async Task<Result> Warn(this Task<Result> resultTask, WarningMessage warning)

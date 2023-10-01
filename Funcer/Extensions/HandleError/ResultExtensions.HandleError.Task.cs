@@ -2,7 +2,6 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ResultExtensions_HandleError_Task
 {
     public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)

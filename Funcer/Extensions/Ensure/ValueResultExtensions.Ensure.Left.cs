@@ -2,7 +2,6 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Ensure_Task_Left
 {
     public static async Task<Result<TValue>> Ensure<TValue>(this Task<Result<TValue>> resultTask, Func<bool> condition, ErrorMessage error)

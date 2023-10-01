@@ -2,82 +2,89 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Resolve_Task_Right
 {
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
     {
-        if (result.IsFailure) await onFailure(result.Errors);
-        else await onSuccess(result.Value!);
+        if (result.IsFailure) return onFailure(result.Errors);
+        else return onSuccess(result.Value!);
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
     {
         if (result.IsFailure) onFailure(result.Errors);
-        else await onSuccess(result.Value!);
+        else return onSuccess(result.Value!);
+        return Task.CompletedTask;
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Action<TValue> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Action<TValue> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
     {
-        if (result.IsFailure) await onFailure(result.Errors);
+        if (result.IsFailure) return onFailure(result.Errors);
         else onSuccess(result.Value!);
+        return Task.CompletedTask;
     }
     
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
     {
-        if (result.IsFailure) await onFailure(result.Errors);
-        else await onSuccess(result.Value!, result.Warnings);
+        if (result.IsFailure) return onFailure(result.Errors);
+        else return onSuccess(result.Value!, result.Warnings);
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
     {
         if (result.IsFailure) onFailure(result.Errors);
-        else await onSuccess(result.Value!, result.Warnings);
+        else return onSuccess(result.Value!, result.Warnings);
+        return Task.CompletedTask;
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Action<TValue, IEnumerable<WarningMessage>> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Action<TValue, IEnumerable<WarningMessage>> onSuccess, Func<IEnumerable<ErrorMessage>, Task> onFailure)
     {
-        if (result.IsFailure) await onFailure(result.Errors);
+        if (result.IsFailure) return onFailure(result.Errors);
         else onSuccess(result.Value!, result.Warnings);
+        return Task.CompletedTask;
     }
     
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Func<Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Func<Task> onFailure)
     {
-        if (result.IsFailure) await onFailure();
-        else await onSuccess(result.Value!);
+        if (result.IsFailure) return onFailure();
+        else return onSuccess(result.Value!);
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Action onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, Task> onSuccess, Action onFailure)
     {
         if (result.IsFailure) onFailure();
-        else await onSuccess(result.Value!);
+        else return onSuccess(result.Value!);
+        return Task.CompletedTask;
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Action<TValue> onSuccess, Func<Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Action<TValue> onSuccess, Func<Task> onFailure)
     {
-        if (result.IsFailure) await onFailure();
+        if (result.IsFailure) return onFailure();
         else onSuccess(result.Value!);
+        return Task.CompletedTask;
     }
     
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Func<Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Func<Task> onFailure)
     {
-        if (result.IsFailure) await onFailure();
-        else await onSuccess(result.Value!, result.Warnings);
+        if (result.IsFailure) return onFailure();
+        else return onSuccess(result.Value!, result.Warnings);
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Action onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Func<TValue, IEnumerable<WarningMessage>, Task> onSuccess, Action onFailure)
     {
         if (result.IsFailure) onFailure();
-        else await onSuccess(result.Value!, result.Warnings);
+        else return onSuccess(result.Value!, result.Warnings);
+        return Task.CompletedTask;
     }
     
-    public static async Task Resolve<TValue>(this Result<TValue> result, Action<TValue, IEnumerable<WarningMessage>> onSuccess, Func<Task> onFailure)
+    public static Task Resolve<TValue>(this Result<TValue> result, Action<TValue, IEnumerable<WarningMessage>> onSuccess, Func<Task> onFailure)
     {
-        if (result.IsFailure) await onFailure();
+        if (result.IsFailure) return onFailure();
         else onSuccess(result.Value!, result.Warnings);
+        return Task.CompletedTask;
     }
     
 

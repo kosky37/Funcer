@@ -1,8 +1,6 @@
-using Funcer.Generator.Attributes;
 
 namespace Funcer.Tests.Common;
 
-[ValueTaskVariantGenerator]
 public static class Tasks
 {
     public static class Returns

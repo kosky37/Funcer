@@ -1,6 +1,5 @@
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ResultExtensions_Side_Task
 {
     public static async Task<Result> Side(this Task<Result> resultTask, Func<Task<Result>> next)

@@ -1,6 +1,5 @@
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Suppress_Task
 {
     public static async Task<Result> Suppress<TValue>(this Task<Result<TValue>> resultTask, params string[] errorTypes)

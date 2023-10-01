@@ -1,6 +1,5 @@
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ResultExtensions_TapIf_Task_Left
 {
     public static async Task<Result> TapIf(this Task<Result> resultTask, bool condition, Func<Result> next)

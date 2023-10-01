@@ -1,9 +1,7 @@
-using Funcer.Generator.Attributes;
 using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Create;
 
-[ValueTaskVariantGenerator]
 public class ResultTests_Create_Task
 {
     [Fact]

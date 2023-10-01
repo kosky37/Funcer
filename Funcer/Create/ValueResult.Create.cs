@@ -15,10 +15,4 @@ public partial struct Result<TValue>
         var isSuccess = await func();
         return isSuccess ? Success(value) : Failure(error);
     }
-    
-    public static async ValueTask<Result<TValue>> Create(Func<ValueTask<bool>> func, TValue value, ErrorMessage error)
-    {
-        var isSuccess = await func();
-        return isSuccess ? Success(value) : Failure(error);
-    }
 }

@@ -1,6 +1,5 @@
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Tap_Task
 {
     public static async Task<Result<TValue>> Tap<TValue>(this Task<Result<TValue>> resultTask, Func<Task<Result<TValue>>> next)

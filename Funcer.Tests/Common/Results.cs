@@ -22,26 +22,6 @@ public static class Results
         }
     }
     
-    public static class ValueTasks
-    {
-        public static class Success
-        {
-            public static ValueTask<Result> Nothing => ValueTask.FromResult(Result.Success());
-            public static ValueTask<Result<Types.Alpha>> Alpha1 => ValueTask.FromResult(Result.Success(Values.Alpha1));
-            public static ValueTask<Result<Types.Alpha>> Alpha2 => ValueTask.FromResult(Result.Success(Values.Alpha2));
-            public static ValueTask<Result<Types.Beta>> Beta1 => ValueTask.FromResult(Result.Success(Values.Beta1));
-            public static ValueTask<Result<Types.Beta>> Beta2 => ValueTask.FromResult(Result.Success(Values.Beta2));
-            public static ValueTask<Result<Types.Beta>> Beta3 => ValueTask.FromResult(Result.Success(Values.Beta3));
-        }
-    
-        public static class Failure
-        {
-            public static ValueTask<Result> Nothing => ValueTask.FromResult(Result.Failure(Values.TestError));
-            public static ValueTask<Result<Types.Alpha>> Alpha => ValueTask.FromResult(Result.Failure<Types.Alpha>(Values.TestError));
-            public static ValueTask<Result<Types.Beta>> Beta => ValueTask.FromResult(Result.Failure<Types.Beta>(Values.TestError));
-        }
-    }
-    
     public static class Success
     {
         public static Result Nothing => Result.Success();

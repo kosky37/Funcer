@@ -1,6 +1,5 @@
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ResultExtensions_Map_Task
 {
     public static async Task<Result> Map(this Task<Result> resultTask, Func<Task<Result>> next)

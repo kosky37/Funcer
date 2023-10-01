@@ -1,9 +1,7 @@
-using Funcer.Generator.Attributes;
 using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Extensions.Map;
 
-[ValueTaskVariantGenerator]
 public class ValueResultMapTests_Task
 {
     public static IEnumerable<object[]> TestData1 => 

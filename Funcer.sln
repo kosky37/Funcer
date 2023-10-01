@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funcer", "Funcer\Funcer.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funcer.Tests", "Funcer.Tests\Funcer.Tests.csproj", "{E3191A1A-D9B0-4134-95B8-A03DC04D3121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funcer.SourceGenerators", "Funcer.SourceGenerators\Funcer.SourceGenerators.csproj", "{458A9C4C-3C9B-4734-8C9E-913FAE2D0CC1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funcer.SourceGenerators.Static", "Funcer.SourceGenerators.Static\Funcer.SourceGenerators.Static.csproj", "{89AE23EA-986C-42E5-AD56-D7A468A26858}"
 EndProject
 Global
@@ -22,10 +20,6 @@ Global
 		{E3191A1A-D9B0-4134-95B8-A03DC04D3121}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3191A1A-D9B0-4134-95B8-A03DC04D3121}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3191A1A-D9B0-4134-95B8-A03DC04D3121}.Release|Any CPU.Build.0 = Release|Any CPU
-		{458A9C4C-3C9B-4734-8C9E-913FAE2D0CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{458A9C4C-3C9B-4734-8C9E-913FAE2D0CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{458A9C4C-3C9B-4734-8C9E-913FAE2D0CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{458A9C4C-3C9B-4734-8C9E-913FAE2D0CC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89AE23EA-986C-42E5-AD56-D7A468A26858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89AE23EA-986C-42E5-AD56-D7A468A26858}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89AE23EA-986C-42E5-AD56-D7A468A26858}.Release|Any CPU.ActiveCfg = Release|Any CPU

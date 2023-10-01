@@ -18,9 +18,4 @@ public partial struct Result
     {
         return await condition() ? Success() : Failure(error);
     }
-
-    public static async ValueTask<Result> Create(Func<ValueTask<bool>> condition, ErrorMessage error)
-    {
-        return await condition() ? Success() : Failure(error);
-    }
 }

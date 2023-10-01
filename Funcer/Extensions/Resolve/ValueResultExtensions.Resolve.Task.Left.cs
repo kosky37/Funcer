@@ -2,7 +2,6 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-[ValueTaskVariantGenerator]
 public static class ValueResultExtensions_Resolve_Task_Left
 {
     public static async Task Resolve<TValue>(this Task<Result<TValue>> resultTask, Action<TValue> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
