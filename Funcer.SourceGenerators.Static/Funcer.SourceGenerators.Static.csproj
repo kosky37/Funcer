@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <IsRoslynComponent>true</IsRoslynComponent>
         <LangVersion>latest</LangVersion>
+        <Pack>false</Pack>
     </PropertyGroup>
 
     <ItemGroup>

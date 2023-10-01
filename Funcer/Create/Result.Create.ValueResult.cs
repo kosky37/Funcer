@@ -4,6 +4,9 @@ namespace Funcer;
 
 public partial struct Result
 {
+    public static Result<TValue> Create<TValue>(bool condition, TValue value, ErrorMessage error) =>
+        Result<TValue>.Create(condition, value, error);
+    
     public static Result<TValue> Create<TValue>(Func<bool> condition, TValue value, ErrorMessage error) =>
         Result<TValue>.Create(condition, value, error);
 

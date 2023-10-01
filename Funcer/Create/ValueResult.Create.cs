@@ -4,6 +4,11 @@ namespace Funcer;
 
 public partial struct Result<TValue>
 {
+    public static Result<TValue> Create(bool condition, TValue value, ErrorMessage error)
+    {
+        return condition ? Success(value) : Failure(error);
+    }
+    
     public static Result<TValue> Create(Func<bool> func, TValue value, ErrorMessage error)
     {
         var isSuccess = func();
