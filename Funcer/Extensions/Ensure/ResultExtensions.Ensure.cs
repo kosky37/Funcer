@@ -2,7 +2,7 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-public static partial class ResultExtensions_Ensure
+public static class ResultExtensions_Ensure
 {
     public static Result Ensure(this Result result, bool condition, ErrorMessage error)
     {

@@ -3,7 +3,7 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Combine;
 
-public class ValueResultTests
+public class ValueResultTests_Combine
 {
     public static IEnumerable<object[]> TestData =>
         new List<object[]>
@@ -57,12 +57,5 @@ public class ValueResultTests
         result.IsSuccess.Should().Be(isSuccess);
 
         result.Tap(values => values.Intersect(expectedValues).Count().Should().Be(expectedValues.Count));
-    }
-
-    [Fact]
-    public void Should()
-    {
-        var result1 = Results.Success.Beta1;
-        var result2 = Results.Success.Alpha2;
     }
 }

@@ -14,7 +14,7 @@ public class ResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData1))]
-    public void Should_Return_Result_When_Tap_On_Result_With_Result(Result first, Func<Result> next, Action<Result> validate)
+    public void Result_Tap_FuncResult(Result first, Func<Result> next, Action<Result> validate)
     {
         var result = first
             .Tap(next);
@@ -32,7 +32,7 @@ public class ResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData2))]
-    public void Should_Return_Result_When_Tap_On_Result_With_ValueResult(Result first, Func<Result<Types.Alpha>> next, Action<Result> validate)
+    public void Result_Tap_FuncValueResult(Result first, Func<Result<Types.Alpha>> next, Action<Result> validate)
     {
         var result = first
             .Tap(next);
@@ -48,7 +48,7 @@ public class ResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData3))]
-    public void Should_Return_Result_When_Tap_On_Result_With_Action(Result first, Action next, Action<Result> validate)
+    public void Result_Tap_Action(Result first, Action next, Action<Result> validate)
     {
         var result = first
             .Tap(next);
@@ -64,7 +64,7 @@ public class ResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData4))]
-    public void Should_Return_Result_When_Tap_On_Result_With_Function(Result first, Func<Types.Alpha> next, Action<Result> validate)
+    public void Result_Tap_FuncAlpha(Result first, Func<Types.Alpha> next, Action<Result> validate)
     {
         var result = first
             .Tap(next);

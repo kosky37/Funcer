@@ -14,7 +14,7 @@ public class ResultEnsureTests
         };
 
     [Theory, MemberData(nameof(TestData1))]
-    public void Should_Return_Correct_Result_With_Condition(Result first, bool condition, Action<Result> validate)
+    public void Result_Ensure_Condition(Result first, bool condition, Action<Result> validate)
     {
         var result = first
             .Ensure(condition, Values.TestError);
@@ -32,7 +32,7 @@ public class ResultEnsureTests
         };
 
     [Theory, MemberData(nameof(TestData2))]
-    public void Should_Return_Correct_Result_With_Condition_Function(Result first, Func<bool> condition, Action<Result> validate)
+    public void Result_Ensure_ConditionFunction(Result first, Func<bool> condition, Action<Result> validate)
     {
         var result = first
             .Ensure(condition, Values.TestError);

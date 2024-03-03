@@ -14,7 +14,7 @@ public class ValueResultEnsureTests
         };
 
     [Theory, MemberData(nameof(TestData1))]
-    public void Should_Return_Correct_Result_With_Condition(Result<Types.Alpha> first, bool condition, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Ensure_Condition(Result<Types.Alpha> first, bool condition, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Ensure(condition, Values.TestError);
@@ -32,7 +32,7 @@ public class ValueResultEnsureTests
         };
 
     [Theory, MemberData(nameof(TestData2))]
-    public void Should_Return_Correct_Result_With_Condition_Function(Result<Types.Alpha> first, Func<bool> condition, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Ensure_ConditionFunction(Result<Types.Alpha> first, Func<bool> condition, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Ensure(condition, Values.TestError);
@@ -52,7 +52,7 @@ public class ValueResultEnsureTests
         };
 
     [Theory, MemberData(nameof(TestData3))]
-    public void Should_Return_Correct_Result_With_Condition_Based_On_Value(Result<Types.Alpha> first, Func<Types.Alpha, bool> condition, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Ensure_ConditionFunctionWithParameter(Result<Types.Alpha> first, Func<Types.Alpha, bool> condition, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Ensure(condition, Values.TestError);

@@ -3,7 +3,7 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Combine;
 
-public class ResultTests_Combine
+public class IResultTests_Combine
 {
     public static IEnumerable<object[]> TestData =>
         new List<object[]>
@@ -13,8 +13,8 @@ public class ResultTests_Combine
                 new List<IResult>
                 {
                     Results.Success.Nothing,
-                    Results.Success.Nothing,
-                    Results.Success.Nothing
+                    Results.Success.Alpha1,
+                    Results.Success.Beta1
                 },
                 true
             },
@@ -23,8 +23,8 @@ public class ResultTests_Combine
                 new List<IResult>
                 {
                     Results.Failure.Nothing,
-                    Results.Success.Nothing,
-                    Results.Success.Nothing
+                    Results.Success.Alpha1,
+                    Results.Success.Beta1
                 },
                 false
             }
@@ -34,15 +34,15 @@ public class ResultTests_Combine
                 new List<IResult>
                 {
                     Results.Success.Nothing,
-                    Results.Failure.Nothing,
-                    Results.Success.Nothing
+                    Results.Failure.Alpha,
+                    Results.Success.Beta1
                 },
                 false
             }
         };
 
     [Theory, MemberData(nameof(TestData))]
-    public void Should_Return_Combined_Result(List<IResult> results, bool isSuccess)
+    public void Should_Combine_Result_And_ValueResult(List<IResult> results, bool isSuccess)
     {
         var result = Result.Combine(results);
 

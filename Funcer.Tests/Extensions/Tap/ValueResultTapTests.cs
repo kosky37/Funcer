@@ -14,7 +14,7 @@ public class ValueResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData1))]
-    public void Should_Return_First_ValueResult_When_Tap_On_ValueResult_With_ValueResult(Result<Types.Alpha> first, Func<Result<Types.Alpha>> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Tap_ValueResultFunction(Result<Types.Alpha> first, Func<Result<Types.Alpha>> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(next);
@@ -32,7 +32,7 @@ public class ValueResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData2))]
-    public void Should_Return_ValueResult_When_Tap_On_ValueResult_With_Result(Result<Types.Alpha> first, Func<Result> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Tap_ResultFunction(Result<Types.Alpha> first, Func<Result> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(_ => next());
@@ -50,7 +50,7 @@ public class ValueResultTapTests
         };
     
     [Theory, MemberData(nameof(TestData3))]
-    public void Should_Return_First_ValueResult_When_Tap_On_ValueResult_With_Different_ValueResult(Result<Types.Alpha> first, Func<Result<Types.Beta>> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult1_Tap_ValueResult2Function(Result<Types.Alpha> first, Func<Result<Types.Beta>> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(_ => next());
@@ -68,7 +68,7 @@ public class ValueResultTapTests
         };
     
     [Theory, MemberData(nameof(TestData4))]
-    public void Should_Pass_A_Param_And_Return_First_ValueResult_When_Tap_On_ValueResult_With_Different_ValueResult(Result<Types.Alpha> first, Func<Types.Alpha, Result<Types.Beta>> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult1_Tap_ValueResult2Function_Param(Result<Types.Alpha> first, Func<Types.Alpha, Result<Types.Beta>> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(next);
@@ -86,7 +86,7 @@ public class ValueResultTapTests
         };
     
     [Theory, MemberData(nameof(TestData5))]
-    public void Should_Pass_A_Param_And_Return_ValueResult_When_Tap_On_ValueResult_With_Result(Result<Types.Alpha> first, Func<Types.Alpha, Result> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Tap_ValueResultFunction_Param(Result<Types.Alpha> first, Func<Types.Alpha, Result> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(next);
@@ -102,7 +102,7 @@ public class ValueResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData6))]
-    public void Should_Return_ValueResult_When_Tap_On_ValueResult_With_Action(Result<Types.Alpha> first, Action next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Tap_Action(Result<Types.Alpha> first, Action next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(next);
@@ -118,7 +118,7 @@ public class ValueResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData7))]
-    public void Should_Return_ValueResult_When_Tap_On_ValueResult_With_Function(Result<Types.Alpha> first, Func<Types.Beta> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult1_Tap_Value2Function(Result<Types.Alpha> first, Func<Types.Beta> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(next);
@@ -134,7 +134,7 @@ public class ValueResultTapTests
         };
 
     [Theory, MemberData(nameof(TestData8))]
-    public void Should_Pass_A_Param_And_Return_ValueResult_When_Tap_On_ValueResult_With_Action(Result<Types.Alpha> first, Action<Types.Alpha> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    public void ValueResult_Tap_Action_Param(Result<Types.Alpha> first, Action<Types.Alpha> next, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = first
             .Tap(next);
