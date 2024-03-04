@@ -93,8 +93,12 @@ Checks a condition and changes the Result accordingly
 #### Compel
 On Failure, throws an exception
 #### Suppress
-Removes an error
+Removes errors of a specified type
 #### HandleError
+Removes errors of a specified type. Allows a callback. The callback can be used to infer a return value.
 #### HandleWarning
+Removes warnings of a specified type. Allows a callback.
 #### Warn
+Adds warning.
 #### WarnIf
+Adds warning if the condition is met
