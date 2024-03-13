@@ -10,26 +10,21 @@
         <Authors>Piotr Nowakowski</Authors>
         <RepositoryUrl>https://github.com/piotr121993/Funcer</RepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <ProjectReference Include="..\Funcer.SourceGenerators.Static\Funcer.SourceGenerators.Static.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\Funcer.SourceGenerators.Static\Funcer.SourceGenerators.Static.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
         <!-- Exclude the output of source generators from the compilation -->
-        <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />
+        <Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="..\README.md">
-        <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Result\" />
+        <None Include="..\README.md" Pack="true" PackagePath="/"/>
+        <None Include="..\LICENSE" Pack="true" PackagePath=""/>
     </ItemGroup>
 
 </Project>
