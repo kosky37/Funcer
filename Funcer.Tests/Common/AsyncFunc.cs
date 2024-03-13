@@ -2,11 +2,11 @@ namespace Funcer.Tests.Common;
 
 using Result = Funcer.Result;
 
-public static class Tasks
+public static class AsyncFunc
 {
     public static class Returns
     {
-        public static Func<Task> Nothing => () => Task.CompletedTask;
+        public static Func<Task> Void => () => Task.CompletedTask;
         public static Func<Task<Types.Alpha>> Alpha1 => () => Task.FromResult(Values.Alpha1);
         public static Func<Task<Types.Beta>> Beta1 => () => Task.FromResult(Values.Beta1);
         public static class Success

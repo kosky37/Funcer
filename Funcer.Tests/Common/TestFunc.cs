@@ -2,11 +2,11 @@ namespace Funcer.Tests.Common;
 
 using Result = Funcer.Result;
 
-public static class Functions
+public static class TestFunc
 {
     public static class Returns
     {
-        public static Action Nothing => () => { };
+        public static Action Void => () => { };
         public static Func<Types.Alpha> Alpha1 => () => Values.Alpha1;
         public static Func<Types.Beta> Beta1 => () => Values.Beta1;
         public static class Success

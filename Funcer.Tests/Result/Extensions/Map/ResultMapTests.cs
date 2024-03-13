@@ -8,10 +8,10 @@ public class ResultMapTests
 {
     public static TheoryData<Result, Func<Result>, Action<Result>> TestData1 => new()
     {
-        { TestResult.Success, Functions.Returns.Success.Empty, Assertions.ResultSuccess },
-        { TestResult.Success, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
-        { TestResult.Failure, Functions.Returns.Success.Empty, Assertions.ResultFailure },
-        { TestResult.Failure, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Success, TestFunc.Returns.Success.Empty, Assertions.ResultSuccess },
+        { TestResult.Success, TestFunc.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Failure, TestFunc.Returns.Success.Empty, Assertions.ResultFailure },
+        { TestResult.Failure, TestFunc.Returns.Failure.Empty, Assertions.ResultFailure },
     };
 
     [Theory, MemberData(nameof(TestData1))]
@@ -25,10 +25,10 @@ public class ResultMapTests
     
     public static TheoryData<Result, Func<Result<Types.Alpha>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData2 => new()
     {
-        { TestResult.Success, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Success, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Failure, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Failure, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Success, TestFunc.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Success, TestFunc.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Failure, TestFunc.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Failure, TestFunc.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
     };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -42,8 +42,8 @@ public class ResultMapTests
     
     public static TheoryData<Result, Action, Action<Result>> TestData3 => new()
     {
-        { TestResult.Success, Functions.Returns.Nothing, Assertions.ResultSuccess },
-        { TestResult.Failure, Functions.Returns.Nothing, Assertions.ResultFailure }
+        { TestResult.Success, TestFunc.Returns.Void, Assertions.ResultSuccess },
+        { TestResult.Failure, TestFunc.Returns.Void, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData3))]
@@ -57,8 +57,8 @@ public class ResultMapTests
     
     public static TheoryData<Result, Func<Types.Alpha>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData4 => new()
     {
-        { TestResult.Success, Functions.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Failure, Functions.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultFailure }
+        { TestResult.Success, TestFunc.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Failure, TestFunc.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData4))]

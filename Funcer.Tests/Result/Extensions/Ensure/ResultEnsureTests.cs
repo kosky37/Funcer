@@ -25,10 +25,10 @@ public class ResultEnsureTests
     
     public static TheoryData<Result, Func<bool>, Action<Result>> TestData2 => new()
     {
-        { TestResult.Success, Functions.Returns.True, Assertions.ResultSuccess },
-        { TestResult.Success, Functions.Returns.False, Assertions.ResultFailure },
-        { TestResult.Failure, Functions.Returns.True, Assertions.ResultFailure },
-        { TestResult.Failure, Functions.Returns.False, Assertions.ResultFailure }
+        { TestResult.Success, TestFunc.Returns.True, Assertions.ResultSuccess },
+        { TestResult.Success, TestFunc.Returns.False, Assertions.ResultFailure },
+        { TestResult.Failure, TestFunc.Returns.True, Assertions.ResultFailure },
+        { TestResult.Failure, TestFunc.Returns.False, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData2))]

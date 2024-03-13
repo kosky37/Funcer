@@ -25,10 +25,10 @@ public class ResultEnsureTests_Task_Left
 
     public static TheoryData<Task<Result>, Func<bool>, Action<Result>> TestData2 => new()
     {
-        { TestResult.Async.Success, Functions.Returns.True, Assertions.ResultSuccess },
-        { TestResult.Async.Success, Functions.Returns.False, Assertions.ResultFailure },
-        { TestResult.Async.Failure, Functions.Returns.True, Assertions.ResultFailure },
-        { TestResult.Async.Failure, Functions.Returns.False, Assertions.ResultFailure }
+        { TestResult.Async.Success, TestFunc.Returns.True, Assertions.ResultSuccess },
+        { TestResult.Async.Success, TestFunc.Returns.False, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestFunc.Returns.True, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestFunc.Returns.False, Assertions.ResultFailure }
     };
     
     [Theory, MemberData(nameof(TestData2))]

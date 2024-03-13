@@ -8,10 +8,10 @@ public class ResultEnsureTests_Task_Right
 { 
     public static TheoryData<Result, Func<Task<bool>>, Action<Result>> TestData1 => new()
     {
-        { TestResult.Success, Tasks.Returns.True, Assertions.ResultSuccess },
-        { TestResult.Success, Tasks.Returns.False, Assertions.ResultFailure },
-        { TestResult.Failure, Tasks.Returns.True, Assertions.ResultFailure },
-        { TestResult.Failure, Tasks.Returns.False, Assertions.ResultFailure }
+        { TestResult.Success, AsyncFunc.Returns.True, Assertions.ResultSuccess },
+        { TestResult.Success, AsyncFunc.Returns.False, Assertions.ResultFailure },
+        { TestResult.Failure, AsyncFunc.Returns.True, Assertions.ResultFailure },
+        { TestResult.Failure, AsyncFunc.Returns.False, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData1))]

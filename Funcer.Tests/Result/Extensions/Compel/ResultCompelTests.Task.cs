@@ -19,12 +19,12 @@ public class ResultCompelTests_Task
     [Fact]
     public async Task Should_Throw_Custom_When_Result_Is_Failure()
     {
-        await Assert.ThrowsAsync<ArgumentException>(() => TestResult.Async.Failure.Compel(_ => Tasks.Returns.ArgumentException));
+        await Assert.ThrowsAsync<ArgumentException>(() => TestResult.Async.Failure.Compel(_ => AsyncFunc.Returns.ArgumentException));
     }
     
     [Fact]
     public async Task Should_Not_Throw_Custom_When_Result_Is_Success()
     {
-        await TestResult.Async.Success.Compel(_ => Tasks.Returns.ArgumentException);
+        await TestResult.Async.Success.Compel(_ => AsyncFunc.Returns.ArgumentException);
     }
 } 

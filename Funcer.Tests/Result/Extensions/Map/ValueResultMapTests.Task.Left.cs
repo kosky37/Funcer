@@ -8,10 +8,10 @@ public class ValueResultMapTests_Task_Left
 {
     public static TheoryData<Task<Result<Types.Alpha>>, Func<Result<Types.Alpha>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData1 => new()
     {
-        { TestResult.Alpha.Async.Success.V1, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Alpha.Async.Success.V1, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Async.Failure, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Async.Failure, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Async.Failure, TestFunc.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Async.Failure, TestFunc.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
     };
 
     [Theory, MemberData(nameof(TestData1))]
@@ -26,10 +26,10 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Alpha>>, Func<Result>, Action<Result>> TestData2 => new()
     {
-        { TestResult.Alpha.Async.Success.V1, Functions.Returns.Success.Empty, Assertions.ResultSuccess },
-        { TestResult.Alpha.Async.Success.V1, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Async.Failure, Functions.Returns.Success.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Async.Failure, Functions.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Returns.Success.Empty, Assertions.ResultSuccess },
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Alpha.Async.Failure, TestFunc.Returns.Success.Empty, Assertions.ResultFailure },
+        { TestResult.Alpha.Async.Failure, TestFunc.Returns.Failure.Empty, Assertions.ResultFailure },
     };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -44,10 +44,10 @@ public class ValueResultMapTests_Task_Left
 
     public static TheoryData<Task<Result<Types.Beta>>, Func<Result<Types.Alpha>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData3 => new()
     {
-        { TestResult.Beta.Async.Success.V1, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Beta.Async.Success.V1, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Beta.Async.Failure, Functions.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Beta.Async.Failure, Functions.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Beta.Async.Success.V1, TestFunc.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Beta.Async.Success.V1, TestFunc.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Beta.Async.Failure, TestFunc.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Beta.Async.Failure, TestFunc.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
     };
     
     [Theory, MemberData(nameof(TestData3))]
@@ -62,10 +62,10 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Beta>>, Func<Types.Beta, Result<Types.Alpha>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData4 => new()
     {
-        { TestResult.Beta.Async.Success.V1, Functions.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Beta.Async.Success.V1, Functions.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Beta.Async.Failure, Functions.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Beta.Async.Failure, Functions.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Beta.Async.Success.V1, TestFunc.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Beta.Async.Success.V1, TestFunc.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Beta.Async.Failure, TestFunc.Takes.Beta.Returns.Success.Alpha1, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Beta.Async.Failure, TestFunc.Takes.Beta.Returns.Failure.Alpha, Values.Alpha1, Assertions.ValueResultFailure },
     };
     
     [Theory, MemberData(nameof(TestData4))]
@@ -80,10 +80,10 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Alpha>>, Func<Types.Alpha, Result>, Action<Result>> TestData5 => new()
     {
-        { TestResult.Alpha.Async.Success.V1, Functions.Takes.Alpha.Returns.Success.Empty, Assertions.ResultSuccess },
-        { TestResult.Alpha.Async.Success.V1, Functions.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Async.Failure, Functions.Takes.Alpha.Returns.Success.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Async.Failure, Functions.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Takes.Alpha.Returns.Success.Empty, Assertions.ResultSuccess },
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Alpha.Async.Failure, TestFunc.Takes.Alpha.Returns.Success.Empty, Assertions.ResultFailure },
+        { TestResult.Alpha.Async.Failure, TestFunc.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
     };
     
     [Theory, MemberData(nameof(TestData5))]
@@ -98,8 +98,8 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Alpha>>, Action, Action<Result>> TestData6 => new()
     {
-        { TestResult.Alpha.Async.Success.V1, Functions.Returns.Nothing, Assertions.ResultSuccess },
-        { TestResult.Alpha.Async.Failure, Functions.Returns.Nothing, Assertions.ResultFailure }
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Returns.Void, Assertions.ResultSuccess },
+        { TestResult.Alpha.Async.Failure, TestFunc.Returns.Void, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData6))]
@@ -114,8 +114,8 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Alpha>>, Action<Types.Alpha>, Action<Result>> TestData7 => new()
     {
-        { TestResult.Alpha.Async.Success.V1, Functions.Takes.Alpha.Returns.Nothing, Assertions.ResultSuccess },
-        { TestResult.Alpha.Async.Failure, Functions.Takes.Alpha.Returns.Nothing, Assertions.ResultFailure }
+        { TestResult.Alpha.Async.Success.V1, TestFunc.Takes.Alpha.Returns.Nothing, Assertions.ResultSuccess },
+        { TestResult.Alpha.Async.Failure, TestFunc.Takes.Alpha.Returns.Nothing, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData7))]
@@ -130,8 +130,8 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Beta>>, Func<Types.Alpha>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData8 => new()
     {
-        { TestResult.Beta.Async.Success.V1, Functions.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Beta.Async.Failure, Functions.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultFailure }
+        { TestResult.Beta.Async.Success.V1, TestFunc.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Beta.Async.Failure, TestFunc.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData8))]
@@ -146,8 +146,8 @@ public class ValueResultMapTests_Task_Left
     
     public static TheoryData<Task<Result<Types.Beta>>, Func<Types.Beta, Types.Alpha>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData9 => new()
     {
-        { TestResult.Beta.Async.Success.V1, Functions.Takes.Beta.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Beta.Async.Failure, Functions.Takes.Beta.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultFailure }
+        { TestResult.Beta.Async.Success.V1, TestFunc.Takes.Beta.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Beta.Async.Failure, TestFunc.Takes.Beta.Returns.Alpha1, Values.Alpha1, Assertions.ValueResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData9))]

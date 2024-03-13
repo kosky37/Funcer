@@ -8,10 +8,10 @@ public class ResultTapTests_Task
 {
     public static TheoryData<Task<Result>, Func<Task<Result>>, Action<Result>> TestData1 => new()
     {
-        { TestResult.Async.Success, Tasks.Returns.Success.Empty, Assertions.ResultSuccess },
-        { TestResult.Async.Success, Tasks.Returns.Failure.Empty, Assertions.ResultFailure },
-        { TestResult.Async.Failure, Tasks.Returns.Success.Empty, Assertions.ResultFailure },
-        { TestResult.Async.Failure, Tasks.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Async.Success, AsyncFunc.Returns.Success.Empty, Assertions.ResultSuccess },
+        { TestResult.Async.Success, AsyncFunc.Returns.Failure.Empty, Assertions.ResultFailure },
+        { TestResult.Async.Failure, AsyncFunc.Returns.Success.Empty, Assertions.ResultFailure },
+        { TestResult.Async.Failure, AsyncFunc.Returns.Failure.Empty, Assertions.ResultFailure },
     };
 
     [Theory, MemberData(nameof(TestData1))]
@@ -25,10 +25,10 @@ public class ResultTapTests_Task
     
     public static TheoryData<Task<Result>, Func<Task<Result<Types.Alpha>>>, Action<Result>> TestData2 => new()
     {
-        { TestResult.Async.Success, Tasks.Returns.Success.Alpha1, Assertions.ResultSuccess },
-        { TestResult.Async.Success, Tasks.Returns.Failure.Alpha, Assertions.ResultFailure },
-        { TestResult.Async.Failure, Tasks.Returns.Success.Alpha1, Assertions.ResultFailure },
-        { TestResult.Async.Failure, Tasks.Returns.Failure.Alpha, Assertions.ResultFailure },
+        { TestResult.Async.Success, AsyncFunc.Returns.Success.Alpha1, Assertions.ResultSuccess },
+        { TestResult.Async.Success, AsyncFunc.Returns.Failure.Alpha, Assertions.ResultFailure },
+        { TestResult.Async.Failure, AsyncFunc.Returns.Success.Alpha1, Assertions.ResultFailure },
+        { TestResult.Async.Failure, AsyncFunc.Returns.Failure.Alpha, Assertions.ResultFailure },
     };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -42,8 +42,8 @@ public class ResultTapTests_Task
     
     public static TheoryData<Task<Result>, Func<Task>, Action<Result>> TestData3 => new()
     {
-        { TestResult.Async.Success, Tasks.Returns.Nothing, Assertions.ResultSuccess },
-        { TestResult.Async.Failure, Tasks.Returns.Nothing, Assertions.ResultFailure }
+        { TestResult.Async.Success, AsyncFunc.Returns.Void, Assertions.ResultSuccess },
+        { TestResult.Async.Failure, AsyncFunc.Returns.Void, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData3))]
@@ -57,8 +57,8 @@ public class ResultTapTests_Task
     
     public static TheoryData<Task<Result>, Func<Task<Types.Alpha>>, Action<Result>> TestData4 => new()
     {
-        { TestResult.Async.Success, Tasks.Returns.Alpha1, Assertions.ResultSuccess },
-        { TestResult.Async.Failure, Tasks.Returns.Alpha1, Assertions.ResultFailure }
+        { TestResult.Async.Success, AsyncFunc.Returns.Alpha1, Assertions.ResultSuccess },
+        { TestResult.Async.Failure, AsyncFunc.Returns.Alpha1, Assertions.ResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData4))]

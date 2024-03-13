@@ -23,10 +23,10 @@ public class ValueResultEnsureTests
     
     public static TheoryData<Result<Types.Alpha>, Func<bool>, Action<Result<Types.Alpha>, Types.Alpha>> TestData2 => new()
     {
-        { TestResult.Alpha.Success.V1, Functions.Returns.True, Assertions.ValueResultSuccess },
-        { TestResult.Alpha.Success.V1, Functions.Returns.False, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Failure, Functions.Returns.True, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Failure, Functions.Returns.False, Assertions.ValueResultFailure }
+        { TestResult.Alpha.Success.V1, TestFunc.Returns.True, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Success.V1, TestFunc.Returns.False, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, TestFunc.Returns.True, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, TestFunc.Returns.False, Assertions.ValueResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData2))]
@@ -40,12 +40,12 @@ public class ValueResultEnsureTests
     
     public static TheoryData<Result<Types.Alpha>, Func<Types.Alpha, bool>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData3 => new()
     {
-        { TestResult.Alpha.Success.V1, Functions.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultSuccess },
-        { TestResult.Alpha.Success.V2, Functions.Takes.Alpha.Returns.IsFalse, Values.Alpha2, Assertions.ValueResultSuccess },
-        { TestResult.Alpha.Success.V1, Functions.Takes.Alpha.Returns.IsFalse, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Success.V2, Functions.Takes.Alpha.Returns.IsTrue, Values.Alpha2, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Failure, Functions.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultFailure },
-        { TestResult.Alpha.Failure, Functions.Takes.Alpha.Returns.IsFalse, Values.Alpha1, Assertions.ValueResultFailure }
+        { TestResult.Alpha.Success.V1, TestFunc.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Success.V2, TestFunc.Takes.Alpha.Returns.IsFalse, Values.Alpha2, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Success.V1, TestFunc.Takes.Alpha.Returns.IsFalse, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Success.V2, TestFunc.Takes.Alpha.Returns.IsTrue, Values.Alpha2, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, TestFunc.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, TestFunc.Takes.Alpha.Returns.IsFalse, Values.Alpha1, Assertions.ValueResultFailure }
     };
 
     [Theory, MemberData(nameof(TestData3))]

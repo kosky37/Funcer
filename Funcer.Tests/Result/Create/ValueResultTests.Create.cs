@@ -17,7 +17,7 @@ public class ValueResultTests_Create
     [Fact]
     public void Should_Create_Success_From_Function()
     {
-        var result = Result.Create(Functions.Returns.True, Values.Alpha1, Values.TestError);
+        var result = Result.Create(TestFunc.Returns.True, Values.Alpha1, Values.TestError);
 
         result.ShouldBeSuccess(Values.Alpha1);
     }
@@ -33,7 +33,7 @@ public class ValueResultTests_Create
     [Fact]
     public void Should_Create_Failure_From_Function()
     {
-        var result = Result.Create(Functions.Returns.False, Values.Alpha1, Values.TestError);
+        var result = Result.Create(TestFunc.Returns.False, Values.Alpha1, Values.TestError);
 
         result.ShouldBeFailure();
     }
