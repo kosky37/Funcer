@@ -2,7 +2,7 @@ using Funcer.Messages;
 
 namespace Funcer;
 
-public partial struct Result<TValue> : IResult
+public readonly partial struct Result<TValue> : IResult
 {
     private readonly List<ErrorMessage> _errors = new();
     private readonly List<WarningMessage> _warnings = new();

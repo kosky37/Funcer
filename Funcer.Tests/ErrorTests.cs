@@ -1,11 +1,10 @@
-using FluentAssertions;
 using Funcer.Messages;
 
 namespace Funcer.Tests;
 
 public class ErrorTests
 {
-    public static class Errors
+    private static class Errors
     {
         public static ErrorMessage SomethingExploded(DateTime time, string abc) => new(nameof(SomethingExploded), $"{abc} exploded at {time}");
     }

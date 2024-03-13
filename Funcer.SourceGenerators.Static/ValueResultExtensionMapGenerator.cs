@@ -16,7 +16,7 @@ public class ValueResultExtensionMapGenerator : StaticSourceGenerator
         sourceBuilder.Append("""
                 namespace Funcer;
                 
-                public static class ValueResultExtensions_Map_Tuple
+                public static partial class ValueResultExtensions
                 {
                 
                 """);

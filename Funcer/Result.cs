@@ -2,7 +2,7 @@
 
 namespace Funcer;
 
-public partial struct Result : IResult
+public readonly partial struct Result : IResult
 {
     private readonly List<ErrorMessage> _errors = new();
     private readonly List<WarningMessage> _warnings = new();
@@ -26,8 +26,8 @@ public partial struct Result : IResult
 
     public IReadOnlyCollection<ErrorMessage> Errors => _errors.AsReadOnly();
     public IReadOnlyCollection<WarningMessage> Warnings => _warnings.AsReadOnly();
-    
-    internal void AddWarning(WarningMessage warning)
+
+    private void AddWarning(WarningMessage warning)
     {
         _warnings.Add(warning);
     }

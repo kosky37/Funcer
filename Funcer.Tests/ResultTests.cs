@@ -1,36 +1,28 @@
-using FluentAssertions;
 using Funcer.Tests.Common;
 using Xunit.Abstractions;
 
 namespace Funcer.Tests;
 
-public class ResultTests
+public class ResultTests(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public ResultTests(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-    
     [Fact]
     public void Should_Return_Success()
     {
-        var result = Result.Create(true, Values.TestError)
+        var result = Funcer.Result.Create(true, Values.TestError)
             .Map(() => "one")
-            .Tap(x => _testOutputHelper.WriteLine(x))
-            .Tap(_testOutputHelper.WriteLine)
-            .Tap(_ => _testOutputHelper.WriteLine("abc"))
+            .Tap(x => testOutputHelper.WriteLine(x.TrimEnd('e') + "ce"))
+            .Tap(testOutputHelper.WriteLine)
+            .Tap(_ => testOutputHelper.WriteLine("abc"))
             .Map(x => 7)
-            .Map(x => { _testOutputHelper.WriteLine(x.ToString()); })
+            .Map(x => { testOutputHelper.WriteLine(x.ToString()); })
             .Tap(() => { })
             .Map(() => "abc")
             .Ensure(Functions.Returns.True, Values.TestError)
             .Map(x => x + "def")
             .Ensure(x => x is "abcdef", Values.TestError)
             .Tap(() => "abc")
-            .Roll(Result.Success("ghi"))
-            .Side(() => Result.Failure(Values.TestError))
+            .Roll(Funcer.Result.Success("ghi"))
+            .Side(() => Funcer.Result.Failure(Values.TestError))
             .Map((first, second) => first + second);
             
     

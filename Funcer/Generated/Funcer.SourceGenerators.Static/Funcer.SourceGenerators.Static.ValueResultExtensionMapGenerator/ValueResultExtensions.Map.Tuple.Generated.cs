@@ -1,6 +1,6 @@
 ﻿namespace Funcer;
 
-public static class ValueResultExtensions_Map_Tuple
+public static partial class ValueResultExtensions
 {
     public static Result<TValue> Map<TValue1, TValue2, TValue>(this Result<(TValue1, TValue2)> result, Func<TValue1, TValue2, Result<TValue>> next)
     {

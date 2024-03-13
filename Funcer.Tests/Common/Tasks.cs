@@ -1,5 +1,6 @@
-
 namespace Funcer.Tests.Common;
+
+using Result = Funcer.Result;
 
 public static class Tasks
 {
@@ -10,15 +11,15 @@ public static class Tasks
         public static Func<Task<Types.Beta>> Beta1 => () => Task.FromResult(Values.Beta1);
         public static class Success
         {
-            public static Func<Task<Result>> Empty => () => Task.FromResult(Results.Success.Nothing);
-            public static Func<Task<Result<Types.Alpha>>> Alpha1 => () => Task.FromResult(Results.Success.Alpha1);
-            public static Func<Task<Result<Types.Beta>>> Beta1 => () => Task.FromResult(Results.Success.Beta1);
+            public static Func<Task<Result>> Empty => () => Task.FromResult(TestResult.Success);
+            public static Func<Task<Result<Types.Alpha>>> Alpha1 => () => Task.FromResult(TestResult.Alpha.Success.V1);
+            public static Func<Task<Result<Types.Beta>>> Beta1 => () => Task.FromResult(TestResult.Beta.Success.V1);
         }
         public static class Failure
         {
-            public static Func<Task<Result>> Empty => () => Task.FromResult(Results.Failure.Nothing);
-            public static Func<Task<Result<Types.Alpha>>> Alpha => () => Task.FromResult(Results.Failure.Alpha);
-            public static Func<Task<Result<Types.Beta>>> Beta => () => Task.FromResult(Results.Failure.Beta);
+            public static Func<Task<Result>> Empty => () => Task.FromResult(TestResult.Failure);
+            public static Func<Task<Result<Types.Alpha>>> Alpha => () => Task.FromResult(TestResult.Alpha.Failure);
+            public static Func<Task<Result<Types.Beta>>> Beta => () => Task.FromResult(TestResult.Beta.Failure);
         }
         public static Func<Task<bool>> False => () => Task.FromResult(false);
         public static Func<Task<bool>> True => () => Task.FromResult(true);
@@ -35,13 +36,13 @@ public static class Tasks
                 public static Func<Types.Alpha, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(Values.Alpha1);
                 public static class Success
                 {
-                    public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(Results.Success.Nothing);
-                    public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta1 => _ => Task.FromResult(Results.Success.Beta1);
+                    public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(TestResult.Success);
+                    public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta1 => _ => Task.FromResult(TestResult.Beta.Success.V1);
                 }
                 public static class Failure
                 {
-                    public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(Results.Failure.Nothing);
-                    public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta => _ => Task.FromResult(Results.Failure.Beta);
+                    public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(TestResult.Failure);
+                    public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta => _ => Task.FromResult(TestResult.Beta.Failure);
                 }
                 
                 public static Func<Types.Alpha, Task<bool>> IsFalse => x => Task.FromResult(x.Value is false);
@@ -57,11 +58,11 @@ public static class Tasks
                 public static Func<Types.Beta, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(Values.Alpha1);
                 public static class Success
                 {
-                    public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha1 => _ => Task.FromResult(Results.Success.Alpha1);
+                    public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha1 => _ => Task.FromResult(TestResult.Alpha.Success.V1);
                 }
                 public static class Failure
                 {
-                    public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha => _ => Task.FromResult(Results.Failure.Alpha);
+                    public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha => _ => Task.FromResult(TestResult.Alpha.Failure);
                 }
             }
         }
