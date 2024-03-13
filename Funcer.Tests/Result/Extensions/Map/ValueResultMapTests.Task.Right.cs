@@ -2,8 +2,6 @@ using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Result.Extensions.Map;
 
-using Result = Funcer.Result;
-
 public class ValueResultMapTests_Task_Right
 {
     public static TheoryData<Result<Types.Alpha>, Func<Task<Result<Types.Alpha>>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TaskTestData1 => new()
@@ -22,24 +20,6 @@ public class ValueResultMapTests_Task_Right
             .Map(next);
 
         validate(result, expectedValue);
-    }
-    
-    public static TheoryData<Result<Types.Alpha>, Func<Task<Result>>, Action<Result>> TaskTestData2 => new()
-    {
-        { TestResult.Alpha.Success.V1, AsyncFunc.Returns.Success.Empty, Assertions.ResultSuccess },
-        { TestResult.Alpha.Success.V1, AsyncFunc.Returns.Failure.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Failure, AsyncFunc.Returns.Success.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Failure, AsyncFunc.Returns.Failure.Empty, Assertions.ResultFailure },
-    };
-
-    [Theory, MemberData(nameof(TaskTestData2))]
-    public async Task Should_Return_Result_When_Map_On_ValueResult_With_Result_Function_Task
-        (Result<Types.Alpha> first, Func<Task<Result>> next, Action<Result> validate)
-    {
-        var result = await first
-            .Map(_ => next());
-
-        validate(result);
     }
 
     public static TheoryData<Result<Types.Beta>, Func<Task<Result<Types.Alpha>>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TaskTestData3 => new()
@@ -76,56 +56,6 @@ public class ValueResultMapTests_Task_Right
             .Map(next);
 
         validate(result, expectedValue);
-    }
-    
-    public static TheoryData<Result<Types.Alpha>, Func<Types.Alpha, Task<Result>>, Action<Result>> TaskTestData5 => new()
-    {
-        { TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.Success.Empty, Assertions.ResultSuccess },
-        { TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.Success.Empty, Assertions.ResultFailure },
-        { TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.Failure.Empty, Assertions.ResultFailure },
-    };
-    
-    [Theory, MemberData(nameof(TaskTestData5))]
-    public async Task Should_Pass_Param_And_Return_Result_When_Map_On_ValueResult_With_Result_Parameterized_Function_Task
-        (Result<Types.Alpha> first, Func<Types.Alpha, Task<Result>> next, Action<Result> validate)
-    {
-        var result = await first
-            .Map(next);
-
-        validate(result);
-    }
-    
-    public static TheoryData<Result<Types.Alpha>, Func<Task>, Action<Result>> TaskTestData6 => new()
-    {
-        { TestResult.Alpha.Success.V1, AsyncFunc.Returns.Void, Assertions.ResultSuccess },
-        { TestResult.Alpha.Failure, AsyncFunc.Returns.Void, Assertions.ResultFailure }
-    };
-
-    [Theory, MemberData(nameof(TaskTestData6))]
-    public async Task Should_Return_Result_When_Map_On_ValueResult_With_Function_Task
-        (Result<Types.Alpha> first, Func<Task> next, Action<Result> validate)
-    {
-        var result = await first
-            .Map(next);
-
-        validate(result);
-    }
-    
-    public static TheoryData<Result<Types.Alpha>, Func<Types.Alpha, Task>, Action<Result>> TaskTestData7 => new()
-    {
-        { TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.Nothing, Assertions.ResultSuccess },
-        { TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.Nothing, Assertions.ResultFailure }
-    };
-
-    [Theory, MemberData(nameof(TaskTestData7))]
-    public async Task Should_Pass_Param_And_Return_Result_When_Map_On_ValueResult_With_Parameterized_Function_Task
-        (Result<Types.Alpha> first, Func<Types.Alpha, Task> next, Action<Result> validate)
-    {
-        var result = await first
-            .Map(next);
-
-        validate(result);
     }
     
     public static TheoryData<Result<Types.Beta>, Func<Task<Types.Alpha>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TaskTestData8 => new()
