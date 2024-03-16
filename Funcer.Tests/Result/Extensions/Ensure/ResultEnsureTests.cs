@@ -18,7 +18,7 @@ public class ResultEnsureTests
     public void Result_Ensure_Condition(Result first, bool condition, Action<Result> validate)
     {
         var result = first
-            .Ensure(condition, Values.TestError);
+            .Ensure(condition, TestValues.Error);
 
         validate(result);
     }
@@ -35,7 +35,7 @@ public class ResultEnsureTests
     public void Result_Ensure_ConditionFunction(Result first, Func<bool> condition, Action<Result> validate)
     {
         var result = first
-            .Ensure(condition, Values.TestError);
+            .Ensure(condition, TestValues.Error);
 
         validate(result);
     }

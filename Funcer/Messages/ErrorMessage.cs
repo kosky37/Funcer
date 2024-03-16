@@ -1,12 +1,12 @@
 namespace Funcer.Messages;
 
-public struct ErrorMessage
+public struct ErrorMessage : IResultMessage
 {
     public ErrorMessage(string type, string message)
     {
         Type = type;
         Message = message;
-        MessageType = MessageType.Basic;
+        MessageType = ResultMessageType.Basic;
     }
     
     public ErrorMessage(string type, string message, string field)
@@ -14,11 +14,11 @@ public struct ErrorMessage
         Type = type;
         Message = message;
         Field = field;
-        MessageType = MessageType.Validation;
+        MessageType = ResultMessageType.Validation;
     }
     
     public string Type { get; }
     public string Message { get; }
-    public MessageType MessageType { get; }
+    public ResultMessageType MessageType { get; }
     public string? Field { get; } = default;
 }

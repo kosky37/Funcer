@@ -11,7 +11,7 @@ public class ValueResultSuppressTests_Task
     public async Task Failure_Suppress_Success()
     {
         (await TestResult.Alpha.Async.Failure
-            .Suppress(Values.TestError.Type))
+            .Suppress(TestValues.Error.Type))
             .ShouldBeSuccess();
     }
     
@@ -21,7 +21,7 @@ public class ValueResultSuppressTests_Task
         var resultTask = Task.FromResult(Result.Combine(TestResult.Alpha.Failure, TestResult.Failure));
         
         (await resultTask
-            .Suppress(Values.TestError.Type))
+            .Suppress(TestValues.Error.Type))
             .ShouldBeSuccess();
     }
     

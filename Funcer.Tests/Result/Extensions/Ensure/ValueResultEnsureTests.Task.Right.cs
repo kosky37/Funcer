@@ -16,34 +16,34 @@ public class ValueResultEnsureTests_Task_Right
     public async Task ValueResult_Ensure_ConditionTask(Result<Types.Alpha> first, Func<Task<bool>> condition, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = await first
-            .Ensure(condition, Values.TestError);
+            .Ensure(condition, TestValues.Error);
 
-        validate(result, Values.Alpha1);
+        validate(result, TestValues.Alpha1);
     }
 
     public static TheoryData<Result<Types.Alpha>, Func<Types.Alpha, Task<bool>>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData2 => new()
     {
         {
-            TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.IsTrue, Values.Alpha1,
+            TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.IsTrue, TestValues.Alpha1,
             Assertions.ValueResultSuccess
         },
         {
-            TestResult.Alpha.Success.V2, AsyncFunc.Takes.Alpha.Returns.IsFalse, Values.Alpha2,
+            TestResult.Alpha.Success.V2, AsyncFunc.Takes.Alpha.Returns.IsFalse, TestValues.Alpha2,
             Assertions.ValueResultSuccess
         },
         {
-            TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.IsFalse, Values.Alpha1,
+            TestResult.Alpha.Success.V1, AsyncFunc.Takes.Alpha.Returns.IsFalse, TestValues.Alpha1,
             Assertions.ValueResultFailure
         },
         {
-            TestResult.Alpha.Success.V2, AsyncFunc.Takes.Alpha.Returns.IsTrue, Values.Alpha2,
+            TestResult.Alpha.Success.V2, AsyncFunc.Takes.Alpha.Returns.IsTrue, TestValues.Alpha2,
             Assertions.ValueResultFailure
         },
         {
-            TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.IsTrue, Values.Alpha1, Assertions.ValueResultFailure
+            TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.IsTrue, TestValues.Alpha1, Assertions.ValueResultFailure
         },
         {
-            TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.IsFalse, Values.Alpha1,
+            TestResult.Alpha.Failure, AsyncFunc.Takes.Alpha.Returns.IsFalse, TestValues.Alpha1,
             Assertions.ValueResultFailure
         }
     };
@@ -52,7 +52,7 @@ public class ValueResultEnsureTests_Task_Right
     public async Task ValueResult_Ensure_ConditionTaskWithParameter(Result<Types.Alpha> first, Func<Types.Alpha, Task<bool>> condition, Types.Alpha expectedValue, Action<Result<Types.Alpha>, Types.Alpha> validate)
     {
         var result = await first
-            .Ensure(condition, Values.TestError);
+            .Ensure(condition, TestValues.Error);
 
         validate(result, expectedValue);
     }

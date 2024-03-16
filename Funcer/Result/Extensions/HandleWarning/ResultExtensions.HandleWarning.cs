@@ -14,12 +14,7 @@ public static partial class ResultExtensions
 
         onWarning(handledWarnings);
 
-        foreach (var warning in handledWarnings)
-        {
-            result.RemoveWarning(warning);
-        }
-
-        return result;
+        return result.WithoutWarnings(handledWarnings);
     }
     
     public static Result HandleWarning(this Result result, string errorType, Action onWarning)
@@ -32,11 +27,6 @@ public static partial class ResultExtensions
 
         onWarning();
 
-        foreach (var warning in handledWarnings)
-        {
-            result.RemoveWarning(warning);
-        }
-
-        return result;
+        return result.WithoutWarnings(handledWarnings);
     }
 }

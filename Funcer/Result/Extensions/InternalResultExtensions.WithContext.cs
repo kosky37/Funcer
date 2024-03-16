@@ -4,13 +4,11 @@ internal static class InternalResultExtensions
 {
     internal static Result WithContext(this Result result, IResult contextResult)
     {
-        result.AddWarnings(contextResult.Warnings);
-        return result;
+        return result.WithWarnings(contextResult.Warnings);
     }
     
     internal static Result<TValue> WithContext<TValue>(this Result<TValue> result, IResult contextResult)
     {
-        result.AddWarnings(contextResult.Warnings);
-        return result;
+        return result.WithWarnings(contextResult.Warnings);
     }
 }

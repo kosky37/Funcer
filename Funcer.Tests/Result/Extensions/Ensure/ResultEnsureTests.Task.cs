@@ -18,7 +18,7 @@ public class ResultEnsureTests_Task
     public async Task ResultTask_Ensure_ConditionTask(Task<Result> first, Func<Task<bool>> condition, Action<Result> validate)
     {
         var result = await first
-            .Ensure(condition, Values.TestError);
+            .Ensure(condition, TestValues.Error);
 
         validate(result);
     }

@@ -1,3 +1,4 @@
+using Funcer.Exceptions;
 using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Result.Extensions.Compel;
@@ -15,7 +16,7 @@ public class ValueResultCompelTests_Task
     {
         var result =  await TestResult.Alpha.Async.Success.V1.Compel();
 
-        result.Should().Be(Values.Alpha1);
+        result.Should().Be(TestValues.Alpha1);
     }
     
     [Fact]
@@ -29,6 +30,6 @@ public class ValueResultCompelTests_Task
     {
         var result = await TestResult.Alpha.Async.Success.V1.Compel(_ => AsyncFunc.Returns.ArgumentException);
         
-        result.Should().Be(Values.Alpha1);
+        result.Should().Be(TestValues.Alpha1);
     }
 }

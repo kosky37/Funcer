@@ -10,7 +10,7 @@ public class ValueResultTests_Combine
     {
         {
             [TestResult.Beta.Success.V1, TestResult.Beta.Success.V2, TestResult.Beta.Success.V3],
-            [Values.Beta1, Values.Beta2, Values.Beta3],
+            [TestValues.Beta1, TestValues.Beta2, TestValues.Beta3],
             true
         },
         {

@@ -7,8 +7,8 @@ public static class AsyncFunc
     public static class Returns
     {
         public static Func<Task> Void => () => Task.CompletedTask;
-        public static Func<Task<Types.Alpha>> Alpha1 => () => Task.FromResult(Values.Alpha1);
-        public static Func<Task<Types.Beta>> Beta1 => () => Task.FromResult(Values.Beta1);
+        public static Func<Task<Types.Alpha>> Alpha1 => () => Task.FromResult(TestValues.Alpha1);
+        public static Func<Task<Types.Beta>> Beta1 => () => Task.FromResult(TestValues.Beta1);
         public static class Success
         {
             public static Func<Task<Result>> Empty => () => Task.FromResult(TestResult.Success);
@@ -33,7 +33,7 @@ public static class AsyncFunc
             public static class Returns
             {
                 public static Func<Types.Alpha, Task> Nothing => _ => Task.CompletedTask;
-                public static Func<Types.Alpha, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(Values.Alpha1);
+                public static Func<Types.Alpha, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(TestValues.Alpha1);
                 public static class Success
                 {
                     public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(TestResult.Success);
@@ -55,7 +55,7 @@ public static class AsyncFunc
             public static class Returns
             {
                 public static Func<Types.Beta, Task> Nothing => _ => Task.CompletedTask;
-                public static Func<Types.Beta, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(Values.Alpha1);
+                public static Func<Types.Beta, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(TestValues.Alpha1);
                 public static class Success
                 {
                     public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha1 => _ => Task.FromResult(TestResult.Alpha.Success.V1);

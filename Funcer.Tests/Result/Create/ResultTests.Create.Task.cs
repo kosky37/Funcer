@@ -9,7 +9,7 @@ public class ResultTests_Create_Task
     [Fact]
     public async Task Should_Create_Failure_From_Task()
     {
-        var result = await Result.Create(AsyncFunc.Returns.False, Values.TestError);
+        var result = await Result.Create(AsyncFunc.Returns.False, TestValues.Error);
 
         result.ShouldBeFailure();
     }
@@ -17,7 +17,7 @@ public class ResultTests_Create_Task
     [Fact]
     public async Task Should_Create_Success_From_Task()
     {
-        var result = await Result.Create(AsyncFunc.Returns.True, Values.TestError);
+        var result = await Result.Create(AsyncFunc.Returns.True, TestValues.Error);
 
         result.ShouldBeSuccess();
     }

@@ -9,15 +9,15 @@ public class ValueResultTests_Create_Task
     [Fact]
     public async Task Should_Create_Success_From_Task()
     {
-        var result = await Result.Create(AsyncFunc.Returns.True, Values.Alpha1, Values.TestError);
+        var result = await Result.Create(AsyncFunc.Returns.True, TestValues.Alpha1, TestValues.Error);
 
-        result.ShouldBeSuccess(Values.Alpha1);
+        result.ShouldBeSuccess(TestValues.Alpha1);
     }
     
     [Fact]
     public async Task Should_Create_Failure_From_Task()
     {
-        var result = await Result.Create(AsyncFunc.Returns.False, Values.Alpha1, Values.TestError);
+        var result = await Result.Create(AsyncFunc.Returns.False, TestValues.Alpha1, TestValues.Error);
 
         result.ShouldBeFailure();
     }

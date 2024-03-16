@@ -14,12 +14,7 @@ public static partial class ValueResultExtensions
 
         onWarning(handledWarnings);
 
-        foreach (var warning in handledWarnings)
-        {
-            result.RemoveWarning(warning);
-        }
-
-        return result;
+        return result.WithoutWarnings(handledWarnings);
     }
     
     public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Func<TValue> onWarning)
@@ -32,11 +27,6 @@ public static partial class ValueResultExtensions
 
         onWarning();
 
-        foreach (var warning in handledWarnings)
-        {
-            result.RemoveWarning(warning);
-        }
-
-        return result;
+        return result.WithoutWarnings(handledWarnings);
     }
 }

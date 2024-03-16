@@ -15,6 +15,6 @@ public class ValueResultCompelTests_Task_Left
     {
         var result = await TestResult.Alpha.Async.Success.V1.Compel(_ => new ArgumentException());
         
-        result.Should().Be(Values.Alpha1);
+        result.Should().Be(TestValues.Alpha1);
     }
 }

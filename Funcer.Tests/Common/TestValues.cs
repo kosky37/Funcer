@@ -2,9 +2,10 @@ using Funcer.Messages;
 
 namespace Funcer.Tests.Common;
 
-public static class Values
+public static class TestValues
 {
-    public static ErrorMessage TestError => new(nameof(TestError), "Test message");
+    public static ErrorMessage Error => new("TestError", "Test error message");
+    public static WarningMessage Warning => new("TestWarning", "Test warning message");
     public static Types.Alpha Alpha1 => new(true);
     public static Types.Alpha Alpha2 => new(false);
     public static Types.Beta Beta1 => new(1);

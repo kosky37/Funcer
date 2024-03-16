@@ -1,6 +1,6 @@
 using Funcer.Messages;
 
-namespace Funcer;
+namespace Funcer.Exceptions;
 
 [Serializable]
 public class FailureResultException : Exception

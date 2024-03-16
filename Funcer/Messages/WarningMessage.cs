@@ -1,6 +1,6 @@
 namespace Funcer.Messages;
 
-public struct WarningMessage
+public struct WarningMessage : IResultMessage
 {
     public WarningMessage(ErrorMessage error)
     {
@@ -14,7 +14,7 @@ public struct WarningMessage
     {
         Type = type;
         Message = message;
-        MessageType = MessageType.Basic;
+        MessageType = ResultMessageType.Basic;
     }
     
     public WarningMessage(string type, string message, string field)
@@ -22,11 +22,11 @@ public struct WarningMessage
         Type = type;
         Message = message;
         Field = field;
-        MessageType = MessageType.Validation;
+        MessageType = ResultMessageType.Validation;
     }
     
     public string Type { get; }
     public string Message { get; }
-    public MessageType MessageType { get; }
+    public ResultMessageType MessageType { get; }
     public string? Field { get; } = default;
 }

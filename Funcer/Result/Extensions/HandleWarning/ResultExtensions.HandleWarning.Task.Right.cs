@@ -14,12 +14,7 @@ public static partial class ResultExtensions
 
         await onWarning(handledWarnings);
 
-        foreach (var warning in handledWarnings)
-        {
-            result.RemoveWarning(warning);
-        }
-
-        return result;
+        return result.WithoutWarnings(handledWarnings);
     }
     
     public static async Task<Result> HandleWarning(this Result result, string errorType, Func<Task> onWarning)
@@ -32,11 +27,6 @@ public static partial class ResultExtensions
 
         await onWarning();
 
-        foreach (var warning in handledWarnings)
-        {
-            result.RemoveWarning(warning);
-        }
-
-        return result;
+        return result.WithoutWarnings(handledWarnings);
     }
 }

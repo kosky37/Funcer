@@ -11,7 +11,7 @@ public class ResultSuppressTests
     public void Failure_Suppress_Success()
     {
         TestResult.Failure
-            .Suppress(Values.TestError.Type)
+            .Suppress(TestValues.Error.Type)
             .ShouldBeSuccess();
     }
     
@@ -21,7 +21,7 @@ public class ResultSuppressTests
         var result = Result.Combine(TestResult.Failure, TestResult.Failure);
         
         result
-            .Suppress(Values.TestError.Type)
+            .Suppress(TestValues.Error.Type)
             .ShouldBeSuccess();
     }
     

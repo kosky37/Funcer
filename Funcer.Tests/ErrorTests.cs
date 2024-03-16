@@ -14,6 +14,6 @@ public class ErrorTests
     {
         var error = Errors.SomethingExploded(DateTime.Now, "Code");
 
-        error.MessageType.Should().Be(MessageType.Basic);
+        error.MessageType.Should().Be(ResultMessageType.Basic);
     }
 }

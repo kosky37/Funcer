@@ -9,7 +9,7 @@ public class ResultTests_Create
     [Fact]
     public void Should_Create_Success()
     {
-        var result = Result.Create(true, Values.TestError);
+        var result = Result.Create(true, TestValues.Error);
 
         result.ShouldBeSuccess();
     }
@@ -17,7 +17,7 @@ public class ResultTests_Create
     [Fact]
     public void Should_Create_Success_From_Function()
     {
-        var result = Result.Create(TestFunc.Returns.True, Values.TestError);
+        var result = Result.Create(TestFunc.Returns.True, TestValues.Error);
 
         result.ShouldBeSuccess();
     }
@@ -25,7 +25,7 @@ public class ResultTests_Create
     [Fact]
     public void Should_Create_Failure()
     {
-        var result = Result.Create(false, Values.TestError);
+        var result = Result.Create(false, TestValues.Error);
 
         result.ShouldBeFailure();
     }
@@ -33,7 +33,7 @@ public class ResultTests_Create
     [Fact]
     public void Should_Create_Failure_From_Function()
     {
-        var result = Result.Create(TestFunc.Returns.False, Values.TestError);
+        var result = Result.Create(TestFunc.Returns.False, TestValues.Error);
 
         result.ShouldBeFailure();
     }

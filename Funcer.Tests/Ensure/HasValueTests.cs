@@ -10,7 +10,7 @@ public class HasValueTests
     public void Ensure_HasValue_Success()
     {
         const string testObject = "test Value";
-        var result = Ensure.HasValue(testObject, Values.TestError);
+        var result = Ensure.HasValue(testObject, TestValues.Error);
 
         result.ShouldBeSuccess(testObject);
     }
@@ -19,7 +19,7 @@ public class HasValueTests
     public void Ensure_HasValue_Failure()
     {
         string? testObject = null;
-        var result = Ensure.HasValue(testObject, Values.TestError);
+        var result = Ensure.HasValue(testObject, TestValues.Error);
 
         result.ShouldBeFailure();
     }

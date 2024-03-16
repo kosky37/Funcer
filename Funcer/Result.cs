@@ -8,6 +8,12 @@ public readonly partial struct Result : IResult
     private readonly List<WarningMessage> _warnings = new();
 
     public Result() { }
+    
+    internal Result(IResult result)
+    {
+        IsFailure = result.IsFailure;
+        _errors.AddRange(result.Errors);
+    }
 
     private Result(ErrorMessage error)
     {
@@ -26,31 +32,26 @@ public readonly partial struct Result : IResult
 
     public IReadOnlyCollection<ErrorMessage> Errors => _errors.AsReadOnly();
     public IReadOnlyCollection<WarningMessage> Warnings => _warnings.AsReadOnly();
-
-    private void AddWarning(WarningMessage warning)
-    {
-        _warnings.Add(warning);
-    }
     
-    internal void AddWarnings(IEnumerable<WarningMessage> warnings)
+    internal Result WithoutWarnings(IEnumerable<WarningMessage> warnings)
     {
-        _warnings.AddRange(warnings);
-    }
-    
-    internal void RemoveWarning(WarningMessage warning)
-    {
-        _warnings.Remove(warning);
+        foreach (var warning in warnings)
+        {
+            _warnings.Remove(warning);
+        }
+        
+        return this;
     }
 
     internal Result WithWarning(WarningMessage warning)
     {
-        AddWarning(warning);
+        _warnings.Add(warning);
         return this;
     }
 
     internal Result WithWarnings(IEnumerable<WarningMessage> warnings)
     {
-        AddWarnings(warnings);
+        _warnings.AddRange(warnings);
         return this;
     }
 }

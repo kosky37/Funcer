@@ -1,6 +1,6 @@
 namespace Funcer.Messages;
 
-public enum MessageType
+public enum ResultMessageType
 {
     Basic = 1,
     Validation = 2

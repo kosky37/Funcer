@@ -1,3 +1,4 @@
+using Funcer.Exceptions;
 using Funcer.Tests.Common;
 
 namespace Funcer.Tests.Result.Extensions.Compel;

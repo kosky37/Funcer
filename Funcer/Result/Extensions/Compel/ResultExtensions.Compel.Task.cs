@@ -1,3 +1,4 @@
+using Funcer.Exceptions;
 using Funcer.Messages;
 
 namespace Funcer;

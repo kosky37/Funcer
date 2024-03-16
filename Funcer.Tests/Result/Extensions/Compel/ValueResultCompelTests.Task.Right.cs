@@ -15,6 +15,6 @@ public class ValueResultCompelTests_Task_Right
     {
         var result = await TestResult.Alpha.Success.V1.Compel(_ => AsyncFunc.Returns.ArgumentException);
         
-        result.Should().Be(Values.Alpha1);
+        result.Should().Be(TestValues.Alpha1);
     }
 }
