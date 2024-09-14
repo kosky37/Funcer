@@ -76,29 +76,85 @@ Result<IEnumberable<int>> valueResult = Result.Combine(result1, result2, result3
 
 #### Map
 On Success, performs mutating action
+```csharp
+Result<int> result = Result.Success(1);
+Result<int> mappedResult = result.Map(value => value + 1);
+```
 #### MapIf
 On Success, if the condition is met, performs non mutating action
+```csharp
+Result<int> result = Result.Success(1);
+Result<int> mappedResult = result.MapIf(value => value > 0, value => value + 1);
+```
 #### Tap
 On Success, performs non mutating action
+```csharp
+Result<int> result = Result.Success(1);
+result.Tap(value => Console.WriteLine(value));
+```
 #### TapIf
 On Success, if the condition is met, performs non mutating action
+```csharp
+Result<int> result = Result.Success(1);
+result.TapIf(value => value > 0, value => Console.WriteLine(value));
+```
 #### Resolve
 On either Success or Failure resolves Result into a single value
+```csharp
+Result<int> result = Result.Success(1);
+int resolvedValue = result.Resolve(success => success, failure => -1);
+```
 #### Side
 On Success, performs a non essential action (Result of that action will not change the Result of the mine pipeline, instead, it's result will be converted into a warning)
+```csharp
+Result<int> result = Result.Success(1);
+result = result.Side(value => Result.Failure<int>(new ErrorMessage("errorType", "Error message")));
+```
 #### Log
 On Failure, it will perform an action
+```csharp
+Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+result.Log(errors => Console.WriteLine(errors.First().Message));
+```
 #### Ensure
 Checks a condition and changes the Result accordingly
+```csharp
+Result<int> result = Result.Success(1);
+result = result.Ensure(value => value > 0, new ErrorMessage("errorType", "Value must be greater than 0"));
+```
 #### Compel
 On Failure, throws an exception
+```csharp
+Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+result.Compel();
+```
 #### Suppress
 Removes errors of a specified type
+```csharp
+Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+Result newResult = result.Suppress("errorType");
+```
 #### HandleError
 Removes errors of a specified type. Allows a callback. The callback can be used to infer a return value.
+```csharp
+Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+Result newResult = result.HandleError("errorType", errors => Console.WriteLine(errors.First().Message));
+```
 #### HandleWarning
 Removes warnings of a specified type. Allows a callback.
+```csharp
+Result<int> result = Result.Success(1).Warn(new WarningMessage("warningType", "Warning message"));
+        result = result.HandleWarning("warningType", warnings => Console.WriteLine(warnings.First().Message));
+```
 #### Warn
 Adds warning.
+```csharp
+Result<int> result = Result.Success(1);
+result = result.Warn(new WarningMessage("warningType", "Warning message"));
+```
 #### WarnIf
 Adds warning if the condition is met
+```csharp
+Result<int> result = Result.Success(1);
+result = result.WarnIf(value => value > 0, new WarningMessage("warningType", "Warning message"));
+```
