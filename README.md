@@ -144,7 +144,7 @@ Result newResult = result.HandleError("errorType", errors => Console.WriteLine(e
 Removes warnings of a specified type. Allows a callback.
 ```csharp
 Result<int> result = Result.Success(1).Warn(new WarningMessage("warningType", "Warning message"));
-        result = result.HandleWarning("warningType", warnings => Console.WriteLine(warnings.First().Message));
+result = result.HandleWarning("warningType", warnings => Console.WriteLine(warnings.First().Message));
 ```
 #### Warn
 Adds warning.
