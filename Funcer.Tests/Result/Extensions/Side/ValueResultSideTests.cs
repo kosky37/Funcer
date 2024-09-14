@@ -40,4 +40,21 @@ public class ValueResultSideTests
 
         validate(result, TestValues.Alpha1, TestValues.Error);
     }
+    
+    public static TheoryData<Result<Types.Alpha>, Func<Types.Alpha, Result<Types.Beta>>, Action<Result<Types.Alpha>, Types.Alpha, IResultMessage>> TestData3 => new()
+    {
+        { TestResult.Alpha.Success.V1, TestFunc.Takes.Alpha.Returns.Failure.Beta, Assertions.ValueResultSuccessWithWarning },
+        { TestResult.Alpha.Success.V1, TestFunc.Takes.Alpha.Returns.Success.Beta1, Assertions.ValueResultSuccessWithoutWarnings },
+        { TestResult.Alpha.Failure, TestFunc.Takes.Alpha.Returns.Failure.Beta, Assertions.ValueResultFailureWithoutWarnings },
+        { TestResult.Alpha.Failure, TestFunc.Takes.Alpha.Returns.Success.Beta1, Assertions.ValueResultFailureWithoutWarnings }
+    };
+    
+    [Theory, MemberData(nameof(TestData3))]
+    public void Result_Side_ValueResultFunc_Param(Result<Types.Alpha> first, Func<Types.Alpha, Result<Types.Beta>> next, Action<Result<Types.Alpha>, Types.Alpha, IResultMessage> validate)
+    {
+        var result = first
+            .Side(next);
+
+        validate(result, TestValues.Alpha1, TestValues.Error);
+    }
 }

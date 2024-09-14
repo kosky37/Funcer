@@ -4,7 +4,20 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Func<IEnumerable<WarningMessage>, TValue> onWarning)
+    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Action onWarning)
+    {
+        if (result.IsFailure) return result;
+        
+        var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
+
+        if (!handledWarnings.Any()) return result;
+
+        onWarning();
+
+        return result.WithoutWarnings(handledWarnings);
+    }
+    
+    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Action<IEnumerable<WarningMessage>> onWarning)
     {
         if (result.IsFailure) return result;
         
@@ -17,7 +30,7 @@ public static partial class ValueResultExtensions
         return result.WithoutWarnings(handledWarnings);
     }
     
-    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Func<TValue> onWarning)
+    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Action<IEnumerable<WarningMessage>, TValue> onWarning)
     {
         if (result.IsFailure) return result;
         
@@ -25,7 +38,7 @@ public static partial class ValueResultExtensions
 
         if (!handledWarnings.Any()) return result;
 
-        onWarning();
+        onWarning(handledWarnings, result.Value);
 
         return result.WithoutWarnings(handledWarnings);
     }
