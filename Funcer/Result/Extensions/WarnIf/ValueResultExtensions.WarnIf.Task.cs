@@ -21,22 +21,4 @@ public static partial class ValueResultExtensions
         var result = await resultTask;
         return result.WarnIf(condition, warning);
     }
-    
-    internal static async Task<Result<TValue>> WarnIf<TValue>(this Task<Result<TValue>> resultTask, bool condition, IEnumerable<WarningMessage> warnings)
-    {
-        var result = await resultTask;
-        return result.WarnIf(condition, warnings);
-    }
-    
-    internal static async Task<Result<TValue>> WarnIf<TValue>(this Task<Result<TValue>> resultTask, Func<bool> condition, IEnumerable<WarningMessage> warnings)
-    {
-        var result = await resultTask;
-        return result.WarnIf(condition, warnings);
-    }
-    
-    internal static async Task<Result<TValue>> WarnIf<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, bool> condition, IEnumerable<WarningMessage> warnings)
-    {
-        var result = await resultTask;
-        return result.WarnIf(condition, warnings);
-    }
 }

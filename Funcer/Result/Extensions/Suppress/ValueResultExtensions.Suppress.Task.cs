@@ -2,7 +2,11 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
+#if NET9_0_OR_GREATER
+    public static async Task<Result> Suppress<TValue>(this Task<Result<TValue>> resultTask, params IEnumerable<string> errorTypes)
+#else
     public static async Task<Result> Suppress<TValue>(this Task<Result<TValue>> resultTask, params string[] errorTypes)
+#endif
     {
         var result = await resultTask;
         

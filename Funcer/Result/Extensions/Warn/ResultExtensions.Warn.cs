@@ -8,9 +8,4 @@ public static partial class ResultExtensions
     {
         return result.IsFailure ? result : result.WithWarning(warning);
     }
-    
-    public static Result Warn(this Result result, IEnumerable<WarningMessage> warnings)
-    {
-        return result.IsFailure ? result : result.WithWarnings(warnings);
-    }
 }

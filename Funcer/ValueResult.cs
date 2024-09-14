@@ -20,12 +20,6 @@ public readonly partial struct Result<TValue> : IResult
         _value = value;
     }
 
-    private Result(ErrorMessage error)
-    {
-        IsFailure = true;
-        _errors.Add(error);
-    }
-
     private Result(IEnumerable<ErrorMessage> errors)
     {
         IsFailure = true;

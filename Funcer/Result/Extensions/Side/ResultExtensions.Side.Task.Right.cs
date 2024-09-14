@@ -10,7 +10,7 @@ public static partial class ResultExtensions
 
         var nextResult = await next();
 
-        return nextResult.IsFailure ? result.Warn(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
+        return nextResult.IsFailure ? result.WithWarnings(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
     }
     
     public static async Task<Result> Side<TValue>(this Result result, Func<Task<Result<TValue>>> next)
@@ -19,6 +19,6 @@ public static partial class ResultExtensions
         
         var nextResult = await next();
 
-        return nextResult.IsFailure ? result.Warn(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
+        return nextResult.IsFailure ? result.WithWarnings(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
     }
 }

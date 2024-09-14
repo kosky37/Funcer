@@ -1,6 +1,6 @@
 namespace Funcer.Messages;
 
-public struct WarningMessage : IResultMessage
+public record struct WarningMessage : IResultMessage
 {
     public WarningMessage(ErrorMessage error)
     {

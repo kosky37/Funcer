@@ -8,9 +8,4 @@ public static partial class ValueResultExtensions
     {
         return result.IsFailure ? result : result.WithWarning(warning);
     }
-    
-    internal static Result<TValue> Warn<TValue>(this Result<TValue> result, IEnumerable<WarningMessage> warnings)
-    {
-        return result.IsFailure ? result : result.WithWarnings(warnings);
-    }
 }
