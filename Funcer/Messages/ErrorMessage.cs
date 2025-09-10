@@ -20,5 +20,5 @@ public struct ErrorMessage : IResultMessage
     public string Type { get; }
     public string Message { get; }
     public ResultMessageType MessageType { get; }
-    public string? Field { get; } = default;
+    public string? Field { get; } = null;
 }

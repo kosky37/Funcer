@@ -1,25 +1,34 @@
 using System.Linq;
 using System.Text;
-using Funcer.SourceGenerators.Static.Common;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Funcer.SourceGenerators.Static;
 
 [Generator]
-public class ResultCombineGenerator : StaticSourceGenerator
+public class ResultCombineGenerator : IIncrementalGenerator
 {
-    protected override void Generate(GeneratorPostInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext initialContext)
+    {
+        initialContext.RegisterSourceOutput(
+            initialContext.CompilationProvider,
+            (context, _) =>
+            {
+                var source = GenerateSource();
+                context.AddSource("Result.Combine.Generated.cs", source);
+            });
+    }
+    
+    private static string GenerateSource()
     {
         var sourceBuilder = new StringBuilder();
 
         sourceBuilder.Append("""
-                namespace Funcer;
-                
-                public partial struct Result
-                {
-                
-                """);
+                             namespace Funcer;
+
+                             public partial struct Result
+                             {
+
+                             """);
 
         for (var count = 2; count <= 16; count++)
         {
@@ -27,13 +36,14 @@ public class ResultCombineGenerator : StaticSourceGenerator
             {
                 sourceBuilder.Append("\n");
             }
+
             var method = GenerateCombineMethod(count);
             sourceBuilder.Append(method);
         }
 
-        sourceBuilder.Append("""}""");
-        
-        context.AddSource("Result.Combine.Generated.cs", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
+        sourceBuilder.Append("}");
+
+        return sourceBuilder.ToString();
     }
     
     private static string GenerateCombineMethod(int outputTupleSize)

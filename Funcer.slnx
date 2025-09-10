@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Funcer.SourceGenerators.Static/Funcer.SourceGenerators.Static.csproj" />
+  <Project Path="Funcer.Tests/Funcer.Tests.csproj" />
+  <Project Path="Funcer/Funcer.csproj" />
+</Solution>

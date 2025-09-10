@@ -1,15 +1,24 @@
 using System.Linq;
 using System.Text;
-using Funcer.SourceGenerators.Static.Common;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Funcer.SourceGenerators.Static;
 
 [Generator]
-public class ValueResultExtensionsRollGenerator : StaticSourceGenerator
+public class ValueResultExtensionsRollGenerator : IIncrementalGenerator
 {
-    protected override void Generate(GeneratorPostInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext initialContext)
+    {
+        initialContext.RegisterSourceOutput(
+            initialContext.CompilationProvider,
+            (context, _) =>
+            {
+                var source = GenerateSource();
+                context.AddSource("ValueResultExtensions.Roll.Generated.cs", source);
+            });
+    }
+    
+    private static string GenerateSource()
     {
         var stringBuilder = new StringBuilder();
 
@@ -40,9 +49,9 @@ public class ValueResultExtensionsRollGenerator : StaticSourceGenerator
             stringBuilder.Append(method);
         }
 
-        stringBuilder.Append("""}""");
-        context.AddSource("ValueResultExtensions.Roll.Generated.cs",
-            SourceText.From(stringBuilder.ToString(), Encoding.UTF8));
+        stringBuilder.Append("}");
+
+        return stringBuilder.ToString();
     }
 
     private static string GenerateRollMethod(int inputTupleSize)

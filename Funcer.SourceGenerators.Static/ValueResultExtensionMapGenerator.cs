@@ -1,15 +1,24 @@
 using System.Linq;
 using System.Text;
-using Funcer.SourceGenerators.Static.Common;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Funcer.SourceGenerators.Static;
 
 [Generator]
-public class ValueResultExtensionMapGenerator : StaticSourceGenerator
+public class ValueResultExtensionMapGenerator : IIncrementalGenerator
 {
-    protected override void Generate(GeneratorPostInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext initialContext)
+    {
+        initialContext.RegisterSourceOutput(
+            initialContext.CompilationProvider,
+            (context, _) =>
+            {
+                var source = GenerateSource();
+                context.AddSource("ValueResultExtensions.Map.Tuple.Generated.cs", source);
+            });
+    }
+
+    private static string GenerateSource()
     {
         var sourceBuilder = new StringBuilder();
 
@@ -31,9 +40,9 @@ public class ValueResultExtensionMapGenerator : StaticSourceGenerator
             sourceBuilder.Append(method);
         }
 
-        sourceBuilder.Append("""}""");
-        
-        context.AddSource("ValueResultExtensions.Map.Tuple.Generated.cs", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
+        sourceBuilder.Append("}");
+
+        return sourceBuilder.ToString();
     }
     
     private static string GenerateMapMethod(int outputTupleSize)

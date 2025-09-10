@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Funcer.Exceptions;
 using Funcer.Messages;
 
@@ -5,9 +6,8 @@ namespace Funcer;
 
 public readonly partial struct Result<TValue> : IResult
 {
-    private readonly List<ErrorMessage> _errors = new();
-    private readonly List<WarningMessage> _warnings = new();
-    private readonly TValue? _value = default;
+    private readonly List<ErrorMessage> _errors = [];
+    private readonly List<WarningMessage> _warnings = [];
 
     public Result()
     {
@@ -17,7 +17,7 @@ public readonly partial struct Result<TValue> : IResult
     
     private Result(TValue value)
     {
-        _value = value;
+        Value = value;
     }
 
     private Result(IEnumerable<ErrorMessage> errors)
@@ -28,7 +28,12 @@ public readonly partial struct Result<TValue> : IResult
 
     public bool IsFailure { get; } = false;
     public bool IsSuccess => !IsFailure;
-    public TValue Value => IsFailure ? throw new FailureResultException(_errors) : _value!;
+
+    [field: AllowNull, MaybeNull]
+    public TValue Value
+    {
+        get => IsFailure ? throw new FailureResultException(_errors) : field!;
+    } = default;
 
     public IReadOnlyCollection<ErrorMessage> Errors => _errors.AsReadOnly();
     public IReadOnlyCollection<WarningMessage> Warnings => _warnings.AsReadOnly();

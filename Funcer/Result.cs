@@ -4,8 +4,8 @@ namespace Funcer;
 
 public readonly partial struct Result : IResult
 {
-    private readonly List<ErrorMessage> _errors = new();
-    private readonly List<WarningMessage> _warnings = new();
+    private readonly List<ErrorMessage> _errors = [];
+    private readonly List<WarningMessage> _warnings = [];
 
     public Result() { }
     
