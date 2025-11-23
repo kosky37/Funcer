@@ -35,126 +35,596 @@ Returns Success or Failure result depending on the value of the condition parame
 var condition = true;
 //just the Result
 Result result = Result.Create(condition, new ErrorMessage("errorType", "Error message"));
+
 //or a ValueResult
 Result<string> valueResult = Result.Create(condition, "some value", new ErrorMessage("errorType", "Error message"));
+
+//with a function returning boolean
+Result resultFromFunc = Result.Create(() => condition, new ErrorMessage("errorType", "Error message"));
+Result<int> valueResultFromFunc = Result.Create(() => condition, 42, new ErrorMessage("errorType", "Error message"));
+
+//with an async function
+Result resultFromTask = await Result.Create(async () => await Task.FromResult(condition), new ErrorMessage("errorType", "Error message"));
+Result<string> valueResultFromTask = await Result.Create(async () => await Task.FromResult(condition), "async value", new ErrorMessage("errorType", "Error message"));
 ```
 
 #### Success
+Creates a successful Result with an optional value
 ```csharp
+// Simple success without a value
 Result result = Result.Success();
-Result<string> valueResult = Result.Success("some value);
+
+// Success with a value
+Result<string> valueResult = Result.Success("some value");
+Result<int> intResult = Result.Success(42);
+Result<MyType> customResult = Result.Success(new MyType());
 ```
 
 #### Failure
+Creates a failed Result with one or more error messages
 ```csharp
+// Simple failure with a single error
 Result result = Result.Failure(new ErrorMessage("errorType", "Error message"));
 Result<SomeType> valueResult = Result.Failure<SomeType>(new ErrorMessage("errorType", "Error message"));
+
+// Failure with multiple errors
+Result resultWithMultipleErrors = Result.Failure(
+    new ErrorMessage("validation", "Field 1 is required"),
+    new ErrorMessage("validation", "Field 2 must be positive")
+);
+
+// Failure with field-specific error
+Result validationError = Result.Failure(
+    new ErrorMessage("validation", "Value must be greater than 0", "amount")
+);
 ```
 
 #### Ensure
-
+Static helper for common validation scenarios
 ```csharp
 SomeType? variable;
 
+// Check if a nullable value has a value
 Result<SomeType> valueResult = Result.Ensure.HasValue(variable);
+// If variable is null, returns Failure with an error message
 ```
 
 #### Combine
+Combines multiple Results into a single Result. If all succeed, returns Success. If any fail, returns Failure with all errors collected.
 ```csharp
-Result result1;
-Result result2;
-Result<int> valueResult1;
-Result<int> valueResult2;
+Result result1 = Result.Success();
+Result result2 = Result.Success();
+Result<int> valueResult1 = Result.Success(1);
+Result<int> valueResult2 = Result.Success(2);
+Result<int> valueResult3 = Result.Success(3);
 
-//if there are multiple types of results combined, only the Result will be returned
-Result result = Result.Combine(result1, result2, result3);
-//when possible (all the combined Results have the same type) a list of received values will be returned
-Result<IEnumberable<int>> valueResult = Result.Combine(result1, result2, result3);
+// If there are multiple types of results combined, only the Result will be returned
+Result result = Result.Combine(result1, result2, valueResult1);
+// result.IsSuccess will be true if all succeed
+
+// When all combined Results have the same type, a list of received values will be returned
+Result<IEnumerable<int>> valueResult = Result.Combine(valueResult1, valueResult2, valueResult3);
+// valueResult.Value will be [1, 2, 3] if all succeed
+
+// If any result fails, all errors are collected
+Result<int> failedResult = Result.Failure<int>(new ErrorMessage("error", "Failed"));
+Result<IEnumerable<int>> combinedWithFailure = Result.Combine(valueResult1, failedResult, valueResult2);
+// combinedWithFailure.IsFailure will be true, and errors will contain the error from failedResult
 ```
 
 ### Extension methods
 
 #### Map
-On Success, performs mutating action
+On Success, transforms the value using a mapping function. Returns a new Result with the mapped value.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Map with a simple function
 Result<int> mappedResult = result.Map(value => value + 1);
+// mappedResult.Value will be 2
+
+// Map to a different type
+Result<string> mappedToString = result.Map(value => value.ToString());
+// mappedToString.Value will be "1"
+
+// Map with an async function
+Result<int> mappedAsync = await result.Map(async value => await Task.FromResult(value * 2));
+// mappedAsync.Value will be 2
+
+// Map with a Result-returning function
+Result<int> mappedWithResult = result.Map(value => 
+    value > 0 
+        ? Result.Success(value * 2) 
+        : Result.Failure<int>(new ErrorMessage("validation", "Value must be positive")));
+// If value > 0, returns Success with doubled value, otherwise Failure
+
+// Map on a non-ValueResult
+Result result = Result.Success();
+Result<string> mappedFromResult = result.Map(() => "mapped value");
+// mappedFromResult.Value will be "mapped value"
 ```
 #### MapIf
-On Success, if the condition is met, performs non mutating action
+On Success, if the condition is met, transforms the value using a mapping function. Otherwise, returns the original Result unchanged.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Map if condition is true
 Result<int> mappedResult = result.MapIf(value => value > 0, value => value + 1);
+// mappedResult.Value will be 2 (condition was true)
+
+// Condition not met - original value is returned
+Result<int> notMapped = result.MapIf(value => value > 10, value => value + 1);
+// notMapped.Value will be 1 (condition was false, original value returned)
+
+// Map with async condition and mapper
+Result<int> mappedAsync = await result.MapIf(
+    async value => await Task.FromResult(value > 0),
+    async value => await Task.FromResult(value * 2)
+);
+// mappedAsync.Value will be 2
+
+// Map to a different type
+Result<string> mappedToString = result.MapIf(
+    value => value > 0,
+    value => $"Positive: {value}"
+);
+// mappedToString.Value will be "Positive: 1" if condition is met
 ```
 #### Tap
-On Success, performs non mutating action
+On Success, performs a side effect (non-mutating action) and returns the original Result unchanged. Useful for logging, validation, or other side effects.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Tap with an Action
 result.Tap(value => Console.WriteLine(value));
+// Prints 1, returns the original Result unchanged
+
+// Tap with an async Action
+await result.Tap(async value => await LogAsync(value));
+
+// Tap with a Result-returning function (can perform validation)
+Result<int> tappedWithValidation = result.Tap(value => 
+    value > 0 
+        ? Result.Success() 
+        : Result.Failure(new ErrorMessage("validation", "Value must be positive")));
+// If validation fails, tappedWithValidation will be Failure
+
+// Tap on a non-ValueResult
+Result result = Result.Success();
+result.Tap(() => Console.WriteLine("Success!"));
+// Prints "Success!", returns the original Result
+
+// Tap with a function that returns a value (value is ignored)
+result.Tap(value => SomeFunction(value));
+// The return value of SomeFunction is ignored
 ```
 #### TapIf
-On Success, if the condition is met, performs non mutating action
+On Success, if the condition is met, performs a side effect and returns the original Result unchanged. If condition is not met, returns the original Result without performing the action.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Tap if condition is true
 result.TapIf(value => value > 0, value => Console.WriteLine(value));
+// Prints 1 (condition was true), returns original Result
+
+// Condition not met - no action performed
+result.TapIf(value => value > 10, value => Console.WriteLine(value));
+// Nothing is printed (condition was false), returns original Result
+
+// Tap with async condition and action
+await result.TapIf(
+    async value => await Task.FromResult(value > 0),
+    async value => await LogAsync(value)
+);
+
+// Tap with a Result-returning function for validation
+Result<int> tappedWithValidation = result.TapIf(
+    value => value > 0,
+    value => Result.Success() // or perform validation
+);
 ```
 #### Resolve
-On either Success or Failure resolves Result into a single value
+On either Success or Failure, resolves the Result into a single value by providing handlers for both cases.
 ```csharp
 Result<int> result = Result.Success(1);
-int resolvedValue = result.Resolve(success => success, failure => -1);
+
+// Resolve with functions
+int resolvedValue = result.Resolve(
+    success => success,      // On success, return the value
+    failure => -1            // On failure, return -1
+);
+// resolvedValue will be 1
+
+// Resolve with constant values
+int resolvedWithConstants = result.Resolve(
+    success: 100,
+    failure: -1
+);
+// resolvedWithConstants will be 100 (success case)
+
+// Resolve with different return types
+string resolvedToString = result.Resolve(
+    success => $"Value: {success}",
+    failure => "Error occurred"
+);
+// resolvedToString will be "Value: 1"
+
+// Resolve with async handlers
+string resolvedAsync = await result.Resolve(
+    async success => await FormatAsync(success),
+    async failure => await GetErrorMessageAsync(failure)
+);
+
+// Resolve on a non-ValueResult
+Result result = Result.Success();
+string message = result.Resolve(
+    success: "Operation succeeded",
+    failure: "Operation failed"
+);
+// message will be "Operation succeeded"
 ```
 #### Side
-On Success, performs a non essential action (Result of that action will not change the Result of the mine pipeline, instead, it's result will be converted into a warning)
+On Success, performs a non-essential action. The Result of that action will not change the Result of the main pipeline. Instead, if the side action fails, its errors will be converted into warnings.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Side action that succeeds - no effect on main Result
+result = result.Side(value => Result.Success());
+// result remains Success(1) with no warnings
+
+// Side action that fails - errors become warnings
 result = result.Side(value => Result.Failure<int>(new ErrorMessage("errorType", "Error message")));
+// result remains Success(1), but now has a warning with the error message
+
+// Side action with async function
+result = await result.Side(async value => 
+    await SomeNonEssentialOperationAsync(value));
+
+// Side action on a non-ValueResult
+Result result = Result.Success();
+result = result.Side(() => Result.Failure(new ErrorMessage("warning", "Non-critical issue")));
+// result remains Success(), but has a warning
 ```
 #### Log
-On Failure, it will perform an action
+On Failure, performs a logging action. The Result is returned unchanged, allowing you to log errors without breaking the chain.
 ```csharp
 Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+
+// Log with an Action
 result.Log(errors => Console.WriteLine(errors.First().Message));
+// Prints the error message, returns the original Failure Result
+
+// Log all errors
+result.Log(errors => 
+{
+    foreach (var error in errors)
+    {
+        Console.WriteLine($"Error: {error.Type} - {error.Message}");
+    }
+});
+
+// Log with async action
+await result.Log(async errors => await LogToDatabaseAsync(errors));
+
+// Log on a non-ValueResult
+Result result = Result.Failure(new ErrorMessage("error", "Something went wrong"));
+result.Log(errors => Logger.LogError(errors));
 ```
 #### Ensure
-Checks a condition and changes the Result accordingly
+Checks a condition and changes the Result accordingly. If the condition is false, the Result becomes a Failure with the provided error.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Ensure with a boolean condition
 result = result.Ensure(value => value > 0, new ErrorMessage("errorType", "Value must be greater than 0"));
+// result remains Success(1) because condition is true
+
+// Condition fails - Result becomes Failure
+result = result.Ensure(value => value > 10, new ErrorMessage("errorType", "Value must be greater than 10"));
+// result is now Failure with the error message
+
+// Ensure with a function returning boolean
+result = Result.Success(5);
+result = result.Ensure(() => SomeValidation(), new ErrorMessage("errorType", "Validation failed"));
+
+// Ensure with an async condition
+result = await result.Ensure(
+    async value => await ValidateAsync(value),
+    new ErrorMessage("errorType", "Async validation failed")
+);
+
+// Ensure on a non-ValueResult
+Result result = Result.Success();
+result = result.Ensure(() => true, new ErrorMessage("errorType", "Condition failed"));
+// If condition is false, result becomes Failure
 ```
 #### Compel
-On Failure, throws an exception
+On Failure, throws a `FailureResultException` with the error messages. Use this when you want to convert a Failure Result into an exception.
 ```csharp
 Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+
+// Throws FailureResultException with the errors
 result.Compel();
+// Will throw an exception containing the error messages
+
+// Compel with a custom exception factory
+result.Compel(errors => new CustomException($"Operation failed: {errors.First().Message}"));
+
+// Compel on a non-ValueResult
+Result result = Result.Failure(new ErrorMessage("error", "Something went wrong"));
+result.Compel();
+// Throws FailureResultException
 ```
 #### Suppress
-Removes errors of a specified type
+Removes errors of a specified type. If all errors are suppressed and the Result was a Failure, it becomes a Success. If it was already a Success, it remains Success.
 ```csharp
-Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+Result<int> result = Result.Failure<int>(
+    new ErrorMessage("errorType", "Error message"),
+    new ErrorMessage("otherType", "Another error")
+);
+
+// Suppress errors of a specific type
 Result newResult = result.Suppress("errorType");
+// newResult still has the "otherType" error
+
+// If all errors are suppressed, Result becomes Success
+Result allSuppressed = result.Suppress("errorType", "otherType");
+// allSuppressed.IsSuccess will be true
+
+// Suppress on a Success Result
+Result success = Result.Success(1);
+Result stillSuccess = success.Suppress("errorType");
+// stillSuccess remains Success(1)
 ```
 #### HandleError
-Removes errors of a specified type. Allows a callback. The callback can be used to infer a return value.
+Removes errors of a specified type and allows a callback to handle them. The callback can return a new Result to replace the handled errors, or perform side effects.
 ```csharp
 Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+
+// Handle error with an Action (performs side effect, removes error)
 Result newResult = result.HandleError("errorType", errors => Console.WriteLine(errors.First().Message));
+// Error is logged and removed, newResult may become Success if no other errors remain
+
+// Handle error with a function returning Result (can replace error with new Result)
+Result handledWithResult = result.HandleError("errorType", errors => 
+{
+    Console.WriteLine("Handling error...");
+    return Result.Success(); // Replace error with Success
+});
+
+// Handle error with a function that returns a value (ignored, error is still removed)
+result.HandleError("errorType", errors => 
+{
+    LogError(errors);
+    return 0; // Return value is ignored
+});
+
+// Handle error with async callback
+Result handledAsync = await result.HandleError("errorType", async errors => 
+{
+    await LogToDatabaseAsync(errors);
+    return Result.Success();
+});
 ```
 #### HandleWarning
-Removes warnings of a specified type. Allows a callback.
+Removes warnings of a specified type and allows a callback to handle them. Useful for processing warnings before removing them.
 ```csharp
 Result<int> result = Result.Success(1).Warn(new WarningMessage("warningType", "Warning message"));
+
+// Handle warning with an Action
 result = result.HandleWarning("warningType", warnings => Console.WriteLine(warnings.First().Message));
+// Warning is logged and removed, result remains Success(1) without warnings
+
+// Handle warning with a function
+result = result.HandleWarning("warningType", warnings => 
+{
+    foreach (var warning in warnings)
+    {
+        Logger.LogWarning(warning);
+    }
+});
+
+// Handle warning with async callback
+result = await result.HandleWarning("warningType", async warnings => 
+{
+    await ProcessWarningsAsync(warnings);
+});
 ```
 #### Warn
-Adds warning.
+Adds a warning message to a successful Result. Warnings do not cause the Result to fail, but can be processed or logged separately.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Add a single warning
 result = result.Warn(new WarningMessage("warningType", "Warning message"));
+// result remains Success(1), but now has a warning
+
+// Add multiple warnings
+result = result.Warn(
+    new WarningMessage("warning1", "First warning"),
+    new WarningMessage("warning2", "Second warning")
+);
+
+// Warn on a non-ValueResult
+Result result = Result.Success();
+result = result.Warn(new WarningMessage("info", "Operation completed with warnings"));
 ```
 #### WarnIf
-Adds warning if the condition is met
+Adds a warning message if the condition is met. If the condition is false, no warning is added.
 ```csharp
 Result<int> result = Result.Success(1);
+
+// Add warning if condition is true
 result = result.WarnIf(value => value > 0, new WarningMessage("warningType", "Warning message"));
+// Warning is added because value > 0 is true
+
+// Condition is false - no warning added
+result = result.WarnIf(value => value > 10, new WarningMessage("warningType", "Value is high"));
+// No warning added because condition is false
+
+// WarnIf with a function returning boolean
+result = result.WarnIf(() => SomeCondition(), new WarningMessage("warningType", "Warning message"));
+
+// WarnIf with async condition
+result = await result.WarnIf(
+    async value => await ShouldWarnAsync(value),
+    new WarningMessage("warningType", "Warning message")
+);
+
+// WarnIf on a non-ValueResult
+Result result = Result.Success();
+result = result.WarnIf(() => true, new WarningMessage("info", "Condition met"));
+```
+#### Roll
+Combines multiple ValueResults into a tuple. Useful for collecting multiple values from independent operations. Supports chaining up to 17 values. If any result fails, returns failure with those errors.
+```csharp
+Result<int> result1 = Result.Success(1);
+Result<string> result2 = Result.Success("hello");
+Result<bool> result3 = Result.Success(true);
+
+// Combines into a tuple
+Result<(int, string, bool)> combined = result1.Roll(result2).Roll(result3);
+// combined.Value will be (1, "hello", true)
+
+// Also supports Task variants
+Result<(int, string)> combinedAsync = await result1.Roll(Task.FromResult(result2));
+```
+#### Map (Tuple Deconstruction)
+Generated Map extensions allow deconstructing tuples from Roll results. Instead of accessing tuple items manually, you can map with a function that takes the tuple elements as separate parameters. Supports tuples from 2 to 16 elements.
+```csharp
+Result<int> result1 = Result.Success(1);
+Result<string> result2 = Result.Success("hello");
+Result<bool> result3 = Result.Success(true);
+
+// Roll into a tuple
+Result<(int, string, bool)> rolled = result1.Roll(result2).Roll(result3);
+
+// Map with tuple deconstruction - function receives individual elements
+Result<string> mapped = rolled.Map((intValue, stringValue, boolValue) => 
+    $"{intValue} - {stringValue} - {boolValue}");
+// mapped.Value will be "1 - hello - True"
+
+// Map with a Result-returning function
+Result<int> mappedWithResult = rolled.Map((intValue, stringValue, boolValue) => 
+    boolValue 
+        ? Result.Success(intValue + stringValue.Length) 
+        : Result.Failure<int>(new ErrorMessage("validation", "Boolean must be true")));
+
+// Works with any tuple size from Roll
+Result<int> r1 = Result.Success(1);
+Result<string> r2 = Result.Success("two");
+Result<bool> r3 = Result.Success(true);
+Result<double> r4 = Result.Success(4.0);
+
+Result<(int, string, bool, double)> rolled4 = r1.Roll(r2).Roll(r3).Roll(r4);
+Result<string> mapped4 = rolled4.Map((a, b, c, d) => $"{a}{b}{c}{d}");
+// mapped4.Value will be "1twoTrue4"
+```
+#### MapAll
+Maps over a collection of Result<TValue> values. Applies a mapper function to each successful value and returns Result<IEnumerable<TMappedValue>>. If any result in the collection fails, returns failure with all errors collected.
+```csharp
+var results = new List<Result<int>>
+{
+    Result.Success(1),
+    Result.Success(2),
+    Result.Success(3)
+};
+
+// Map with a simple function
+Result<IEnumerable<string>> mapped = results.MapAll(x => x.ToString());
+// mapped.Value will be ["1", "2", "3"]
+
+// Map with a Result-returning function
+Result<IEnumerable<string>> mappedWithResult = results.MapAll(x => 
+    Result.Success($"Value: {x}"));
+
+// Supports Task and IEnumerable combinations
+var resultTasks = new List<Task<Result<int>>>
+{
+    Task.FromResult(Result.Success(1)),
+    Task.FromResult(Result.Success(2))
+};
+Result<IEnumerable<string>> mappedAsync = await resultTasks.MapAll(x => x.ToString());
+
+// Supports Task<IEnumerable<Result<TValue>>>
+Task<IEnumerable<Result<int>>> resultsTask = Task.FromResult(results);
+Result<IEnumerable<string>> mappedTask = await resultsTask.MapAll(x => x.ToString());
+```
+#### TapAll
+Performs side effects on each successful value in a collection of Result<TValue> and returns the original collection as Result<IEnumerable<TValue>>. If any result fails, returns failure with all errors collected.
+```csharp
+var results = new List<Result<int>>
+{
+    Result.Success(1),
+    Result.Success(2),
+    Result.Success(3)
+};
+
+// Tap with an Action
+var tappedValues = new List<int>();
+Result<IEnumerable<int>> tapped = results.TapAll(x => tappedValues.Add(x));
+// tapped.Value will be [1, 2, 3], tappedValues will also contain [1, 2, 3]
+
+// Tap with a Result-returning function
+Result<IEnumerable<int>> tappedWithResult = results.TapAll(x => 
+    Result.Success()); // Can perform validation or other operations
+
+// Supports Task and IEnumerable combinations
+var resultTasks = new List<Task<Result<int>>>
+{
+    Task.FromResult(Result.Success(1)),
+    Task.FromResult(Result.Success(2))
+};
+Result<IEnumerable<int>> tappedAsync = await resultTasks.TapAll(x => Console.WriteLine(x));
+```
+#### Combine (Extension)
+Extension method version of the static Combine method. Allows combining a Result with other Results or ValueResults. Also supports IEnumerable and Task combinations for more complex scenarios.
+```csharp
+Result result1 = Result.Success();
+Result result2 = Result.Success();
+Result<int> valueResult1 = Result.Success(1);
+Result<int> valueResult2 = Result.Success(2);
+
+// Combine Result with other Results
+Result combined = result1.Combine(result2);
+
+// Combine Result with ValueResults (returns Result<IEnumerable<TValue>>)
+Result<IEnumerable<int>> combinedWithValues = result1.Combine(valueResult1, valueResult2);
+// combinedWithValues.Value will be [1, 2]
+
+// Combine ValueResult with other Results
+Result combinedFromValue = valueResult1.Combine(result1, result2);
+
+// Combine ValueResult with same-type ValueResults
+Result<IEnumerable<int>> combinedSameType = valueResult1.Combine(valueResult2);
+// combinedSameType.Value will be [1, 2]
+
+// Combine ValueResult with different-type ValueResults
+Result<string> stringResult = Result.Success("hello");
+Result<IEnumerable<string>> combinedDifferentType = valueResult1.Combine(stringResult);
+// combinedDifferentType.Value will be ["hello"]
+
+// Combine IEnumerable of Results
+var results = new List<Result> { result1, result2 };
+Result combinedEnumerable = results.Combine();
+
+// Combine IEnumerable of ValueResults
+var valueResults = new List<Result<int>> { valueResult1, valueResult2 };
+Result<IEnumerable<int>> combinedValueEnumerable = valueResults.Combine();
+
+// Supports Task combinations
+Task<IEnumerable<Result<int>>> resultsTask = Task.FromResult(valueResults);
+Result<IEnumerable<int>> combinedTask = await resultsTask.Combine();
+
+// Supports IEnumerable<Task<Result<TValue>>>
+var resultTasks = new List<Task<Result<int>>>
+{
+    Task.FromResult(valueResult1),
+    Task.FromResult(valueResult2)
+};
+Result<IEnumerable<int>> combinedTaskEnumerable = await resultTasks.Combine();
+
+// Supports Task<IEnumerable<Task<Result<TValue>>>>
+Task<IEnumerable<Task<Result<int>>>> nestedTask = Task.FromResult(resultTasks);
+Result<IEnumerable<int>> combinedNested = await nestedTask.Combine();
 ```
