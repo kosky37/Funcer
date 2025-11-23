@@ -521,61 +521,77 @@ Result<string> mapped4 = rolled4.Map((a, b, c, d) => $"{a}{b}{c}{d}");
 // mapped4.Value will be "1twoTrue4"
 ```
 #### MapAll
-Maps over a collection of Result<TValue> values. Applies a mapper function to each successful value and returns Result<IEnumerable<TMappedValue>>. If any result in the collection fails, returns failure with all errors collected.
+Maps over each element in a `Result<IEnumerable<TValue>>` collection. Applies a mapper function to each element and returns `Result<IEnumerable<TMappedValue>>`. If the input Result is a failure, returns failure. If any element mapping fails, returns failure with all errors collected.
 ```csharp
-var results = new List<Result<int>>
-{
-    Result.Success(1),
-    Result.Success(2),
-    Result.Success(3)
-};
+Result<IEnumerable<int>> result = Result.Success(new[] { 1, 2, 3 }.AsEnumerable());
 
 // Map with a simple function
-Result<IEnumerable<string>> mapped = results.MapAll(x => x.ToString());
+Result<IEnumerable<string>> mapped = result.MapAll(x => x.ToString());
 // mapped.Value will be ["1", "2", "3"]
 
-// Map with a Result-returning function
-Result<IEnumerable<string>> mappedWithResult = results.MapAll(x => 
-    Result.Success($"Value: {x}"));
+// Map to a different type
+Result<IEnumerable<string>> mappedToString = result.MapAll(x => $"Value: {x}");
+// mappedToString.Value will be ["Value: 1", "Value: 2", "Value: 3"]
 
-// Supports Task and IEnumerable combinations
-var resultTasks = new List<Task<Result<int>>>
-{
-    Task.FromResult(Result.Success(1)),
-    Task.FromResult(Result.Success(2))
-};
-Result<IEnumerable<string>> mappedAsync = await resultTasks.MapAll(x => x.ToString());
+// Map with a Result-returning function (can fail for individual elements)
+Result<IEnumerable<string>> mappedWithResult = result.MapAll(x => 
+    x > 0 
+        ? Result.Success($"Value: {x}") 
+        : Result.Failure<string>(new ErrorMessage("validation", "Value must be positive")));
+// If any element mapping fails, all errors are collected
 
-// Supports Task<IEnumerable<Result<TValue>>>
-Task<IEnumerable<Result<int>>> resultsTask = Task.FromResult(results);
-Result<IEnumerable<string>> mappedTask = await resultsTask.MapAll(x => x.ToString());
+// Map with async function
+Result<IEnumerable<string>> mappedAsync = await result.MapAll(async x => 
+    await Task.FromResult(x.ToString()));
+
+// Map with async Result-returning function
+Result<IEnumerable<string>> mappedAsyncWithResult = await result.MapAll(async x => 
+    await Task.FromResult(Result.Success($"Value: {x}")));
+
+// Supports Task<Result<IEnumerable<TValue>>>
+Task<Result<IEnumerable<int>>> resultTask = Task.FromResult(result);
+Result<IEnumerable<string>> mappedTask = await resultTask.MapAll(x => x.ToString());
+
+// Empty collection
+Result<IEnumerable<int>> emptyResult = Result.Success(Array.Empty<int>().AsEnumerable());
+Result<IEnumerable<string>> mappedEmpty = emptyResult.MapAll(x => x.ToString());
+// mappedEmpty.Value will be an empty collection
 ```
 #### TapAll
-Performs side effects on each successful value in a collection of Result<TValue> and returns the original collection as Result<IEnumerable<TValue>>. If any result fails, returns failure with all errors collected.
+Performs side effects on each element in a `Result<IEnumerable<TValue>>` collection and returns the original Result unchanged. If the input Result is a failure, no side effects are performed. If any element tap fails, returns failure with all errors collected.
 ```csharp
-var results = new List<Result<int>>
-{
-    Result.Success(1),
-    Result.Success(2),
-    Result.Success(3)
-};
+Result<IEnumerable<int>> result = Result.Success(new[] { 1, 2, 3 }.AsEnumerable());
 
 // Tap with an Action
 var tappedValues = new List<int>();
-Result<IEnumerable<int>> tapped = results.TapAll(x => tappedValues.Add(x));
+Result<IEnumerable<int>> tapped = result.TapAll(x => tappedValues.Add(x));
 // tapped.Value will be [1, 2, 3], tappedValues will also contain [1, 2, 3]
+// The original Result is returned unchanged
 
-// Tap with a Result-returning function
-Result<IEnumerable<int>> tappedWithResult = results.TapAll(x => 
-    Result.Success()); // Can perform validation or other operations
+// Tap with a Result-returning function (can perform validation)
+Result<IEnumerable<int>> tappedWithValidation = result.TapAll(x => 
+    x > 0 
+        ? Result.Success() 
+        : Result.Failure(new ErrorMessage("validation", "Value must be positive")));
+// If any validation fails, tappedWithValidation will be Failure with all errors collected
 
-// Supports Task and IEnumerable combinations
-var resultTasks = new List<Task<Result<int>>>
-{
-    Task.FromResult(Result.Success(1)),
-    Task.FromResult(Result.Success(2))
-};
-Result<IEnumerable<int>> tappedAsync = await resultTasks.TapAll(x => Console.WriteLine(x));
+// Tap with async Action
+Result<IEnumerable<int>> tappedAsync = await result.TapAll(async x => 
+    await LogAsync(x));
+// Logs each value, returns original Result unchanged
+
+// Tap with async Result-returning function
+Result<IEnumerable<int>> tappedAsyncWithValidation = await result.TapAll(async x => 
+    await ValidateAsync(x));
+
+// Supports Task<Result<IEnumerable<TValue>>>
+Task<Result<IEnumerable<int>>> resultTask = Task.FromResult(result);
+Result<IEnumerable<int>> tappedTask = await resultTask.TapAll(x => Console.WriteLine(x));
+
+// Empty collection
+Result<IEnumerable<int>> emptyResult = Result.Success(Array.Empty<int>().AsEnumerable());
+Result<IEnumerable<int>> tappedEmpty = emptyResult.TapAll(x => Console.WriteLine(x));
+// No side effects performed, returns original empty Result
 ```
 #### Combine (Extension)
 Extension method version of the static Combine method. Allows combining a Result with other Results or ValueResults. Also supports IEnumerable and Task combinations for more complex scenarios.
