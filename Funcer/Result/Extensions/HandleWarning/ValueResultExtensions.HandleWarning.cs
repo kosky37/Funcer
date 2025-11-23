@@ -10,7 +10,7 @@ public static partial class ValueResultExtensions
         
         var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (!handledWarnings.Any()) return result;
+        if (handledWarnings.Count == 0) return result;
 
         onWarning();
 
@@ -23,7 +23,7 @@ public static partial class ValueResultExtensions
         
         var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (!handledWarnings.Any()) return result;
+        if (handledWarnings.Count == 0) return result;
 
         onWarning(handledWarnings);
 
@@ -36,7 +36,7 @@ public static partial class ValueResultExtensions
         
         var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (!handledWarnings.Any()) return result;
+        if (handledWarnings.Count == 0) return result;
 
         onWarning(handledWarnings, result.Value);
 

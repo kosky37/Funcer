@@ -11,12 +11,12 @@ public static partial class ValueResultExtensions
         var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
         
         var handledErrors = errorLookup[true].ToList();
-        if (!handledErrors.Any()) return result;
+        if (handledErrors.Count == 0) return result;
         
         var newValue = await onError(handledErrors);
             
         var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Any() ? Result<TValue>.Failure(remainingErrors) : Result.Success(newValue);
+        return remainingErrors.Count != 0 ? Result<TValue>.Failure(remainingErrors) : Result.Success(newValue);
     }
     
     public static async Task<Result<TValue>> HandleError<TValue>(this Result<TValue> result, string errorType, Func<Task<TValue>> onError)
@@ -26,12 +26,42 @@ public static partial class ValueResultExtensions
         var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
 
         var handledErrors = errorLookup[true].ToList();
-        if (!handledErrors.Any()) return result;
+        if (handledErrors.Count == 0) return result;
             
         var newValue = await onError();
 
         var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Any() ? Result<TValue>.Failure(remainingErrors) : Result.Success(newValue);
+        return remainingErrors.Count != 0 ? Result<TValue>.Failure(remainingErrors) : Result.Success(newValue);
+    }
+    
+    public static async Task<Result<TValue>> HandleError<TValue>(this Result<TValue> result, string errorType, Func<IEnumerable<ErrorMessage>, Task<Result<TValue>>> onError)
+    {
+        if (result.IsSuccess) return result;
+        
+        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+        
+        var handledErrors = errorLookup[true].ToList();
+        if (handledErrors.Count == 0) return result;
+        
+        var newResult = await onError(handledErrors);
+        
+        var remainingErrors = errorLookup[false].ToList();
+        return remainingErrors.Count != 0 ? Result<TValue>.Failure(remainingErrors) : newResult;
+    }
+    
+    public static async Task<Result<TValue>> HandleError<TValue>(this Result<TValue> result, string errorType, Func<Task<Result<TValue>>> onError)
+    {
+        if (result.IsSuccess) return result;
+        
+        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+
+        var handledErrors = errorLookup[true].ToList();
+        if (handledErrors.Count == 0) return result;
+            
+        var newResult = await onError();
+
+        var remainingErrors = errorLookup[false].ToList();
+        return remainingErrors.Count != 0 ? Result<TValue>.Failure(remainingErrors) : newResult;
     }
     
     public static async Task<Result> HandleError<TValue>(this Result<TValue> result, string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)
@@ -41,12 +71,12 @@ public static partial class ValueResultExtensions
         var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
         
         var handledErrors = errorLookup[true].ToList();
-        if (!handledErrors.Any()) return Result.Failure(result.Errors);
+        if (handledErrors.Count == 0) return Result.Failure(result.Errors);
         
         await onError(handledErrors);
             
         var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Any() ? Result.Failure(remainingErrors) : Result.Success();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
     }
     
     public static async Task<Result> HandleError<TValue>(this Result<TValue> result, string errorType, Func<Task> onError)
@@ -56,11 +86,41 @@ public static partial class ValueResultExtensions
         var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
 
         var handledErrors = errorLookup[true].ToList();
-        if (!handledErrors.Any()) return Result.Failure(result.Errors);
+        if (handledErrors.Count == 0) return Result.Failure(result.Errors);
             
         await onError();
 
         var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Any() ? Result.Failure(remainingErrors) : Result.Success();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
+    }
+    
+    public static async Task<Result> HandleError<TValue>(this Result<TValue> result, string errorType, Func<IEnumerable<ErrorMessage>, Task<Result>> onError)
+    {
+        if (result.IsSuccess) return Result.Success().WithContext(result);
+        
+        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+        
+        var handledErrors = errorLookup[true].ToList();
+        if (handledErrors.Count == 0) return Result.Failure(result.Errors);
+        
+        var newResult = await onError(handledErrors);
+            
+        var remainingErrors = errorLookup[false].ToList();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
+    }
+    
+    public static async Task<Result> HandleError<TValue>(this Result<TValue> result, string errorType, Func<Task<Result>> onError)
+    {
+        if (result.IsSuccess) return Result.Success().WithContext(result);
+        
+        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+
+        var handledErrors = errorLookup[true].ToList();
+        if (handledErrors.Count == 0) return Result.Failure(result.Errors);
+            
+        var newResult = await onError();
+
+        var remainingErrors = errorLookup[false].ToList();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
     }
 }

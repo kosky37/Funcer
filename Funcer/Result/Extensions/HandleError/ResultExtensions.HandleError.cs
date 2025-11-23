@@ -4,6 +4,21 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
+    public static Result HandleError(this Result result, string errorType, Func<IEnumerable<ErrorMessage>, Result> onError)
+    {
+        if (result.IsSuccess) return result;
+        
+        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+        
+        var handledErrors = errorLookup[true].ToList();
+        if (handledErrors.Count == 0) return result;
+        
+        var newResult = onError(handledErrors);
+            
+        var remainingErrors = errorLookup[false].ToList();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
+    }
+    
     public static Result HandleError(this Result result, string errorType, Action<IEnumerable<ErrorMessage>> onError)
     {
         if (result.IsSuccess) return result;
@@ -11,12 +26,27 @@ public static partial class ResultExtensions
         var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
         
         var handledErrors = errorLookup[true].ToList();
-        if (!handledErrors.Any()) return result;
+        if (handledErrors.Count == 0) return result;
         
         onError(handledErrors);
             
         var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Any() ? Result.Failure(remainingErrors) : Result.Success();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
+    }
+    
+    public static Result HandleError(this Result result, string errorType, Func<Result> onError)
+    {
+        if (result.IsSuccess) return result;
+        
+        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+
+        var handledErrors = errorLookup[true].ToList();
+        if (handledErrors.Count == 0) return result;
+            
+        var newResult = onError();
+
+        var remainingErrors = errorLookup[false].ToList();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
     }
     
     public static Result HandleError(this Result result, string errorType, Action onError)
@@ -26,11 +56,11 @@ public static partial class ResultExtensions
         var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
 
         var handledErrors = errorLookup[true].ToList();
-        if (!handledErrors.Any()) return result;
+        if (handledErrors.Count == 0) return result;
             
         onError();
 
         var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Any() ? Result.Failure(remainingErrors) : Result.Success();
+        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
     }
 }

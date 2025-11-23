@@ -17,4 +17,18 @@ public static partial class ResultExtensions
 
         return await result.HandleError(errorType, onError);
     }
+    
+    public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Task<Result>> onError)
+    {
+        var result = await resultTask;
+
+        return await result.HandleError(errorType, onError);
+    }
+    
+    public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Func<Task<Result>> onError)
+    {
+        var result = await resultTask;
+
+        return await result.HandleError(errorType, onError);
+    }
 }
