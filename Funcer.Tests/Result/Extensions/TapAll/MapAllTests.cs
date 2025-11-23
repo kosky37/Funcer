@@ -1,8 +1,8 @@
 using Funcer.Tests.Common;
 
-namespace Funcer.Tests.Result.Extensions.MapAll;
+namespace Funcer.Tests.Result.Extensions.TapAll;
 
-public class MapAllTests
+public class TapAllTests
 {
     [Fact]
     public async Task SanityCheck()
@@ -12,7 +12,7 @@ public class MapAllTests
             TestResult.Alpha.Async.Success.V1, TestResult.Alpha.Async.Success.V2
         };
         
-        var result = await tasks.MapAll(Funcer.Result.Success);
+        var result = await tasks.TapAll(x => 7);
 
         result.Value.First().Value.Should().BeTrue();
         result.Value.Last().Value.Should().BeFalse();
