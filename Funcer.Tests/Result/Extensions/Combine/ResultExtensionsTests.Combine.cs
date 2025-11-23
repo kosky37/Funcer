@@ -1,6 +1,6 @@
 using Funcer.Tests.Common;
 
-namespace Funcer.Tests.Result.Combine;
+namespace Funcer.Tests.Result.Extensions.Combine;
 
 using Result = Funcer.Result;
 
