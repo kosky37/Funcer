@@ -2,32 +2,32 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static Result<IEnumerable<TMappedValue>> MapAll<TValue, TMappedValue>(this IEnumerable<Result<TValue>> results, Func<TValue, Result<TMappedValue>> mapper)
+    public static Result<IEnumerable<TValue2>> MapAll<TValue, TValue2>(this Result<IEnumerable<TValue>> result, Func<TValue, Result<TValue2>> next)
     {
-        var resultsList = results.ToList();
-        var errors = resultsList.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
-        
+        if (result.IsFailure)
+        {
+            return Result<IEnumerable<TValue2>>.Failure(result.Errors);
+        }
+
+        var mappedResults = result.Value!.Select(next).ToList();
+        var errors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
+
         if (errors.Count is not 0)
         {
-            return Result<IEnumerable<TMappedValue>>.Failure(errors);
+            return Result<IEnumerable<TValue2>>.Failure(errors);
         }
-        
-        var mappedResults = resultsList.Select(x => mapper(x.Value!)).ToList();
-        var mappedErrors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
-        
-        return mappedErrors.Count is not 0
-            ? Result<IEnumerable<TMappedValue>>.Failure(mappedErrors)
-            : Result.Success(mappedResults.Select(x => x.Value!));
+
+        return Result.Success(mappedResults.Select(x => x.Value!)).WithContext(result);
     }
-    
-    public static Result<IEnumerable<TMappedValue>> MapAll<TValue, TMappedValue>(this IEnumerable<Result<TValue>> results, Func<TValue, TMappedValue> mapper)
+
+    public static Result<IEnumerable<TValue2>> MapAll<TValue, TValue2>(this Result<IEnumerable<TValue>> result, Func<TValue, TValue2> next)
     {
-        var resultsList = results.ToList();
-        var errors = resultsList.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
-        
-        return errors.Count is not 0
-            ? Result<IEnumerable<TMappedValue>>.Failure(errors)
-            : Result.Success(resultsList.Select(x => mapper(x.Value!)));
+        if (result.IsFailure)
+        {
+            return Result<IEnumerable<TValue2>>.Failure(result.Errors);
+        }
+
+        return Result.Success(result.Value!.Select(next)).WithContext(result);
     }
 }
 

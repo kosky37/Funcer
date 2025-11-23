@@ -2,28 +2,16 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<IEnumerable<TMappedValue>>> MapAll<TValue, TMappedValue>(this IEnumerable<Task<Result<TValue>>> resultTasks, Func<TValue, Result<TMappedValue>> mapper)
+    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<IEnumerable<TValue>>> resultTask, Func<TValue, Result<TValue2>> next)
     {
-        var results = await Task.WhenAll(resultTasks);
-        return results.MapAll(mapper);
+        var result = await resultTask;
+        return result.MapAll(next);
     }
-    
-    public static async Task<Result<IEnumerable<TMappedValue>>> MapAll<TValue, TMappedValue>(this IEnumerable<Task<Result<TValue>>> resultTasks, Func<TValue, TMappedValue> mapper)
+
+    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<IEnumerable<TValue>>> resultTask, Func<TValue, TValue2> next)
     {
-        var results = await Task.WhenAll(resultTasks);
-        return results.MapAll(mapper);
-    }
-    
-    public static async Task<Result<IEnumerable<TMappedValue>>> MapAll<TValue, TMappedValue>(this IEnumerable<Task<Result<TValue>>> resultTasks, Func<TValue, Task<Result<TMappedValue>>> mapper)
-    {
-        var results = await Task.WhenAll(resultTasks);
-        return await results.MapAll(mapper);
-    }
-    
-    public static async Task<Result<IEnumerable<TMappedValue>>> MapAll<TValue, TMappedValue>(this IEnumerable<Task<Result<TValue>>> resultTasks, Func<TValue, Task<TMappedValue>> mapper)
-    {
-        var results = await Task.WhenAll(resultTasks);
-        return await results.MapAll(mapper);
+        var result = await resultTask;
+        return result.MapAll(next);
     }
 }
 
