@@ -3,29 +3,73 @@
 [![NuGet downloads](https://img.shields.io/nuget/v/funcer.svg)](https://www.nuget.org/packages/Funcer/)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/piotr121993/Funcer/blob/main/LICENSE)
 
-This library helps you write a C# code in a functional way. It is inspired by the CSharpFunctionalExtensions library, but focuses solely on the Result type.
+This library helps you write C# code in a functional way. It is inspired by the [CSharpFunctionalExtensions](https://github.com/vkhorikov/CSharpFunctionalExtensions) library, but focuses solely on the Result type and provides a different approach to error handling.
 
-## What makes it different?
-It uses an `ErrorMessage` type for errors, that is not just an error message but also a type, which allows to map, suppress or otherwise handle specific errors, while making sure that creating new error types is not too verbose. The `ErrorMessage` also has an optional field `Field` for usage with field validation, so that you can correlate an error message to a specific field.
+## Comparison with CSharpFunctionalExtensions
 
-It is an opinionated solution, but I believe it is better then the alternatives:
-- simple string: very easy to instantiate but not very versatile
-- generic type: can be custom tailored but the types that need to be used get very verbose, the addition af a result itself is already making types comlicated. let's say we want to have `MyType` returned, the type need for a simple return like that might look something like this `Task<Result<MyType, ValidationErrorType>>>`
-- strictly typed errors, with each error being a separate class: adds the most flexibility, but it needs a lot of code
+### Key Differences
 
-The failure `Result` is not limited to a single error message. The result stores a list of error messages, so that it's possible to, for example, validate object's fields and return all the issues.
+**Error Handling Approach:**
+- **CSharpFunctionalExtensions**: Uses simple string error messages (`Result<T, string>`) or generic error types (`Result<T, E>`)
+- **Funcer**: Uses a structured `ErrorMessage` type with both a message and a type identifier, providing better error categorization without the verbosity of generic error types
 
-It also adds a `WarningMessage` type passed with the successful `Result`. It is an idea I'm toying with right now, so it might still need a little polish. It allows to create an optional part of the functions chain, while still getting a feedback from that part. It has the same structure as the `ErrorMessage` and in fact the list of errors can be downgraded to warnings.
+**Error Structure:**
+- **CSharpFunctionalExtensions**: Single error per Result (or custom error type)
+- **Funcer**: Multiple errors per Result, allowing validation of multiple fields and collecting all issues at once
+
+**Type Complexity:**
+- **CSharpFunctionalExtensions**: With generic error types, signatures become verbose: `Task<Result<MyType, ValidationErrorType>>`
+- **Funcer**: Simpler signatures: `Result<MyType>` or `Task<Result<MyType>>`, with error types handled through the `ErrorMessage` structure
+
+**Additional Features:**
+- **Funcer** adds `WarningMessage` support, allowing non-critical feedback without breaking the success chain
+- **Funcer** includes an optional `Field` property on `ErrorMessage` for field-specific validation errors
+
+### Why Choose Funcer?
+
+If you need:
+- ✅ Multiple error messages per Result (e.g., form validation with multiple fields)
+- ✅ Error categorization without generic type complexity
+- ✅ Field-specific error tracking
+- ✅ Warning messages alongside successful results
+- ✅ A focused library that only handles Result types
+
+Then Funcer might be a better fit than CSharpFunctionalExtensions.
+
+If you need:
+- ✅ Maybe types (`Maybe<T>`)
+- ✅ Value objects and other functional constructs
+- ✅ Generic error types with compile-time safety
+- ✅ A more comprehensive functional programming toolkit
+
+Then CSharpFunctionalExtensions might be more suitable.
 
 ## API examples:
 
 ### General notes
-In principle:
-- conditions should accept:
-  - boolean `true/false`
-  - function returning boolean `() => true`. Sometimes with a parameter `arg => arg > 0`
-  - a task returning boolean `() => Task.FromResult(true)` or `arg => Task.FromResult(arg > 0)`
-- chain methods should accept both sync and async functions `.Map(arg => arg + 1)` `.Map(arg => Task.FromResult(arg = 1)`
+
+The library follows consistent design principles throughout:
+
+**Condition Parameters:**
+Most methods that accept conditions (like `Ensure`, `MapIf`, `TapIf`, `WarnIf`) support multiple overloads:
+- Direct boolean values: `result.Ensure(value > 0, error)`
+- Synchronous functions: `result.Ensure(() => value > 0, error)` or `result.Ensure(value => value > 0, error)`
+- Asynchronous functions: `await result.Ensure(async () => await ValidateAsync(), error)` or `await result.Ensure(async value => await ValidateAsync(value), error)`
+
+**Chain Methods:**
+Extension methods that transform or process values (like `Map`, `Tap`, `MapAll`, `TapAll`) support both synchronous and asynchronous operations:
+- Synchronous: `result.Map(value => value + 1)`
+- Asynchronous: `await result.Map(async value => await ProcessAsync(value))`
+- Result-returning functions: `result.Map(value => Result.Success(value * 2))`
+- Async Result-returning functions: `await result.Map(async value => await ProcessWithResultAsync(value))`
+
+**Task Variants:**
+For methods that work with `Task<Result<T>>`, there are typically three variants:
+- **Task** (both result and function are async): `Task<Result<T>>` with `Func<T, Task<TResult>>`
+- **Task.Left** (result is async, function is sync): `Task<Result<T>>` with `Func<T, TResult>`
+- **Task.Right** (result is sync, function is async): `Result<T>` with `Func<T, Task<TResult>>`
+
+This flexibility allows you to mix synchronous and asynchronous operations seamlessly throughout your code.
 
 ### Static methods
 
