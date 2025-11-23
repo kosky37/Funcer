@@ -24,8 +24,6 @@
 
     <ItemGroup>
       <Folder Include="Result\" />
-      <Folder Include="Result\Extensions\MapAll\" />
-      <Folder Include="Result\Extensions\TapAll\" />
     </ItemGroup>
 
 </Project>
