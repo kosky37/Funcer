@@ -34,6 +34,7 @@ public static class AsyncFunc
             {
                 public static Func<Types.Alpha, Task> Nothing => _ => Task.CompletedTask;
                 public static Func<Types.Alpha, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(TestValues.Alpha1);
+                public static Func<Types.Alpha, Task<Types.Beta>> Beta1 => _ => Task.FromResult(TestValues.Beta1);
                 public static class Success
                 {
                     public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(TestResult.Success);

@@ -79,6 +79,21 @@ public static class Assertions
         result.Errors.Should().NotBeEmpty();
     };
 
+    public static readonly Action<Result<IEnumerable<Types.Beta>>, IEnumerable<Types.Beta>> ValueResultBetaEnumerableSuccess = (result, expectedValues) =>
+    {
+        result.IsSuccess.Should().BeTrue();
+        result.IsFailure.Should().BeFalse();
+        result.Errors.Should().BeEmpty();
+        result.Value.Should().BeEquivalentTo(expectedValues);
+    };
+    
+    public static readonly Action<Result<IEnumerable<Types.Beta>>, IEnumerable<Types.Beta>> ValueResultBetaEnumerableFailure = (result, _) =>
+    {
+        result.IsSuccess.Should().BeFalse();
+        result.IsFailure.Should().BeTrue();
+        result.Errors.Should().NotBeEmpty();
+    };
+
     public static IResult ShouldBeSuccess(this IResult result)
     {
         result.IsSuccess.Should().BeTrue();

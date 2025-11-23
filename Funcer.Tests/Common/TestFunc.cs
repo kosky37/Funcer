@@ -33,6 +33,7 @@ public static class TestFunc
             {
                 public static Action<Types.Alpha> Nothing => _ => { };
                 public static Func<Types.Alpha, Types.Alpha> Alpha1 => _ => TestValues.Alpha1;
+                public static Func<Types.Alpha, Types.Beta> Beta1 => _ => TestValues.Beta1;
                 public static class Success
                 {
                     public static Func<Types.Alpha, Result> Empty => _ => TestResult.Success;

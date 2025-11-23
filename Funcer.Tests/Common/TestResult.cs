@@ -75,4 +75,25 @@ public static class TestResult
         
         public static Result<IEnumerable<Types.Alpha>> Failure => Result.Failure<IEnumerable<Types.Alpha>>(TestValues.Error);
     }
+    
+    public static class BetaEnumerable
+    {
+        public static class Async
+        {
+            public static class Success
+            {
+                public static Task<Result<IEnumerable<Types.Beta>>> V1V2 => Task.FromResult(Result.Success(new[] { TestValues.Beta1, TestValues.Beta2 }.AsEnumerable()));
+                public static Task<Result<IEnumerable<Types.Beta>>> Empty => Task.FromResult(Result.Success(Array.Empty<Types.Beta>().AsEnumerable()));
+            }
+            public static Task<Result<IEnumerable<Types.Beta>>> Failure => Task.FromResult(Result.Failure<IEnumerable<Types.Beta>>(TestValues.Error));
+        }
+
+        public static class Success
+        {
+            public static Result<IEnumerable<Types.Beta>> V1V2 => Result.Success(new[] { TestValues.Beta1, TestValues.Beta2 }.AsEnumerable());
+            public static Result<IEnumerable<Types.Beta>> Empty => Result.Success(Array.Empty<Types.Beta>().AsEnumerable());
+        }
+        
+        public static Result<IEnumerable<Types.Beta>> Failure => Result.Failure<IEnumerable<Types.Beta>>(TestValues.Error);
+    }
 }
