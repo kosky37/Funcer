@@ -329,31 +329,6 @@ Result result = Result.Success();
 result = result.Side(() => Result.Failure(new ErrorMessage("warning", "Non-critical issue")));
 // result remains Success(), but has a warning
 ```
-#### Log
-On Failure, performs a logging action. The Result is returned unchanged, allowing you to log errors without breaking the chain.
-```csharp
-Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
-
-// Log with an Action
-result.Log(errors => Console.WriteLine(errors.First().Message));
-// Prints the error message, returns the original Failure Result
-
-// Log all errors
-result.Log(errors => 
-{
-    foreach (var error in errors)
-    {
-        Console.WriteLine($"Error: {error.Type} - {error.Message}");
-    }
-});
-
-// Log with async action
-await result.Log(async errors => await LogToDatabaseAsync(errors));
-
-// Log on a non-ValueResult
-Result result = Result.Failure(new ErrorMessage("error", "Something went wrong"));
-result.Log(errors => Logger.LogError(errors));
-```
 #### Ensure
 Checks a condition and changes the Result accordingly. If the condition is false, the Result becomes a Failure with the provided error.
 ```csharp
@@ -449,6 +424,48 @@ Result handledAsync = await result.HandleError("errorType", async errors =>
     await LogToDatabaseAsync(errors);
     return Result.Success();
 });
+```
+#### OnError
+On Failure with a specific error type, performs a side effect without changing the Result. The original Result is preserved unchanged, but errors can be added if the callback returns a Result with errors. Similar to `Tap` but for errors - useful for logging or performing actions when specific errors occur without interrupting the chain.
+```csharp
+Result<int> result = Result.Failure<int>(new ErrorMessage("errorType", "Error message"));
+
+// OnError with an Action - logs when specific error occurs
+result = result.OnError("errorType", errors => Console.WriteLine(errors.First().Message));
+// Prints the error message, returns the original Failure Result unchanged
+
+// OnError with a function returning Result - can add errors but preserves original
+result = result.OnError("errorType", errors => 
+{
+    LogToDatabase(errors);
+    return Result.Failure(new ErrorMessage("AdditionalError", "Something else went wrong"));
+});
+// Original errors are preserved, additional errors are combined
+
+// OnError with async action
+result = await result.OnError("errorType", async errors => 
+{
+    await LogToDatabaseAsync(errors);
+});
+// Logs asynchronously, returns original Result unchanged
+
+// OnError with a function returning Result that succeeds
+result = result.OnError("errorType", errors => 
+{
+    LogError(errors);
+    return Result.Success();
+});
+// Original errors are preserved, no new errors added
+
+// OnError on a non-ValueResult
+Result result = Result.Failure(new ErrorMessage("errorType", "Something went wrong"));
+result = result.OnError("errorType", errors => Logger.LogError(errors));
+// Logs the error, returns original Failure Result unchanged
+
+// OnError only executes if error type matches
+Result result = Result.Failure(new ErrorMessage("otherError", "Different error"));
+result = result.OnError("errorType", errors => Console.WriteLine("This won't execute"));
+// Callback doesn't execute because error type doesn't match
 ```
 #### HandleWarning
 Removes warnings of a specified type and allows a callback to handle them. Useful for processing warnings before removing them.
