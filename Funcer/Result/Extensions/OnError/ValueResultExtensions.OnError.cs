@@ -6,8 +6,8 @@ public static partial class ValueResultExtensions
 {
     extension<TValue>(Result<TValue> result)
     {
-        public Result<TValue> OnError(string errorType,
-            Func<IEnumerable<ErrorMessage>, Result<TValue>> onError)
+        public Result<TValue> OnError<TValue2>(string errorType,
+            Func<IEnumerable<ErrorMessage>, Result<TValue2>> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -27,7 +27,7 @@ public static partial class ValueResultExtensions
             return result.WithContext(nextResult);
         }
 
-        public Result<TValue> OnError(string errorType, Func<IEnumerable<ErrorMessage>, TValue> onError)
+        public Result<TValue> OnError<TValue2>(string errorType, Func<IEnumerable<ErrorMessage>, TValue2> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -41,7 +41,7 @@ public static partial class ValueResultExtensions
             return result;
         }
 
-        public Result<TValue> OnError(string errorType, Func<Result<TValue>> onError)
+        public Result<TValue> OnError<TValue2>(string errorType, Func<Result<TValue2>> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -61,7 +61,7 @@ public static partial class ValueResultExtensions
             return result.WithContext(nextResult);
         }
 
-        public Result<TValue> OnError(string errorType, Func<TValue> onError)
+        public Result<TValue> OnError<TValue2>(string errorType, Func<TValue2> onError)
         {
             if (result.IsSuccess) return result;
         

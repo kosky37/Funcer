@@ -6,7 +6,7 @@ public static partial class ValueResultExtensions
 {
     extension<TValue>(Result<TValue> result)
     {
-        public async Task<Result<TValue>> OnError(string errorType, Func<IEnumerable<ErrorMessage>, Task<TValue>> onError)
+        public async Task<Result<TValue>> OnError(string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -15,14 +15,12 @@ public static partial class ValueResultExtensions
             var matchedErrors = errorLookup[true].ToList();
             if (matchedErrors.Count == 0) return result;
         
-            // Execute the function but ignore the return value - we preserve the original result
             await onError(matchedErrors);
         
-            // Preserve original result unchanged
             return result;
         }
-
-        public async Task<Result<TValue>> OnError(string errorType, Func<Task<TValue>> onError)
+        
+        public async Task<Result<TValue>> OnError(string errorType, Func<Task> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -31,14 +29,41 @@ public static partial class ValueResultExtensions
             var matchedErrors = errorLookup[true].ToList();
             if (matchedErrors.Count == 0) return result;
             
-            // Execute the function but ignore the return value - we preserve the original result
             await onError();
 
-            // Preserve original result unchanged
+            return result;
+        }
+        
+        
+        public async Task<Result<TValue>> OnError<TValue2>(string errorType, Func<IEnumerable<ErrorMessage>, Task<TValue2>> onError)
+        {
+            if (result.IsSuccess) return result;
+        
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+        
+            var matchedErrors = errorLookup[true].ToList();
+            if (matchedErrors.Count == 0) return result;
+        
+            await onError(matchedErrors);
+        
             return result;
         }
 
-        public async Task<Result<TValue>> OnError(string errorType, Func<IEnumerable<ErrorMessage>, Task<Result<TValue>>> onError)
+        public async Task<Result<TValue>> OnError<TValue2>(string errorType, Func<Task<TValue2>> onError)
+        {
+            if (result.IsSuccess) return result;
+        
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+
+            var matchedErrors = errorLookup[true].ToList();
+            if (matchedErrors.Count == 0) return result;
+            
+            await onError();
+
+            return result;
+        }
+
+        public async Task<Result<TValue>> OnError<TValue2>(string errorType, Func<IEnumerable<ErrorMessage>, Task<Result<TValue2>>> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -49,18 +74,16 @@ public static partial class ValueResultExtensions
         
             var nextResult = await onError(matchedErrors);
         
-            // Preserve original result, but combine errors if nextResult has errors
             if (nextResult.IsFailure)
             {
                 var allErrors = result.Errors.Concat(nextResult.Errors).ToList();
                 return Result<TValue>.Failure(allErrors).WithContext(nextResult);
             }
         
-            // Preserve original result unchanged, but preserve warnings from nextResult
             return result.WithContext(nextResult);
         }
 
-        public async Task<Result<TValue>> OnError(string errorType, Func<Task<Result<TValue>>> onError)
+        public async Task<Result<TValue>> OnError<TValue2>(string errorType, Func<Task<Result<TValue2>>> onError)
         {
             if (result.IsSuccess) return result;
         
@@ -71,14 +94,12 @@ public static partial class ValueResultExtensions
             
             var nextResult = await onError();
         
-            // Preserve original result, but combine errors if nextResult has errors
             if (nextResult.IsFailure)
             {
                 var allErrors = result.Errors.Concat(nextResult.Errors).ToList();
                 return Result<TValue>.Failure(allErrors).WithContext(nextResult);
             }
         
-            // Preserve original result unchanged, but preserve warnings from nextResult
             return result.WithContext(nextResult);
         }
     }

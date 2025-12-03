@@ -16,8 +16,7 @@ public static partial class ResultExtensions
             if (matchedErrors.Count == 0) return result;
         
             await onError(matchedErrors);
-        
-            // Preserve original result unchanged
+            
             return result;
         }
 
@@ -32,7 +31,6 @@ public static partial class ResultExtensions
             
             await onError();
 
-            // Preserve original result unchanged
             return result;
         }
 
@@ -47,14 +45,12 @@ public static partial class ResultExtensions
         
             var nextResult = await onError(matchedErrors);
         
-            // Preserve original result, but combine errors if nextResult has errors
             if (nextResult.IsFailure)
             {
                 var allErrors = result.Errors.Concat(nextResult.Errors).ToList();
                 return Result.Failure(allErrors).WithContext(nextResult);
             }
         
-            // Preserve original result unchanged, but preserve warnings from nextResult
             return result.WithContext(nextResult);
         }
 

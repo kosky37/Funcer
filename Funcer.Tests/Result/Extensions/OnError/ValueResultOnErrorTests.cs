@@ -70,4 +70,68 @@ public class ValueResultOnErrorTests
 
         validate(result, TestValues.Alpha1);
     }
+    
+    public static TheoryData<Result<Types.Alpha>, string, Func<IEnumerable<ErrorMessage>, Result<Types.Beta>>, Action<Result<Types.Alpha>, Types.Alpha>> TestData5 => new()
+    {
+        { TestResult.Alpha.Success.V1, TestValues.Error.Type, _ => TestResult.Beta.Success.V1, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Failure, TestValues.Error.Type, _ => TestResult.Beta.Success.V1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, "DifferentErrorType", _ => TestResult.Beta.Success.V1, Assertions.ValueResultFailure },
+    };
+
+    [Theory, MemberData(nameof(TestData5))]
+    public void ValueResult_OnError_Func_ValueResult_With_Errors_DifferentType(Result<Types.Alpha> first, string errorType, Func<IEnumerable<ErrorMessage>, Result<Types.Beta>> onError, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    {
+        var result = first
+            .OnError(errorType, onError);
+
+        validate(result, TestValues.Alpha1);
+    }
+    
+    public static TheoryData<Result<Types.Alpha>, string, Func<Result<Types.Beta>>, Action<Result<Types.Alpha>, Types.Alpha>> TestData6 => new()
+    {
+        { TestResult.Alpha.Success.V1, TestValues.Error.Type, () => TestResult.Beta.Success.V1, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Failure, TestValues.Error.Type, () => TestResult.Beta.Success.V1, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, "DifferentErrorType", () => TestResult.Beta.Success.V1, Assertions.ValueResultFailure },
+    };
+
+    [Theory, MemberData(nameof(TestData6))]
+    public void ValueResult_OnError_Func_ValueResult_DifferentType(Result<Types.Alpha> first, string errorType, Func<Result<Types.Beta>> onError, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    {
+        var result = first
+            .OnError(errorType, onError);
+
+        validate(result, TestValues.Alpha1);
+    }
+    
+    public static TheoryData<Result<Types.Alpha>, string, Func<IEnumerable<ErrorMessage>, Types.Beta>, Action<Result<Types.Alpha>, Types.Alpha>> TestData7 => new()
+    {
+        { TestResult.Alpha.Success.V1, TestValues.Error.Type, _ => TestValues.Beta1, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Failure, TestValues.Error.Type, _ => TestValues.Beta2, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, "DifferentErrorType", _ => TestValues.Beta1, Assertions.ValueResultFailure },
+    };
+
+    [Theory, MemberData(nameof(TestData7))]
+    public void ValueResult_OnError_Func_TValue_With_Errors_DifferentType(Result<Types.Alpha> first, string errorType, Func<IEnumerable<ErrorMessage>, Types.Beta> onError, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    {
+        var result = first
+            .OnError(errorType, onError);
+
+        validate(result, TestValues.Alpha1);
+    }
+    
+    public static TheoryData<Result<Types.Alpha>, string, Func<Types.Beta>, Action<Result<Types.Alpha>, Types.Alpha>> TestData8 => new()
+    {
+        { TestResult.Alpha.Success.V1, TestValues.Error.Type, () => TestValues.Beta1, Assertions.ValueResultSuccess },
+        { TestResult.Alpha.Failure, TestValues.Error.Type, () => TestValues.Beta2, Assertions.ValueResultFailure },
+        { TestResult.Alpha.Failure, "DifferentErrorType", () => TestValues.Beta1, Assertions.ValueResultFailure },
+    };
+
+    [Theory, MemberData(nameof(TestData8))]
+    public void ValueResult_OnError_Func_TValue_DifferentType(Result<Types.Alpha> first, string errorType, Func<Types.Beta> onError, Action<Result<Types.Alpha>, Types.Alpha> validate)
+    {
+        var result = first
+            .OnError(errorType, onError);
+
+        validate(result, TestValues.Alpha1);
+    }
 }
