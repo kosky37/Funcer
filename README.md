@@ -655,31 +655,12 @@ Result<IEnumerable<int>> tappedEmpty = emptyResult.TapAll(x => Console.WriteLine
 // No side effects performed, returns original empty Result
 ```
 #### Combine (Extension)
-Extension method version of the static Combine method. Allows combining a Result with other Results or ValueResults. Also supports IEnumerable and Task combinations for more complex scenarios.
+Extension methods for combining collections of Results. Works with IEnumerable and Task combinations for more complex scenarios.
 ```csharp
 Result result1 = Result.Success();
 Result result2 = Result.Success();
 Result<int> valueResult1 = Result.Success(1);
 Result<int> valueResult2 = Result.Success(2);
-
-// Combine Result with other Results
-Result combined = result1.Combine(result2);
-
-// Combine Result with ValueResults (returns Result<IEnumerable<TValue>>)
-Result<IEnumerable<int>> combinedWithValues = result1.Combine(valueResult1, valueResult2);
-// combinedWithValues.Value will be [1, 2]
-
-// Combine ValueResult with other Results
-Result combinedFromValue = valueResult1.Combine(result1, result2);
-
-// Combine ValueResult with same-type ValueResults
-Result<IEnumerable<int>> combinedSameType = valueResult1.Combine(valueResult2);
-// combinedSameType.Value will be [1, 2]
-
-// Combine ValueResult with different-type ValueResults
-Result<string> stringResult = Result.Success("hello");
-Result<IEnumerable<string>> combinedDifferentType = valueResult1.Combine(stringResult);
-// combinedDifferentType.Value will be ["hello"]
 
 // Combine IEnumerable of Results
 var results = new List<Result> { result1, result2 };
