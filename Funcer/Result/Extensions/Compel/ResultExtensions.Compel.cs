@@ -5,13 +5,16 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static void Compel(this Result result)
+    extension(Result result)
     {
-        if (result.IsFailure) throw new FailureResultException(result.Errors);
-    }
-    
-    public static void Compel(this Result result, Func<IReadOnlyCollection<ErrorMessage>, Exception> exception)
-    {
-        if (result.IsFailure) throw exception(result.Errors);
+        public void Compel()
+        {
+            if (result.IsFailure) throw new FailureResultException(result.Errors);
+        }
+
+        public void Compel(Func<IReadOnlyCollection<ErrorMessage>, Exception> exception)
+        {
+            if (result.IsFailure) throw exception(result.Errors);
+        }
     }
 }

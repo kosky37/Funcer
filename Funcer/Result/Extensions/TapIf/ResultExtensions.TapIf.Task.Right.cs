@@ -2,65 +2,68 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task<Result> TapIf(this Result result, bool condition, Func<Task<Result>> next)
+    extension(Result result)
     {
-        if (result.IsFailure || !condition) return result;
-        var nextResult = await next();
+        public async Task<Result> TapIf(bool condition, Func<Task<Result>> next)
+        {
+            if (result.IsFailure || !condition) return result;
+            var nextResult = await next();
         
-        return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
-    }
-    
-    public static async Task<Result> TapIf(this Result result, Func<bool> condition, Func<Task<Result>> next)
-    {
-        if (result.IsFailure || !condition()) return result;
-        var nextResult = await next();
-        
-        return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
-    }
-    
-    public static async Task<Result> TapIf<TValue>(this Result result, bool condition, Func<Task<Result<TValue>>> next)
-    {
-        if (result.IsFailure || !condition) return result;
-        var nextResult = await next();
-        
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static async Task<Result> TapIf<TValue>(this Result result, Func<bool> condition, Func<Task<Result<TValue>>> next)
-    {
-        if (result.IsFailure || !condition()) return result;
-        var nextResult = await next();
-        
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static async Task<Result> TapIf(this Result result, bool condition, Func<Task> next)
-    {
-        if (result.IsSuccess && condition) await next();
+            return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
+        }
 
-        return result;
-    }
-    
-    public static async Task<Result> TapIf(this Result result, Func<bool> condition, Func<Task> next)
-    {
-        if (result.IsSuccess && condition()) await next();
+        public async Task<Result> TapIf(Func<bool> condition, Func<Task<Result>> next)
+        {
+            if (result.IsFailure || !condition()) return result;
+            var nextResult = await next();
+        
+            return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
+        }
 
-        return result;
-    }
-    
-    public static async Task<Result> TapIf<TValue>(this Result result, bool condition, Func<Task<TValue>> next)
-    {
-        if (result.IsFailure || !condition) return result;
-        await next();
+        public async Task<Result> TapIf<TValue>(bool condition, Func<Task<Result<TValue>>> next)
+        {
+            if (result.IsFailure || !condition) return result;
+            var nextResult = await next();
         
-        return Result.Success().WithContext(result);
-    }
-    
-    public static async Task<Result> TapIf<TValue>(this Result result, Func<bool> condition, Func<Task<TValue>> next)
-    {
-        if (result.IsFailure || !condition()) return result;
-        await next();
+            return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
+
+        public async Task<Result> TapIf<TValue>(Func<bool> condition, Func<Task<Result<TValue>>> next)
+        {
+            if (result.IsFailure || !condition()) return result;
+            var nextResult = await next();
         
-        return Result.Success().WithContext(result);
+            return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
+
+        public async Task<Result> TapIf(bool condition, Func<Task> next)
+        {
+            if (result.IsSuccess && condition) await next();
+
+            return result;
+        }
+
+        public async Task<Result> TapIf(Func<bool> condition, Func<Task> next)
+        {
+            if (result.IsSuccess && condition()) await next();
+
+            return result;
+        }
+
+        public async Task<Result> TapIf<TValue>(bool condition, Func<Task<TValue>> next)
+        {
+            if (result.IsFailure || !condition) return result;
+            await next();
+        
+            return Result.Success().WithContext(result);
+        }
+
+        public async Task<Result> TapIf<TValue>(Func<bool> condition, Func<Task<TValue>> next)
+        {
+            if (result.IsFailure || !condition()) return result;
+            await next();
+        
+            return Result.Success().WithContext(result);
+        }
     }
 }

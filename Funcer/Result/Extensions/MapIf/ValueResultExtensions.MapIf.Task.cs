@@ -2,45 +2,48 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<TValue>> MapIf<TValue>(this Task<Result<TValue>> resultTask, bool condition, Func<Task<Result<TValue>>> next)
+    extension<TValue>(Task<Result<TValue>> resultTask)
     {
-        var result = await resultTask;
+        public async Task<Result<TValue>> MapIf(bool condition, Func<Task<Result<TValue>>> next)
+        {
+            var result = await resultTask;
 
-        return await result.MapIf(condition, next);
-    }
-    
-    public static async Task<Result<TValue>> MapIf<TValue>(this Task<Result<TValue>> resultTask, bool condition, Func<TValue, Task<TValue>> mapping)
-    {
-        var result = await resultTask;
+            return await result.MapIf(condition, next);
+        }
 
-        return await result.MapIf(condition, mapping);
-    }
+        public async Task<Result<TValue>> MapIf(bool condition, Func<TValue, Task<TValue>> mapping)
+        {
+            var result = await resultTask;
 
-    public static async Task<Result<TValue>> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<bool> condition, Func<Task<Result<TValue>>> next)
-    {
-        var result = await resultTask;
+            return await result.MapIf(condition, mapping);
+        }
 
-        return await result.MapIf(condition, next);
-    }
-    
-    public static async Task<Result<TValue>> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<bool> condition, Func<TValue, Task<TValue>> mapping)
-    {
-        var result = await resultTask;
+        public async Task<Result<TValue>> MapIf(Func<bool> condition, Func<Task<Result<TValue>>> next)
+        {
+            var result = await resultTask;
 
-        return await result.MapIf(condition, mapping);
-    }
-    
-    public static async Task<Result<TValue>> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, bool> condition, Func<Task<Result<TValue>>> next)
-    {
-        var result = await resultTask;
+            return await result.MapIf(condition, next);
+        }
 
-        return await result.MapIf(condition, next);
-    }
-    
-    public static async Task<Result<TValue>> MapIf<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, bool> condition, Func<TValue, Task<TValue>> mapping)
-    {
-        var result = await resultTask;
+        public async Task<Result<TValue>> MapIf(Func<bool> condition, Func<TValue, Task<TValue>> mapping)
+        {
+            var result = await resultTask;
 
-        return await result.MapIf(condition, mapping);
+            return await result.MapIf(condition, mapping);
+        }
+
+        public async Task<Result<TValue>> MapIf(Func<TValue, bool> condition, Func<Task<Result<TValue>>> next)
+        {
+            var result = await resultTask;
+
+            return await result.MapIf(condition, next);
+        }
+
+        public async Task<Result<TValue>> MapIf(Func<TValue, bool> condition, Func<TValue, Task<TValue>> mapping)
+        {
+            var result = await resultTask;
+
+            return await result.MapIf(condition, mapping);
+        }
     }
 }

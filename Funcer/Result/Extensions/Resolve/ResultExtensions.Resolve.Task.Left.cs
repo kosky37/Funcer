@@ -4,73 +4,76 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task Resolve(this Task<Result> resultTask, Action onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+    extension(Task<Result> resultTask)
     {
-        var result = await resultTask;
+        public async Task Resolve(Action onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+        {
+            var result = await resultTask;
         
-        result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task Resolve(this Task<Result> resultTask, Action<IEnumerable<WarningMessage>> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
-    {
-        var result = await resultTask;
+            result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task Resolve(Action<IEnumerable<WarningMessage>> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+        {
+            var result = await resultTask;
         
-        result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task Resolve(this Task<Result> resultTask, Action onSuccess, Action onFailure)
-    {
-        var result = await resultTask;
+            result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task Resolve(Action onSuccess, Action onFailure)
+        {
+            var result = await resultTask;
         
-        result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task Resolve(this Task<Result> resultTask, Action<IEnumerable<WarningMessage>> onSuccess, Action onFailure)
-    {
-        var result = await resultTask;
+            result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task Resolve(Action<IEnumerable<WarningMessage>> onSuccess, Action onFailure)
+        {
+            var result = await resultTask;
         
-        result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task<TReturnValue> Resolve<TReturnValue>(this Task<Result> resultTask, Func<TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
-    {
-        var result = await resultTask;
+            result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task<TReturnValue> Resolve<TReturnValue>(Func<TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
+        {
+            var result = await resultTask;
         
-        return result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task<TReturnValue> Resolve<TReturnValue>(this Task<Result> resultTask, Func<IEnumerable<WarningMessage>, TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
-    {
-        var result = await resultTask;
+            return result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task<TReturnValue> Resolve<TReturnValue>(Func<IEnumerable<WarningMessage>, TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
+        {
+            var result = await resultTask;
         
-        return result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task<TReturnValue> Resolve<TReturnValue>(this Task<Result> resultTask, TReturnValue onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
-    {
-        var result = await resultTask;
+            return result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task<TReturnValue> Resolve<TReturnValue>(TReturnValue onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)
+        {
+            var result = await resultTask;
         
-        return result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task<TReturnValue> Resolve<TReturnValue>(this Task<Result> resultTask, TReturnValue onSuccess, TReturnValue onFailure)
-    {
-        var result = await resultTask;
+            return result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task<TReturnValue> Resolve<TReturnValue>(TReturnValue onSuccess, TReturnValue onFailure)
+        {
+            var result = await resultTask;
         
-        return result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task<TReturnValue> Resolve<TReturnValue>(this Task<Result> resultTask, Func<TReturnValue> onSuccess, TReturnValue onFailure)
-    {
-        var result = await resultTask;
+            return result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task<TReturnValue> Resolve<TReturnValue>(Func<TReturnValue> onSuccess, TReturnValue onFailure)
+        {
+            var result = await resultTask;
         
-        return result.Resolve(onSuccess, onFailure);
-    }
-    
-    public static async Task<TReturnValue> Resolve<TReturnValue>(this Task<Result> resultTask, Func<IEnumerable<WarningMessage>, TReturnValue> onSuccess, TReturnValue onFailure)
-    {
-        var result = await resultTask;
+            return result.Resolve(onSuccess, onFailure);
+        }
+
+        public async Task<TReturnValue> Resolve<TReturnValue>(Func<IEnumerable<WarningMessage>, TReturnValue> onSuccess, TReturnValue onFailure)
+        {
+            var result = await resultTask;
         
-        return result.Resolve(onSuccess, onFailure);
+            return result.Resolve(onSuccess, onFailure);
+        }
     }
 }

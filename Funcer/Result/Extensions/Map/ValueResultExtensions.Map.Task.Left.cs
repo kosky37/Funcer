@@ -2,27 +2,30 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<TValue>> Map<TValue>(this Task<Result<TValue>> resultTask, Func<Result<TValue>> next)
+    extension<TValue>(Task<Result<TValue>> resultTask)
     {
-        var result = await resultTask;
-        return result.Map(next);
-    }
-    
-    public static async Task<Result<TValue2>> Map<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Func<TValue1, Result<TValue2>> next)
-    {
-        var result = await resultTask;
-        return result.Map(next);
-    }
-    
-    public static async Task<Result<TValue2>> Map<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Func<TValue2> next)
-    {
-        var result = await resultTask;
-        return result.Map(next);
-    }
-    
-    public static async Task<Result<TValue2>> Map<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Func<TValue1, TValue2> next)
-    {
-        var result = await resultTask;
-        return result.Map(next);
+        public async Task<Result<TValue>> Map(Func<Result<TValue>> next)
+        {
+            var result = await resultTask;
+            return result.Map(next);
+        }
+
+        public async Task<Result<TValue2>> Map<TValue2>(Func<TValue, Result<TValue2>> next)
+        {
+            var result = await resultTask;
+            return result.Map(next);
+        }
+
+        public async Task<Result<TValue2>> Map<TValue2>(Func<TValue2> next)
+        {
+            var result = await resultTask;
+            return result.Map(next);
+        }
+
+        public async Task<Result<TValue2>> Map<TValue2>(Func<TValue, TValue2> next)
+        {
+            var result = await resultTask;
+            return result.Map(next);
+        }
     }
 }

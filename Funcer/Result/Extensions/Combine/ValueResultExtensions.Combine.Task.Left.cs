@@ -2,10 +2,13 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<IEnumerable<TValue>>> Combine<TValue>(this IEnumerable<Task<Result<TValue>>> resultTasks)
+    extension<TValue>(IEnumerable<Task<Result<TValue>>> resultTasks)
     {
-        var results = await Task.WhenAll(resultTasks);
-        return results.Combine();
+        public async Task<Result<IEnumerable<TValue>>> Combine()
+        {
+            var results = await Task.WhenAll(resultTasks);
+            return results.Combine();
+        }
     }
 }
 

@@ -4,15 +4,18 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<TValue>> Ensure<TValue>(this Task<Result<TValue>> resultTask, Func<Task<bool>> condition, ErrorMessage error)
+    extension<TValue>(Task<Result<TValue>> resultTask)
     {
-        var result = await resultTask;
-        return await result.Ensure(condition, error);
-    }
-    
-    public static async Task<Result<TValue>> Ensure<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, Task<bool>> condition, ErrorMessage error)
-    {
-        var result = await resultTask;
-        return await result.Ensure(condition, error);
+        public async Task<Result<TValue>> Ensure(Func<Task<bool>> condition, ErrorMessage error)
+        {
+            var result = await resultTask;
+            return await result.Ensure(condition, error);
+        }
+
+        public async Task<Result<TValue>> Ensure(Func<TValue, Task<bool>> condition, ErrorMessage error)
+        {
+            var result = await resultTask;
+            return await result.Ensure(condition, error);
+        }
     }
 }

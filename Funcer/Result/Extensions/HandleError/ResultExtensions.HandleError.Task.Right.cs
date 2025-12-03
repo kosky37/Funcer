@@ -4,63 +4,66 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task<Result> HandleError(this Result result, string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)
+    extension(Result result)
     {
-        if (result.IsSuccess) return result;
+        public async Task<Result> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)
+        {
+            if (result.IsSuccess) return result;
         
-        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
         
-        var handledErrors = errorLookup[true].ToList();
-        if (handledErrors.Count == 0) return result;
+            var handledErrors = errorLookup[true].ToList();
+            if (handledErrors.Count == 0) return result;
         
-        await onError(handledErrors);
+            await onError(handledErrors);
             
-        var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
-    }
-    
-    public static async Task<Result> HandleError(this Result result, string errorType, Func<Task> onError)
-    {
-        if (result.IsSuccess) return result;
-        
-        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+            var remainingErrors = errorLookup[false].ToList();
+            return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
+        }
 
-        var handledErrors = errorLookup[true].ToList();
-        if (handledErrors.Count == 0) return result;
+        public async Task<Result> HandleError(string errorType, Func<Task> onError)
+        {
+            if (result.IsSuccess) return result;
+        
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+
+            var handledErrors = errorLookup[true].ToList();
+            if (handledErrors.Count == 0) return result;
             
-        await onError();
+            await onError();
 
-        var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
-    }
-    
-    public static async Task<Result> HandleError(this Result result, string errorType, Func<IEnumerable<ErrorMessage>, Task<Result>> onError)
-    {
-        if (result.IsSuccess) return result;
+            var remainingErrors = errorLookup[false].ToList();
+            return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : Result.Success();
+        }
+
+        public async Task<Result> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Task<Result>> onError)
+        {
+            if (result.IsSuccess) return result;
         
-        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
         
-        var handledErrors = errorLookup[true].ToList();
-        if (handledErrors.Count == 0) return result;
+            var handledErrors = errorLookup[true].ToList();
+            if (handledErrors.Count == 0) return result;
         
-        var newResult = await onError(handledErrors);
+            var newResult = await onError(handledErrors);
             
-        var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
-    }
-    
-    public static async Task<Result> HandleError(this Result result, string errorType, Func<Task<Result>> onError)
-    {
-        if (result.IsSuccess) return result;
+            var remainingErrors = errorLookup[false].ToList();
+            return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
+        }
+
+        public async Task<Result> HandleError(string errorType, Func<Task<Result>> onError)
+        {
+            if (result.IsSuccess) return result;
         
-        var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
 
-        var handledErrors = errorLookup[true].ToList();
-        if (handledErrors.Count == 0) return result;
+            var handledErrors = errorLookup[true].ToList();
+            if (handledErrors.Count == 0) return result;
             
-        var newResult = await onError();
+            var newResult = await onError();
 
-        var remainingErrors = errorLookup[false].ToList();
-        return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
+            var remainingErrors = errorLookup[false].ToList();
+            return remainingErrors.Count != 0 ? Result.Failure(remainingErrors) : newResult;
+        }
     }
 }

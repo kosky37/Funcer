@@ -2,33 +2,36 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Result<IEnumerable<TValue>> result, Func<TValue, Task<Result<TValue2>>> next)
+    extension<TValue>(Result<IEnumerable<TValue>> result)
     {
-        if (result.IsFailure)
+        public async Task<Result<IEnumerable<TValue2>>> MapAll<TValue2>(Func<TValue, Task<Result<TValue2>>> next)
         {
-            return Result<IEnumerable<TValue2>>.Failure(result.Errors);
+            if (result.IsFailure)
+            {
+                return Result<IEnumerable<TValue2>>.Failure(result.Errors);
+            }
+
+            var mappedResults = await Task.WhenAll(result.Value!.Select(next));
+            var errors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
+
+            if (errors.Count is not 0)
+            {
+                return Result<IEnumerable<TValue2>>.Failure(errors);
+            }
+
+            return Result.Success(mappedResults.Select(x => x.Value!)).WithContext(result);
         }
 
-        var mappedResults = await Task.WhenAll(result.Value!.Select(next));
-        var errors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
-
-        if (errors.Count is not 0)
+        public async Task<Result<IEnumerable<TValue2>>> MapAll<TValue2>(Func<TValue, Task<TValue2>> next)
         {
-            return Result<IEnumerable<TValue2>>.Failure(errors);
+            if (result.IsFailure)
+            {
+                return Result<IEnumerable<TValue2>>.Failure(result.Errors);
+            }
+
+            var mappedValues = await Task.WhenAll(result.Value!.Select(next));
+            return Result.Success(mappedValues.AsEnumerable()).WithContext(result);
         }
-
-        return Result.Success(mappedResults.Select(x => x.Value!)).WithContext(result);
-    }
-
-    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Result<IEnumerable<TValue>> result, Func<TValue, Task<TValue2>> next)
-    {
-        if (result.IsFailure)
-        {
-            return Result<IEnumerable<TValue2>>.Failure(result.Errors);
-        }
-
-        var mappedValues = await Task.WhenAll(result.Value!.Select(next));
-        return Result.Success(mappedValues.AsEnumerable()).WithContext(result);
     }
 }
 

@@ -4,28 +4,31 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static void Resolve<TValue>(this Result<TValue> result, Action<TValue> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+    extension<TValue>(Result<TValue> result)
     {
-        if (result.IsFailure) onFailure(result.Errors);
-        else onSuccess(result.Value!);
-    }
-    
-    public static void Resolve<TValue>(this Result<TValue> result, Action<TValue, IEnumerable<WarningMessage>> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
-    {
-        if (result.IsFailure) onFailure(result.Errors);
-        else onSuccess(result.Value!, result.Warnings);
-    }
-    
-    public static void Resolve<TValue>(this Result<TValue> result, Action<TValue> onSuccess, Action onFailure)
-    {
-        if (result.IsFailure) onFailure();
-        else onSuccess(result.Value!);
-    }
-    
-    public static void Resolve<TValue>(this Result<TValue> result, Action<TValue, IEnumerable<WarningMessage>> onSuccess, Action onFailure)
-    {
-        if (result.IsFailure) onFailure();
-        else onSuccess(result.Value!, result.Warnings);
+        public void Resolve(Action<TValue> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+        {
+            if (result.IsFailure) onFailure(result.Errors);
+            else onSuccess(result.Value!);
+        }
+
+        public void Resolve(Action<TValue, IEnumerable<WarningMessage>> onSuccess, Action<IEnumerable<ErrorMessage>> onFailure)
+        {
+            if (result.IsFailure) onFailure(result.Errors);
+            else onSuccess(result.Value!, result.Warnings);
+        }
+
+        public void Resolve(Action<TValue> onSuccess, Action onFailure)
+        {
+            if (result.IsFailure) onFailure();
+            else onSuccess(result.Value!);
+        }
+
+        public void Resolve(Action<TValue, IEnumerable<WarningMessage>> onSuccess, Action onFailure)
+        {
+            if (result.IsFailure) onFailure();
+            else onSuccess(result.Value!, result.Warnings);
+        }
     }
 
     public static TReturnValue Resolve<TReturnValue, TValue>(this Result<TValue> result, Func<TValue, TReturnValue> onSuccess, Func<IEnumerable<ErrorMessage>, TReturnValue> onFailure)

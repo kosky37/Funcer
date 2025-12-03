@@ -4,9 +4,12 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<TValue>> Warn<TValue>(this Task<Result<TValue>> resultTask, WarningMessage warning)
+    extension<TValue>(Task<Result<TValue>> resultTask)
     {
-        var result = await resultTask;
-        return result.Warn(warning);
+        public async Task<Result<TValue>> Warn(WarningMessage warning)
+        {
+            var result = await resultTask;
+            return result.Warn(warning);
+        }
     }
 }

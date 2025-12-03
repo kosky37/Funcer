@@ -4,42 +4,45 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Action onWarning)
+    extension<TValue>(Result<TValue> result)
     {
-        if (result.IsFailure) return result;
+        public Result<TValue> HandleWarning(string errorType, Action onWarning)
+        {
+            if (result.IsFailure) return result;
         
-        var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
+            var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (handledWarnings.Count == 0) return result;
+            if (handledWarnings.Count == 0) return result;
 
-        onWarning();
+            onWarning();
 
-        return result.WithoutWarnings(handledWarnings);
-    }
-    
-    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Action<IEnumerable<WarningMessage>> onWarning)
-    {
-        if (result.IsFailure) return result;
+            return result.WithoutWarnings(handledWarnings);
+        }
+
+        public Result<TValue> HandleWarning(string errorType, Action<IEnumerable<WarningMessage>> onWarning)
+        {
+            if (result.IsFailure) return result;
         
-        var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
+            var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (handledWarnings.Count == 0) return result;
+            if (handledWarnings.Count == 0) return result;
 
-        onWarning(handledWarnings);
+            onWarning(handledWarnings);
 
-        return result.WithoutWarnings(handledWarnings);
-    }
-    
-    public static Result<TValue> HandleWarning<TValue>(this Result<TValue> result, string errorType, Action<IEnumerable<WarningMessage>, TValue> onWarning)
-    {
-        if (result.IsFailure) return result;
+            return result.WithoutWarnings(handledWarnings);
+        }
+
+        public Result<TValue> HandleWarning(string errorType, Action<IEnumerable<WarningMessage>, TValue> onWarning)
+        {
+            if (result.IsFailure) return result;
         
-        var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
+            var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (handledWarnings.Count == 0) return result;
+            if (handledWarnings.Count == 0) return result;
 
-        onWarning(handledWarnings, result.Value);
+            onWarning(handledWarnings, result.Value);
 
-        return result.WithoutWarnings(handledWarnings);
+            return result.WithoutWarnings(handledWarnings);
+        }
     }
 }

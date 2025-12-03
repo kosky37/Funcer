@@ -4,31 +4,34 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Action<IEnumerable<ErrorMessage>> onError)
+    extension(Task<Result> resultTask)
     {
-        var result = await resultTask;
+        public async Task<Result> HandleError(string errorType, Action<IEnumerable<ErrorMessage>> onError)
+        {
+            var result = await resultTask;
 
-        return result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Action onError)
-    {
-        var result = await resultTask;
+            return result.HandleError(errorType, onError);
+        }
 
-        return result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Result> onError)
-    {
-        var result = await resultTask;
+        public async Task<Result> HandleError(string errorType, Action onError)
+        {
+            var result = await resultTask;
 
-        return result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError(this Task<Result> resultTask, string errorType, Func<Result> onError)
-    {
-        var result = await resultTask;
+            return result.HandleError(errorType, onError);
+        }
 
-        return result.HandleError(errorType, onError);
+        public async Task<Result> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Result> onError)
+        {
+            var result = await resultTask;
+
+            return result.HandleError(errorType, onError);
+        }
+
+        public async Task<Result> HandleError(string errorType, Func<Result> onError)
+        {
+            var result = await resultTask;
+
+            return result.HandleError(errorType, onError);
+        }
     }
 }

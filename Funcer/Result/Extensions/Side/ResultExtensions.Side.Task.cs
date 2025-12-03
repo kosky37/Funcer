@@ -2,17 +2,20 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task<Result> Side(this Task<Result> resultTask, Func<Task<Result>> next)
+    extension(Task<Result> resultTask)
     {
-        var result = await resultTask;
+        public async Task<Result> Side(Func<Task<Result>> next)
+        {
+            var result = await resultTask;
 
-        return await result.Side(next);
-    }
-    
-    public static async Task<Result> Side<TValue>(this Task<Result> resultTask, Func<Task<Result<TValue>>> next)
-    {
-        var result = await resultTask;
+            return await result.Side(next);
+        }
 
-        return await result.Side(next);
+        public async Task<Result> Side<TValue>(Func<Task<Result<TValue>>> next)
+        {
+            var result = await resultTask;
+
+            return await result.Side(next);
+        }
     }
 }

@@ -2,14 +2,20 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static Result Combine(this IEnumerable<IResult> results)
+    extension(IEnumerable<IResult> results)
     {
-        return Result.Combine(results);
+        public Result Combine()
+        {
+            return Result.Combine(results);
+        }
     }
     
-    public static Result Combine(this IEnumerable<Result> results)
+    extension(IEnumerable<Result> results)
     {
-        return Result.Combine(results.Cast<IResult>());
+        public Result Combine()
+        {
+            return Result.Combine(results.Cast<IResult>());
+        }
     }
 }
 

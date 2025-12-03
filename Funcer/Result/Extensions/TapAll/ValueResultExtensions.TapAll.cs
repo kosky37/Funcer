@@ -2,57 +2,60 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static Result<IEnumerable<TValue>> TapAll<TValue>(this Result<IEnumerable<TValue>> result, Func<TValue, Result> next)
+    extension<TValue>(Result<IEnumerable<TValue>> result)
     {
-        if (result.IsFailure) return result;
-
-        var tapResults = result.Value!.Select(next).ToList();
-        var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
-
-        if (errors.Count is not 0)
+        public Result<IEnumerable<TValue>> TapAll(Func<TValue, Result> next)
         {
-            return Result<IEnumerable<TValue>>.Failure(errors);
-        }
+            if (result.IsFailure) return result;
 
-        if (tapResults.Count == 0)
-        {
-            return result;
-        }
+            var tapResults = result.Value!.Select(next).ToList();
+            var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
-        return result.WithContext(tapResults[0]);
-    }
-
-    public static Result<IEnumerable<TValue>> TapAll<TValue>(this Result<IEnumerable<TValue>> result, Action<TValue> next)
-    {
-        if (result.IsSuccess)
-        {
-            foreach (var item in result.Value!)
+            if (errors.Count is not 0)
             {
-                next(item);
+                return Result<IEnumerable<TValue>>.Failure(errors);
             }
+
+            if (tapResults.Count == 0)
+            {
+                return result;
+            }
+
+            return result.WithContext(tapResults[0]);
         }
 
-        return result;
-    }
-
-    public static Result<IEnumerable<TValue>> TapAll<TValue, TValue2>(this Result<IEnumerable<TValue>> result, Func<TValue, Result<TValue2>> next)
-    {
-        if (result.IsFailure) return result;
-
-        var tapResults = result.Value!.Select(next).ToList();
-        var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
-
-        if (errors.Count is not 0)
+        public Result<IEnumerable<TValue>> TapAll(Action<TValue> next)
         {
-            return Result<IEnumerable<TValue>>.Failure(errors);
-        }
+            if (result.IsSuccess)
+            {
+                foreach (var item in result.Value!)
+                {
+                    next(item);
+                }
+            }
 
-        if (tapResults.Count == 0)
-        {
             return result;
         }
 
-        return result.WithContext(tapResults[0]);
+        public Result<IEnumerable<TValue>> TapAll<TValue2>(Func<TValue, Result<TValue2>> next)
+        {
+            if (result.IsFailure) return result;
+
+            var tapResults = result.Value!.Select(next).ToList();
+            var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
+
+            if (errors.Count is not 0)
+            {
+                return Result<IEnumerable<TValue>>.Failure(errors);
+            }
+
+            if (tapResults.Count == 0)
+            {
+                return result;
+            }
+
+            return result.WithContext(tapResults[0]);
+        }
     }
 }
 

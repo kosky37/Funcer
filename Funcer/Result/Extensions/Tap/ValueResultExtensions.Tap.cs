@@ -2,48 +2,51 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static Result<TValue> Tap<TValue>(this Result<TValue> result, Func<Result<TValue>> next)
+    extension<TValue>(Result<TValue> result)
     {
-        if (result.IsFailure) return result;
-        var nextResult = next();
+        public Result<TValue> Tap(Func<Result<TValue>> next)
+        {
+            if (result.IsFailure) return result;
+            var nextResult = next();
         
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static Result<TValue> Tap<TValue>(this Result<TValue> result, Func<TValue, Result> next)
-    {
-        if (result.IsFailure) return result;
-        var nextResult = next(result.Value!);
-        
-        return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static Result<TValue> Tap<TValue>(this Result<TValue> result, Action next)
-    {
-        if (result.IsSuccess) next();
-    
-        return result;
-    }
-    
-    public static Result<TValue> Tap<TValue>(this Result<TValue> result, Action<TValue> next)
-    {
-        if (result.IsSuccess) next(result.Value!);
+            return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
 
-        return result;
-    }
-    
-    public static Result<TValue1> Tap<TValue1, TValue2>(this Result<TValue1> result, Func<TValue1, Result<TValue2>> next)
-    {
-        if (result.IsFailure) return result;
-        var nextResult = next(result.Value!);
+        public Result<TValue> Tap(Func<TValue, Result> next)
+        {
+            if (result.IsFailure) return result;
+            var nextResult = next(result.Value!);
         
-        return nextResult.IsFailure ? Result<TValue1>.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static Result<TValue1> Tap<TValue1, TValue2>(this Result<TValue1> result, Func<TValue2> next)
-    {
-        if (result.IsSuccess) next();
+            return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
 
-        return result;
+        public Result<TValue> Tap(Action next)
+        {
+            if (result.IsSuccess) next();
+    
+            return result;
+        }
+
+        public Result<TValue> Tap(Action<TValue> next)
+        {
+            if (result.IsSuccess) next(result.Value!);
+
+            return result;
+        }
+
+        public Result<TValue> Tap<TValue2>(Func<TValue, Result<TValue2>> next)
+        {
+            if (result.IsFailure) return result;
+            var nextResult = next(result.Value!);
+        
+            return nextResult.IsFailure ? Result<TValue>.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
+
+        public Result<TValue> Tap<TValue2>(Func<TValue2> next)
+        {
+            if (result.IsSuccess) next();
+
+            return result;
+        }
     }
 }

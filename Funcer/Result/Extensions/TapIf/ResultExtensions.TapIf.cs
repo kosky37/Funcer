@@ -2,65 +2,68 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static Result TapIf(this Result result, bool condition, Func<Result> next)
+    extension(Result result)
     {
-        if (result.IsFailure || !condition) return result;
-        var nextResult = next();
+        public Result TapIf(bool condition, Func<Result> next)
+        {
+            if (result.IsFailure || !condition) return result;
+            var nextResult = next();
         
-        return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
-    }
-    
-    public static Result TapIf(this Result result, Func<bool> condition, Func<Result> next)
-    {
-        if (result.IsFailure || !condition()) return result;
-        var nextResult = next();
-        
-        return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
-    }
-    
-    public static Result TapIf<TValue>(this Result result, bool condition, Func<Result<TValue>> next)
-    {
-        if (result.IsFailure || !condition) return result;
-        var nextResult = next();
-        
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static Result TapIf<TValue>(this Result result, Func<bool> condition, Func<Result<TValue>> next)
-    {
-        if (result.IsFailure || !condition()) return result;
-        var nextResult = next();
-        
-        return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
-    }
-    
-    public static Result TapIf(this Result result, bool condition, Action next)
-    {
-        if (result.IsSuccess && condition) next();
+            return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
+        }
 
-        return result;
-    }
-    
-    public static Result TapIf(this Result result, Func<bool> condition, Action next)
-    {
-        if (result.IsSuccess && condition()) next();
+        public Result TapIf(Func<bool> condition, Func<Result> next)
+        {
+            if (result.IsFailure || !condition()) return result;
+            var nextResult = next();
+        
+            return nextResult.IsFailure ? nextResult : result.WithContext(nextResult);
+        }
 
-        return result;
-    }
-    
-    public static Result TapIf<TValue>(this Result result, bool condition, Func<TValue> next)
-    {
-        if (result.IsFailure || !condition) return result;
-        next();
+        public Result TapIf<TValue>(bool condition, Func<Result<TValue>> next)
+        {
+            if (result.IsFailure || !condition) return result;
+            var nextResult = next();
         
-        return Result.Success().WithContext(result);
-    }
-    
-    public static Result TapIf<TValue>(this Result result, Func<bool> condition, Func<TValue> next)
-    {
-        if (result.IsFailure || !condition()) return result;
-        next();
+            return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
+
+        public Result TapIf<TValue>(Func<bool> condition, Func<Result<TValue>> next)
+        {
+            if (result.IsFailure || !condition()) return result;
+            var nextResult = next();
         
-        return Result.Success().WithContext(result);
+            return nextResult.IsFailure ? Result.Failure(nextResult.Errors) : result.WithContext(nextResult);
+        }
+
+        public Result TapIf(bool condition, Action next)
+        {
+            if (result.IsSuccess && condition) next();
+
+            return result;
+        }
+
+        public Result TapIf(Func<bool> condition, Action next)
+        {
+            if (result.IsSuccess && condition()) next();
+
+            return result;
+        }
+
+        public Result TapIf<TValue>(bool condition, Func<TValue> next)
+        {
+            if (result.IsFailure || !condition) return result;
+            next();
+        
+            return Result.Success().WithContext(result);
+        }
+
+        public Result TapIf<TValue>(Func<bool> condition, Func<TValue> next)
+        {
+            if (result.IsFailure || !condition()) return result;
+            next();
+        
+            return Result.Success().WithContext(result);
+        }
     }
 }

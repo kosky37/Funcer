@@ -4,21 +4,24 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task<Result> Side(this Result result, Func<Task<Result>> next)
+    extension(Result result)
     {
-        if (result.IsFailure) return result;
+        public async Task<Result> Side(Func<Task<Result>> next)
+        {
+            if (result.IsFailure) return result;
 
-        var nextResult = await next();
+            var nextResult = await next();
 
-        return nextResult.IsFailure ? result.WithWarnings(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
-    }
-    
-    public static async Task<Result> Side<TValue>(this Result result, Func<Task<Result<TValue>>> next)
-    {
-        if (result.IsFailure) return result;
+            return nextResult.IsFailure ? result.WithWarnings(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
+        }
+
+        public async Task<Result> Side<TValue>(Func<Task<Result<TValue>>> next)
+        {
+            if (result.IsFailure) return result;
         
-        var nextResult = await next();
+            var nextResult = await next();
 
-        return nextResult.IsFailure ? result.WithWarnings(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
+            return nextResult.IsFailure ? result.WithWarnings(nextResult.Errors.Select(error => new WarningMessage(error))) : result.WithContext(nextResult);
+        }
     }
 }

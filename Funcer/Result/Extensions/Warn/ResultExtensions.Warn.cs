@@ -4,8 +4,11 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static Result Warn(this Result result, WarningMessage warning)
+    extension(Result result)
     {
-        return result.IsFailure ? result : result.WithWarning(warning);
+        public Result Warn(WarningMessage warning)
+        {
+            return result.IsFailure ? result : result.WithWarning(warning);
+        }
     }
 }

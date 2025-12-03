@@ -4,8 +4,11 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task Compel(this Result result, Func<IEnumerable<ErrorMessage>, Task<Exception>> exception)
+    extension(Result result)
     {
-        if (result.IsFailure) throw await exception(result.Errors);
+        public async Task Compel(Func<IEnumerable<ErrorMessage>, Task<Exception>> exception)
+        {
+            if (result.IsFailure) throw await exception(result.Errors);
+        }
     }
 }

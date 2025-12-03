@@ -2,39 +2,42 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<TValue>> Tap<TValue>(this Task<Result<TValue>> resultTask, Func<Result<TValue>> next)
+    extension<TValue>(Task<Result<TValue>> resultTask)
     {
-        var result = await resultTask;
-        return result.Tap(next);
-    }
-    
-    public static async Task<Result<TValue>> Tap<TValue>(this Task<Result<TValue>> resultTask, Func<TValue, Result> next)
-    {
-        var result = await resultTask;
-        return result.Tap(next);
-    }
-    
-    public static async Task<Result<TValue>> Tap<TValue>(this Task<Result<TValue>> resultTask, Action next)
-    {
-        var result = await resultTask;
-        return result.Tap(next);
-    }
-    
-    public static async Task<Result<TValue>> Tap<TValue>(this Task<Result<TValue>> resultTask, Action<TValue> next)
-    {
-        var result = await resultTask;
-        return result.Tap(next);
-    }
-    
-    public static async Task<Result<TValue1>> Tap<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Func<TValue1, Result<TValue2>> next)
-    {
-        var result = await resultTask;
-        return result.Tap(next);
-    }
-    
-    public static async Task<Result<TValue1>> Tap<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Func<TValue2> next)
-    {
-        var result = await resultTask;
-        return result.Tap(next);
+        public async Task<Result<TValue>> Tap(Func<Result<TValue>> next)
+        {
+            var result = await resultTask;
+            return result.Tap(next);
+        }
+
+        public async Task<Result<TValue>> Tap(Func<TValue, Result> next)
+        {
+            var result = await resultTask;
+            return result.Tap(next);
+        }
+
+        public async Task<Result<TValue>> Tap(Action next)
+        {
+            var result = await resultTask;
+            return result.Tap(next);
+        }
+
+        public async Task<Result<TValue>> Tap(Action<TValue> next)
+        {
+            var result = await resultTask;
+            return result.Tap(next);
+        }
+
+        public async Task<Result<TValue>> Tap<TValue2>(Func<TValue, Result<TValue2>> next)
+        {
+            var result = await resultTask;
+            return result.Tap(next);
+        }
+
+        public async Task<Result<TValue>> Tap<TValue2>(Func<TValue2> next)
+        {
+            var result = await resultTask;
+            return result.Tap(next);
+        }
     }
 }

@@ -4,29 +4,32 @@ namespace Funcer;
 
 public static partial class ResultExtensions
 {
-    public static async Task<Result> HandleWarning(this Result result, string errorType, Func<IEnumerable<WarningMessage>, Task> onWarning)
+    extension(Result result)
     {
-        if (result.IsFailure) return result;
+        public async Task<Result> HandleWarning(string errorType, Func<IEnumerable<WarningMessage>, Task> onWarning)
+        {
+            if (result.IsFailure) return result;
         
-        var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
+            var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (handledWarnings.Count == 0) return result;
+            if (handledWarnings.Count == 0) return result;
 
-        await onWarning(handledWarnings);
+            await onWarning(handledWarnings);
 
-        return result.WithoutWarnings(handledWarnings);
-    }
-    
-    public static async Task<Result> HandleWarning(this Result result, string errorType, Func<Task> onWarning)
-    {
-        if (result.IsFailure) return result;
+            return result.WithoutWarnings(handledWarnings);
+        }
+
+        public async Task<Result> HandleWarning(string errorType, Func<Task> onWarning)
+        {
+            if (result.IsFailure) return result;
         
-        var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
+            var handledWarnings = result.Warnings.Where(e => e.Type == errorType).ToList();
 
-        if (handledWarnings.Count == 0) return result;
+            if (handledWarnings.Count == 0) return result;
 
-        await onWarning();
+            await onWarning();
 
-        return result.WithoutWarnings(handledWarnings);
+            return result.WithoutWarnings(handledWarnings);
+        }
     }
 }

@@ -2,22 +2,25 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<IEnumerable<TValue>>> TapAll<TValue>(this Task<Result<IEnumerable<TValue>>> resultTask, Func<TValue, Result> next)
+    extension<TValue>(Task<Result<IEnumerable<TValue>>> resultTask)
     {
-        var result = await resultTask;
-        return result.TapAll(next);
-    }
+        public async Task<Result<IEnumerable<TValue>>> TapAll(Func<TValue, Result> next)
+        {
+            var result = await resultTask;
+            return result.TapAll(next);
+        }
 
-    public static async Task<Result<IEnumerable<TValue>>> TapAll<TValue>(this Task<Result<IEnumerable<TValue>>> resultTask, Action<TValue> next)
-    {
-        var result = await resultTask;
-        return result.TapAll(next);
-    }
+        public async Task<Result<IEnumerable<TValue>>> TapAll(Action<TValue> next)
+        {
+            var result = await resultTask;
+            return result.TapAll(next);
+        }
 
-    public static async Task<Result<IEnumerable<TValue>>> TapAll<TValue, TValue2>(this Task<Result<IEnumerable<TValue>>> resultTask, Func<TValue, Result<TValue2>> next)
-    {
-        var result = await resultTask;
-        return result.TapAll(next);
+        public async Task<Result<IEnumerable<TValue>>> TapAll<TValue2>(Func<TValue, Result<TValue2>> next)
+        {
+            var result = await resultTask;
+            return result.TapAll(next);
+        }
     }
 }
 

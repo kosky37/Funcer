@@ -4,59 +4,62 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    public static async Task<Result<TValue>> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Task<TValue>> onError)
+    extension<TValue>(Task<Result<TValue>> resultTask)
     {
-        var result = await resultTask;
+        public async Task<Result<TValue>> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Task<TValue>> onError)
+        {
+            var result = await resultTask;
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result<TValue>> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<Task<TValue>> onError)
-    {
-        var result = await resultTask;
+            return await result.HandleError(errorType, onError);
+        }
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result<TValue>> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Task<Result<TValue>>> onError)
-    {
-        var result = await resultTask;
+        public async Task<Result<TValue>> HandleError(string errorType, Func<Task<TValue>> onError)
+        {
+            var result = await resultTask;
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result<TValue>> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<Task<Result<TValue>>> onError)
-    {
-        var result = await resultTask;
+            return await result.HandleError(errorType, onError);
+        }
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)
-    {
-        var result = await resultTask;
+        public async Task<Result<TValue>> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Task<Result<TValue>>> onError)
+        {
+            var result = await resultTask;
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<Task> onError)
-    {
-        var result = await resultTask;
+            return await result.HandleError(errorType, onError);
+        }
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<IEnumerable<ErrorMessage>, Task<Result>> onError)
-    {
-        var result = await resultTask;
+        public async Task<Result<TValue>> HandleError(string errorType, Func<Task<Result<TValue>>> onError)
+        {
+            var result = await resultTask;
 
-        return await result.HandleError(errorType, onError);
-    }
-    
-    public static async Task<Result> HandleError<TValue>(this Task<Result<TValue>> resultTask, string errorType, Func<Task<Result>> onError)
-    {
-        var result = await resultTask;
+            return await result.HandleError(errorType, onError);
+        }
 
-        return await result.HandleError(errorType, onError);
+        public async Task<Result> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Task> onError)
+        {
+            var result = await resultTask;
+
+            return await result.HandleError(errorType, onError);
+        }
+
+        public async Task<Result> HandleError(string errorType, Func<Task> onError)
+        {
+            var result = await resultTask;
+
+            return await result.HandleError(errorType, onError);
+        }
+
+        public async Task<Result> HandleError(string errorType, Func<IEnumerable<ErrorMessage>, Task<Result>> onError)
+        {
+            var result = await resultTask;
+
+            return await result.HandleError(errorType, onError);
+        }
+
+        public async Task<Result> HandleError(string errorType, Func<Task<Result>> onError)
+        {
+            var result = await resultTask;
+
+            return await result.HandleError(errorType, onError);
+        }
     }
 }
