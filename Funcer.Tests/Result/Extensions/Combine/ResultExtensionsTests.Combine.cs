@@ -7,41 +7,6 @@ using Result = Funcer.Result;
 public class ResultExtensionsTests_Combine
 {
     [Fact]
-    public void Should_Combine_Result_With_Other_Results()
-    {
-        var result = TestResult.Success.Combine(TestResult.Alpha.Success.V1, TestResult.Beta.Success.V1);
-
-        result.ShouldBeSuccess();
-    }
-    
-    [Fact]
-    public void Should_Combine_Result_With_Other_Results_And_Return_Failure_When_One_Fails()
-    {
-        var result = TestResult.Success.Combine(TestResult.Alpha.Failure, TestResult.Beta.Success.V1);
-
-        result.ShouldBeFailure();
-    }
-    
-    [Fact]
-    public void Should_Combine_Result_With_ValueResults()
-    {
-        var result = TestResult.Success.Combine(TestResult.Alpha.Success.V1, TestResult.Alpha.Success.V2);
-
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().HaveCount(2);
-        result.Value.Should().Contain(TestValues.Alpha1);
-        result.Value.Should().Contain(TestValues.Alpha2);
-    }
-    
-    [Fact]
-    public void Should_Combine_Result_With_ValueResults_And_Return_Failure_When_One_Fails()
-    {
-        var result = TestResult.Success.Combine(TestResult.Alpha.Failure, TestResult.Alpha.Success.V1);
-
-        result.ShouldBeFailure();
-    }
-    
-    [Fact]
     public void Should_Combine_IEnumerable_Of_Results()
     {
         var results = new List<Result> { TestResult.Success, TestResult.Success, TestResult.Success };

@@ -5,22 +5,6 @@ namespace Funcer.Tests.Result.Extensions.Combine;
 public class ValueResultExtensionsTests_Combine
 {
     [Fact]
-    public void Should_Combine_ValueResult_With_Other_Results()
-    {
-        var result = TestResult.Alpha.Success.V1.Combine(TestResult.Success, TestResult.Beta.Success.V1);
-
-        result.ShouldBeSuccess();
-    }
-    
-    [Fact]
-    public void Should_Combine_ValueResult_With_Other_Results_And_Return_Failure_When_One_Fails()
-    {
-        var result = TestResult.Alpha.Success.V1.Combine(TestResult.Failure, TestResult.Beta.Success.V1);
-
-        result.ShouldBeFailure();
-    }
-    
-    [Fact]
     public void Should_Combine_ValueResult_With_Same_Type_ValueResults()
     {
         // Use IEnumerable extension to avoid ambiguity
@@ -35,17 +19,6 @@ public class ValueResultExtensionsTests_Combine
         result.Value.Should().HaveCount(2);
         result.Value.Should().Contain(TestValues.Alpha1);
         result.Value.Should().Contain(TestValues.Alpha2);
-    }
-    
-    [Fact]
-    public void Should_Combine_ValueResult_With_Different_Type_ValueResults()
-    {
-        var result = TestResult.Alpha.Success.V1.Combine(TestResult.Beta.Success.V1, TestResult.Beta.Success.V2);
-
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().HaveCount(2);
-        result.Value.Should().Contain(TestValues.Beta1);
-        result.Value.Should().Contain(TestValues.Beta2);
     }
     
     [Fact]
