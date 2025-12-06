@@ -23,6 +23,9 @@ public static class TestFunc
         }
         public static Func<bool> True => () => true;
         public static Func<bool> False => () => false;
+        public static Func<Result<bool>> BoolSuccessTrue => () => TestResult.Bool.SuccessTrue;
+        public static Func<Result<bool>> BoolSuccessFalse => () => TestResult.Bool.SuccessFalse;
+        public static Func<Result<bool>> BoolFailure => () => TestResult.Bool.Failure;
     }
     
     public static class Takes
@@ -46,6 +49,9 @@ public static class TestFunc
                 }
                 public static Func<Types.Alpha, bool> IsFalse => x => x.Value is false;
                 public static Func<Types.Alpha, bool> IsTrue => x => x.Value;
+                public static Func<Types.Alpha, Result<bool>> BoolSuccessTrue => _ => TestResult.Bool.SuccessTrue;
+                public static Func<Types.Alpha, Result<bool>> BoolSuccessFalse => _ => TestResult.Bool.SuccessFalse;
+                public static Func<Types.Alpha, Result<bool>> BoolFailure => _ => TestResult.Bool.Failure;
             }
         }
         

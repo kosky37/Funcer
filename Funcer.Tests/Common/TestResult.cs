@@ -13,6 +13,20 @@ public static class TestResult
     public static Result Success => Result.Success();
     public static Result Failure => Result.Failure(TestValues.Error);
 
+    public static class Bool
+    {
+        public static class Async
+        {
+            public static Task<Result<bool>> SuccessTrue => Task.FromResult(Result.Success(true));
+            public static Task<Result<bool>> SuccessFalse => Task.FromResult(Result.Success(false));
+            public static Task<Result<bool>> Failure => Task.FromResult(Result.Failure<bool>(TestValues.Error));
+        }
+
+        public static Result<bool> SuccessTrue => Result.Success(true);
+        public static Result<bool> SuccessFalse => Result.Success(false);
+        public static Result<bool> Failure => Result.Failure<bool>(TestValues.Error);
+    }
+
     public static class Alpha
     {
         public static class Async

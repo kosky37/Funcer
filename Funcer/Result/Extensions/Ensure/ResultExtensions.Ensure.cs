@@ -19,5 +19,26 @@ public static partial class ResultExtensions
                 ? result 
                 : condition() ? result : Result.Failure(error);
         }
+
+        public Result Ensure(Result<bool> condition, ErrorMessage error)
+        {
+            if (result.IsFailure) return result;
+            
+            if (condition.IsFailure)
+                return Result.Failure(condition.Errors);
+            
+            return condition.Value ? result : Result.Failure(error);
+        }
+
+        public Result Ensure(Func<Result<bool>> condition, ErrorMessage error)
+        {
+            if (result.IsFailure) return result;
+            
+            var conditionResult = condition();
+            if (conditionResult.IsFailure)
+                return Result.Failure(conditionResult.Errors);
+            
+            return conditionResult.Value ? result : Result.Failure(error);
+        }
     }
 }

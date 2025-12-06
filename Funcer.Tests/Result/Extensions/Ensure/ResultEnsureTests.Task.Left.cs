@@ -39,4 +39,42 @@ public class ResultEnsureTests_Task_Left
 
         validate(result);
     }
+
+    public static TheoryData<Task<Result>, Result<bool>, Action<Result>> TestData3 => new()
+    {
+        { TestResult.Async.Success, TestResult.Bool.SuccessTrue, Assertions.ResultSuccess },
+        { TestResult.Async.Success, TestResult.Bool.SuccessFalse, Assertions.ResultFailure },
+        { TestResult.Async.Success, TestResult.Bool.Failure, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestResult.Bool.SuccessTrue, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestResult.Bool.SuccessFalse, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestResult.Bool.Failure, Assertions.ResultFailure }
+    };
+
+    [Theory, MemberData(nameof(TestData3))]
+    public async Task ResultTask_Ensure_ResultBoolCondition(Task<Result> first, Result<bool> condition, Action<Result> validate)
+    {
+        var result = await first
+            .Ensure(condition, TestValues.Error);
+
+        validate(result);
+    }
+
+    public static TheoryData<Task<Result>, Func<Result<bool>>, Action<Result>> TestData4 => new()
+    {
+        { TestResult.Async.Success, TestFunc.Returns.BoolSuccessTrue, Assertions.ResultSuccess },
+        { TestResult.Async.Success, TestFunc.Returns.BoolSuccessFalse, Assertions.ResultFailure },
+        { TestResult.Async.Success, TestFunc.Returns.BoolFailure, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestFunc.Returns.BoolSuccessTrue, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestFunc.Returns.BoolSuccessFalse, Assertions.ResultFailure },
+        { TestResult.Async.Failure, TestFunc.Returns.BoolFailure, Assertions.ResultFailure }
+    };
+
+    [Theory, MemberData(nameof(TestData4))]
+    public async Task ResultTask_Ensure_ResultBoolConditionFunction(Task<Result> first, Func<Result<bool>> condition, Action<Result> validate)
+    {
+        var result = await first
+            .Ensure(condition, TestValues.Error);
+
+        validate(result);
+    }
 }

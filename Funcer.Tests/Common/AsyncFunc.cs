@@ -23,6 +23,9 @@ public static class AsyncFunc
         }
         public static Func<Task<bool>> False => () => Task.FromResult(false);
         public static Func<Task<bool>> True => () => Task.FromResult(true);
+        public static Func<Task<Result<bool>>> BoolSuccessTrue => () => Task.FromResult(TestResult.Bool.SuccessTrue);
+        public static Func<Task<Result<bool>>> BoolSuccessFalse => () => Task.FromResult(TestResult.Bool.SuccessFalse);
+        public static Func<Task<Result<bool>>> BoolFailure => () => Task.FromResult(TestResult.Bool.Failure);
         public static Task<Exception> ArgumentException => Task.FromResult<Exception>(new ArgumentException());
     }
     
@@ -48,6 +51,9 @@ public static class AsyncFunc
                 
                 public static Func<Types.Alpha, Task<bool>> IsFalse => x => Task.FromResult(x.Value is false);
                 public static Func<Types.Alpha, Task<bool>> IsTrue => x => Task.FromResult(x.Value);
+                public static Func<Types.Alpha, Task<Result<bool>>> BoolSuccessTrue => _ => Task.FromResult(TestResult.Bool.SuccessTrue);
+                public static Func<Types.Alpha, Task<Result<bool>>> BoolSuccessFalse => _ => Task.FromResult(TestResult.Bool.SuccessFalse);
+                public static Func<Types.Alpha, Task<Result<bool>>> BoolFailure => _ => Task.FromResult(TestResult.Bool.Failure);
             }
         }
         

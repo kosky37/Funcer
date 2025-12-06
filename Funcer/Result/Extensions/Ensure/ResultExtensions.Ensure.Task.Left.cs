@@ -17,5 +17,17 @@ public static partial class ResultExtensions
             var result = await resultTask;
             return result.Ensure(condition, error);
         }
+
+        public async Task<Result> Ensure(Result<bool> condition, ErrorMessage error)
+        {
+            var result = await resultTask;
+            return result.Ensure(condition, error);
+        }
+
+        public async Task<Result> Ensure(Func<Result<bool>> condition, ErrorMessage error)
+        {
+            var result = await resultTask;
+            return result.Ensure(condition, error);
+        }
     }
 }
