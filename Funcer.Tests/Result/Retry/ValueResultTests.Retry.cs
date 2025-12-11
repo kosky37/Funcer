@@ -14,7 +14,7 @@ public class ValueResultTests_Retry
     public void Should_Return_Success_On_First_Attempt()
     {
         var attemptCount = 0;
-        var result = Result<Types.Alpha>.Retry(
+        var result = Result.Retry(
             attemptNumber =>
             {
                 attemptCount++;
@@ -32,7 +32,7 @@ public class ValueResultTests_Retry
     public void Should_Return_Success_After_Retries()
     {
         var attemptCount = 0;
-        var result = Result<Types.Alpha>.Retry(
+        var result = Result.Retry(
             attemptNumber =>
             {
                 attemptCount++;
@@ -54,7 +54,7 @@ public class ValueResultTests_Retry
     public void Should_Return_Immediately_When_Error_Type_Differs()
     {
         var attemptCount = 0;
-        var result = Result<Types.Alpha>.Retry(
+        var result = Result.Retry(
             attemptNumber =>
             {
                 attemptCount++;
@@ -75,7 +75,7 @@ public class ValueResultTests_Retry
     public void Should_Return_Failure_After_Max_Tries_Exhausted()
     {
         var attemptCount = 0;
-        var result = Result<Types.Alpha>.Retry(
+        var result = Result.Retry(
             attemptNumber =>
             {
                 attemptCount++;
@@ -96,7 +96,7 @@ public class ValueResultTests_Retry
     public void Should_Return_Success_On_Last_Attempt()
     {
         var attemptCount = 0;
-        var result = Result<Types.Alpha>.Retry(
+        var result = Result.Retry(
             attemptNumber =>
             {
                 attemptCount++;

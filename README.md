@@ -172,8 +172,8 @@ Result result = Result.Retry(
 // Will retry up to 3 times if operation fails with "RetryableError"
 // Returns immediately on success or if error type differs
 
-// Sync version for ValueResult
-Result<string> valueResult = Result<string>.Retry(
+// Sync version for ValueResult (type is inferred)
+Result<string> valueResult = Result.Retry(
     attemptNumber => 
     {
         // Operation that may fail with "RetryableError" type
@@ -195,8 +195,8 @@ Result result = await Result.Retry(
     maxTries: 3
 );
 
-// Async version for ValueResult
-Result<int> valueResult = await Result<int>.Retry(
+// Async version for ValueResult (type is inferred)
+Result<int> valueResult = await Result.Retry(
     async attemptNumber => 
     {
         await Task.Delay(100);
@@ -221,7 +221,7 @@ Result result = Result.Retry(
 // If operation succeeds, it returns immediately
 
 // Example: Using attempt number in the operation
-Result<int> result = Result<int>.Retry(
+Result<int> result = Result.Retry(
     attemptNumber => 
     {
         // Can use attemptNumber for exponential backoff, logging, etc.
