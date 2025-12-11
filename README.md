@@ -156,6 +156,83 @@ Result<IEnumerable<int>> combinedWithFailure = Result.Combine(valueResult1, fail
 // combinedWithFailure.IsFailure will be true, and errors will contain the error from failedResult
 ```
 
+#### Retry
+Retries an operation up to a maximum number of attempts. The operation is retried only if it fails with a specific error type. If the operation succeeds or fails with a different error type, it returns immediately without retrying.
+```csharp
+// Sync version for Result
+Result result = Result.Retry(
+    attemptNumber => 
+    {
+        // Operation that may fail with "RetryableError" type
+        return SomeOperation();
+    },
+    errorType: "RetryableError",
+    maxTries: 3
+);
+// Will retry up to 3 times if operation fails with "RetryableError"
+// Returns immediately on success or if error type differs
+
+// Sync version for ValueResult
+Result<string> valueResult = Result<string>.Retry(
+    attemptNumber => 
+    {
+        // Operation that may fail with "RetryableError" type
+        return SomeOperationReturningString();
+    },
+    errorType: "RetryableError",
+    maxTries: 3
+);
+// Will retry up to 3 times if operation fails with "RetryableError"
+
+// Async version for Result
+Result result = await Result.Retry(
+    async attemptNumber => 
+    {
+        await Task.Delay(100);
+        return await SomeAsyncOperation();
+    },
+    errorType: "RetryableError",
+    maxTries: 3
+);
+
+// Async version for ValueResult
+Result<int> valueResult = await Result<int>.Retry(
+    async attemptNumber => 
+    {
+        await Task.Delay(100);
+        return await SomeAsyncOperationReturningInt();
+    },
+    errorType: "RetryableError",
+    maxTries: 3
+);
+
+// Example: Retry only on specific error type
+Result result = Result.Retry(
+    attemptNumber => 
+    {
+        // This operation might fail with "NetworkError" or "ValidationError"
+        return CallExternalService();
+    },
+    errorType: "NetworkError",  // Only retry on NetworkError
+    maxTries: 5
+);
+// If operation fails with "NetworkError", it will retry up to 5 times
+// If operation fails with "ValidationError", it returns immediately without retrying
+// If operation succeeds, it returns immediately
+
+// Example: Using attempt number in the operation
+Result<int> result = Result<int>.Retry(
+    attemptNumber => 
+    {
+        // Can use attemptNumber for exponential backoff, logging, etc.
+        Console.WriteLine($"Attempt {attemptNumber}");
+        return FetchDataWithRetry(attemptNumber);
+    },
+    errorType: "TransientError",
+    maxTries: 3
+);
+```
+
 ### Extension methods
 
 #### Map
