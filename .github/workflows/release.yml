@@ -11,12 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     # Only run if not from a tag (to avoid duplicate releases)
     if: "!startsWith(github.ref, 'refs/tags/')"
+    permissions:
+      contents: write  # Needed to create releases and push tags
     
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2  # Need previous commit to compare versions
-          token: ${{ secrets.GITHUB_TOKEN }}  # Needed to push tags
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use default token with proper permissions
       
       - name: Extract current version
         id: current_version
@@ -59,27 +61,18 @@ jobs:
             echo "Version did not change ($CURRENT)"
           fi
       
-      - name: Configure git for tag push
-        if: steps.version_changed.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-      
       - name: Create and push tag
         if: steps.version_changed.outputs.changed == 'true'
         run: |
           TAG_NAME="v${{ steps.current_version.outputs.version }}"
-          # Check if tag already exists locally or remotely
-          if git rev-parse "$TAG_NAME" >/dev/null 2>&1 || git ls-remote --tags origin "$TAG_NAME" | grep -q "$TAG_NAME"; then
+          # Check if tag already exists
+          if git ls-remote --tags origin "$TAG_NAME" | grep -q "$TAG_NAME"; then
             echo "Tag $TAG_NAME already exists, skipping tag creation"
           else
             git tag "$TAG_NAME"
-            # Push using token in URL
-            git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git "$TAG_NAME"
+            git push origin "$TAG_NAME"
             echo "Created and pushed tag: $TAG_NAME"
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Create Release
         if: steps.version_changed.outputs.changed == 'true'
@@ -90,5 +83,6 @@ jobs:
           generate_release_notes: true
           draft: false
           prerelease: false
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
