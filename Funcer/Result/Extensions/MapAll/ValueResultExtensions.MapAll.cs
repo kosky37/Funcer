@@ -2,7 +2,8 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    extension<TValue>(Result<IEnumerable<TValue>> result)
+    extension<TValueList, TValue>(Result<TValueList> result)
+        where TValueList : IEnumerable<TValue>
     {
         public Result<IEnumerable<TValue2>> MapAll<TValue2>(Func<TValue, Result<TValue2>> next)
         {
@@ -33,4 +34,3 @@ public static partial class ValueResultExtensions
         }
     }
 }
-
