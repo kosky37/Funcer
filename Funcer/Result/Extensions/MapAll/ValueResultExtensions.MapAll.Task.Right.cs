@@ -2,8 +2,7 @@ namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
-    extension<TValueList, TValue>(Result<TValueList> result)
-        where TValueList : IEnumerable<TValue>
+    extension<TValue>(Result<IEnumerable<TValue>> result)
     {
         public async Task<Result<IEnumerable<TValue2>>> MapAll<TValue2>(Func<TValue, Task<Result<TValue2>>> next)
         {
