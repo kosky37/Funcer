@@ -29,6 +29,18 @@ public static partial class ValueResultExtensions
             var result = await resultTask;
             return result.OnError(errorType, onError);
         }
+        
+        public async Task<Result<TValue>> OnError(string errorType, Action onError)
+        {
+            var result = await resultTask;
+            return result.OnError(errorType, onError);
+        }
+        
+        public async Task<Result<TValue>> OnError(string errorType, Action<IEnumerable<ErrorMessage>> onError)
+        {
+            var result = await resultTask;
+            return result.OnError(errorType, onError);
+        }
     }
 }
 

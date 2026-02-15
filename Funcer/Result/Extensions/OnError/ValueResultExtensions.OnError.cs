@@ -74,6 +74,34 @@ public static partial class ValueResultExtensions
         
             return result;
         }
+        
+        public Result<TValue> OnError(string errorType, Action onError)
+        {
+            if (result.IsSuccess) return result;
+        
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+        
+            var matchedErrors = errorLookup[true].ToList();
+            if (matchedErrors.Count == 0) return result;
+        
+            onError();
+        
+            return result;
+        }
+        
+        public Result<TValue> OnError(string errorType, Action<IEnumerable<ErrorMessage>> onError)
+        {
+            if (result.IsSuccess) return result;
+        
+            var errorLookup = result.Errors.ToLookup(e => e.Type == errorType);
+        
+            var matchedErrors = errorLookup[true].ToList();
+            if (matchedErrors.Count == 0) return result;
+        
+            onError(matchedErrors);
+        
+            return result;
+        }
     }
 }
 
