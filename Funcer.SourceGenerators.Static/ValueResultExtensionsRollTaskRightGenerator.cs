@@ -27,9 +27,9 @@ public class ValueResultExtensionsRollTaskRightGenerator : IIncrementalGenerator
                 
                 public static partial class ValueResultExtensions
                 {
-                    public static async Task<Result<(TValue1, TValue2)>> Roll<TValue1, TValue2>(this Result<TValue1> result, Task<Result<TValue2>> nextTask)
+                    public static async Task<Result<(TValue1, TValue2)>> Roll<TValue1, TValue2>(this Result<TValue1> result, Func<Task<Result<TValue2>>> nextTask)
                     {
-                        return result.IsFailure ? Result<(TValue1, TValue2)>.Failure(result.Errors) : result.Roll(await nextTask);
+                        return result.IsFailure ? Result<(TValue1, TValue2)>.Failure(result.Errors) : result.Roll(await nextTask());
                     }
                 
                 """);
@@ -57,9 +57,9 @@ public class ValueResultExtensionsRollTaskRightGenerator : IIncrementalGenerator
         var outputTupleTypes = string.Join(", ", Enumerable.Range(1, outputTupleSize).Select(i => $"TValue{i}"));
 
         return $$"""
-                    public static async Task<Result<({{outputTupleTypes}})>> Roll<{{outputTupleTypes}}>(this Result<({{inputTupleTypes}})> result, Task<Result<TValue{{outputTupleSize}}>> nextTask)
+                    public static async Task<Result<({{outputTupleTypes}})>> Roll<{{outputTupleTypes}}>(this Result<({{inputTupleTypes}})> result, Func<Task<Result<TValue{{outputTupleSize}}>>> nextTask)
                     {
-                        return result.IsFailure ? Result<({{outputTupleTypes}})>.Failure(result.Errors) : result.Roll(await nextTask);
+                        return result.IsFailure ? Result<({{outputTupleTypes}})>.Failure(result.Errors) : result.Roll(await nextTask());
                     }
 
                 """;

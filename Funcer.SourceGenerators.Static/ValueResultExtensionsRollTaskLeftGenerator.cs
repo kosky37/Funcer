@@ -27,7 +27,7 @@ public class ValueResultExtensionsRollTaskLeftGenerator : IIncrementalGenerator
                 
                 public static partial class ValueResultExtensions
                 {
-                    public static async Task<Result<(TValue1, TValue2)>> Roll<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Result<TValue2> next)
+                    public static async Task<Result<(TValue1, TValue2)>> Roll<TValue1, TValue2>(this Task<Result<TValue1>> resultTask, Func<Result<TValue2>> next)
                     {
                         var result = await resultTask;
                         return result.Roll(next);
@@ -58,7 +58,7 @@ public class ValueResultExtensionsRollTaskLeftGenerator : IIncrementalGenerator
         var outputTupleTypes = string.Join(", ", Enumerable.Range(1, outputTupleSize).Select(i => $"TValue{i}"));
 
         return $$"""
-                    public static async Task<Result<({{outputTupleTypes}})>> Roll<{{outputTupleTypes}}>(this Task<Result<({{inputTupleTypes}})>> resultTask, Result<TValue{{outputTupleSize}}> next)
+                    public static async Task<Result<({{outputTupleTypes}})>> Roll<{{outputTupleTypes}}>(this Task<Result<({{inputTupleTypes}})>> resultTask, Func<Result<TValue{{outputTupleSize}}>> next)
                     {
                         var result = await resultTask;
                         return result.Roll(next);
