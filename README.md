@@ -291,6 +291,73 @@ Result<string> mappedToString = result.MapIf(
 );
 // mappedToString.Value will be "Positive: 1" if condition is met
 ```
+#### Fork
+On Success, evaluates a condition and applies one of two mapping functions based on the result. Unlike MapIf, Fork always produces an output in the desired type by providing separate transformations for both true and false conditions.
+```csharp
+Result<int> result = Result.Success(5);
+
+// Fork with value mappers - always transforms to the target type
+Result<string> forked = result.Fork(
+    value => value > 0,           // Condition
+    value => $"Positive: {value}", // onTrue
+    value => $"Non-positive: {value}" // onFalse
+);
+// forked.Value will be "Positive: 5"
+
+// Fork with different conditions
+Result<string> forkedFalse = result.Fork(
+    value => value > 10,          // Condition is false
+    value => $"Greater than 10: {value}",
+    value => $"Not greater than 10: {value}"
+);
+// forkedFalse.Value will be "Not greater than 10: 5"
+
+// Fork with Result-returning functions
+Result<string> forkedWithResults = result.Fork(
+    value => value > 0,
+    value => Result.Success($"Valid: {value}"),
+    value => Result.Failure<string>(new ErrorMessage("validation", "Invalid value"))
+);
+// If true path returns Failure, the overall Result becomes Failure
+
+// Fork with bool condition instead of function
+Result<string> forkedBool = result.Fork(
+    true,                          // Static condition
+    value => $"True branch: {value}",
+    value => $"False branch: {value}"
+);
+// forkedBool.Value will be "True branch: 5"
+
+// Fork with Func<bool> condition
+Result<string> forkedFunc = result.Fork(
+    () => DateTime.Now.Hour > 12,  // Condition function
+    value => $"Afternoon: {value}",
+    value => $"Morning: {value}"
+);
+
+// Fork with async mappers
+Result<string> forkedAsync = await result.Fork(
+    value => value > 0,
+    async value => await FormatAsync(value, "positive"),
+    async value => await FormatAsync(value, "non-positive")
+);
+
+// Fork with mixed async/sync mappers
+Result<string> forkedMixed = await result.Fork(
+    value => value > 0,
+    async value => await FormatAsync(value), // onTrue is async
+    value => $"Non-positive: {value}"         // onFalse is sync
+);
+
+// Fork on a non-ValueResult
+Result result = Result.Success();
+Result<string> forkedFromResult = result.Fork(
+    true,
+    () => "Success path",
+    () => "Failure path"
+);
+// forkedFromResult.Value will be "Success path"
+```
 #### Tap
 On Success, performs a side effect (non-mutating action) and returns the original Result unchanged. Useful for logging, validation, or other side effects.
 ```csharp
