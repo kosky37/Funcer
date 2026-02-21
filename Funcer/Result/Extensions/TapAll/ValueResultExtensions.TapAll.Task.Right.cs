@@ -1,14 +1,18 @@
+using System.Runtime.CompilerServices;
+using Funcer.Helpers;
+
 namespace Funcer;
 
 public static partial class ValueResultExtensions
 {
     extension<TValue>(Result<IEnumerable<TValue>> result)
     {
-        public async Task<Result<IEnumerable<TValue>>> TapAll(Func<TValue, Task<Result>> next)
+        [OverloadResolutionPriority(1)]
+        public async Task<Result<IEnumerable<TValue>>> TapAll(Func<TValue, Task<Result>> next, bool parallel = true)
         {
             if (result.IsFailure) return result;
 
-            var tapResults = await Task.WhenAll(result.Value!.Select(next));
+            var tapResults = parallel ? await Task.WhenAll(result.Value.Select(next)) : (await result.Value.Select(next).ExecuteSequentially()).ToArray();
             var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
             if (errors.Count is not 0)
@@ -24,21 +28,30 @@ public static partial class ValueResultExtensions
             return result.WithContext(tapResults[0]);
         }
 
-        public async Task<Result<IEnumerable<TValue>>> TapAll(Func<TValue, Task> next)
+        [OverloadResolutionPriority(1)]
+        public async Task<Result<IEnumerable<TValue>>> TapAll(Func<TValue, Task> next, bool parallel = true)
         {
-            if (result.IsSuccess)
+            if (result.IsFailure) return result;
+            
+            if (parallel)
             {
-                await Task.WhenAll(result.Value!.Select(next));
+                await Task.WhenAll(result.Value.Select(next));
+            }
+            else
+            {
+                await result.Value.Select(next)
+                    .ExecuteSequentially();
             }
 
             return result;
         }
 
-        public async Task<Result<IEnumerable<TValue>>> TapAll<TValue2>(Func<TValue, Task<Result<TValue2>>> next)
+        [OverloadResolutionPriority(1)]
+        public async Task<Result<IEnumerable<TValue>>> TapAll<TValue2>(Func<TValue, Task<Result<TValue2>>> next, bool parallel = true)
         {
             if (result.IsFailure) return result;
 
-            var tapResults = await Task.WhenAll(result.Value!.Select(next));
+            var tapResults = parallel ? await Task.WhenAll(result.Value.Select(next)) : (await result.Value.Select(next).ExecuteSequentially()).ToArray();
             var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
             if (errors.Count is not 0)

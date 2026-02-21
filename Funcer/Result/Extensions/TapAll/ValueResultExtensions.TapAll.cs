@@ -8,7 +8,7 @@ public static partial class ValueResultExtensions
         {
             if (result.IsFailure) return result;
 
-            var tapResults = result.Value!.Select(next).ToList();
+            var tapResults = result.Value.Select(next).ToList();
             var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
             if (errors.Count is not 0)
@@ -28,7 +28,7 @@ public static partial class ValueResultExtensions
         {
             if (result.IsSuccess)
             {
-                foreach (var item in result.Value!)
+                foreach (var item in result.Value)
                 {
                     next(item);
                 }
@@ -41,7 +41,7 @@ public static partial class ValueResultExtensions
         {
             if (result.IsFailure) return result;
 
-            var tapResults = result.Value!.Select(next).ToList();
+            var tapResults = result.Value.Select(next).ToList();
             var errors = tapResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
             if (errors.Count is not 0)

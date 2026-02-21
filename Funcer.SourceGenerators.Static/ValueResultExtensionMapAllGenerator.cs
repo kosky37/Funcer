@@ -18,9 +18,11 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
     private static string GenerateSource()
     {
         var sb = new StringBuilder();
+        sb.AppendLine("using Funcer.Helpers;");
         sb.AppendLine("using System;");
         sb.AppendLine("using System.Collections.Generic;");
         sb.AppendLine("using System.Linq;");
+        sb.AppendLine("using System.Runtime.CompilerServices;");
         sb.AppendLine("using System.Threading.Tasks;");
         sb.AppendLine();
         sb.AppendLine("namespace Funcer;");
@@ -30,6 +32,7 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
 
         var types = new[]
         {
+            ("IEnumerable", "IEnumerable<TValue>"),
             ("List", "List<TValue>"),
             ("IList", "IList<TValue>"),
             ("IReadOnlyCollection", "IReadOnlyCollection<TValue>"),
@@ -53,7 +56,6 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
     {
         sb.Append($$"""
 
-    // Sync Overloads for {{type}}
     public static Result<IEnumerable<TValue2>> MapAll<TValue, TValue2>(this Result<{{type}}> result, Func<TValue, Result<TValue2>> next)
     {
         if (result.IsFailure)
@@ -61,7 +63,7 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(result.Errors);
         }
 
-        var mappedResults = result.Value!.Select(next).ToList();
+        var mappedResults = result.Value.Select(next).ToList();
         var errors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
         if (errors.Count is not 0)
@@ -69,7 +71,7 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(errors);
         }
 
-        return Result.Success(mappedResults.Select(x => x.Value!)).WithContext(result);
+        return Result.Success(mappedResults.Select(x => x.Value)).WithContext(result);
     }
 
     public static Result<IEnumerable<TValue2>> MapAll<TValue, TValue2>(this Result<{{type}}> result, Func<TValue, TValue2> next)
@@ -79,7 +81,7 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(result.Errors);
         }
 
-        return Result.Success(result.Value!.Select(next)).WithContext(result);
+        return Result.Success(result.Value.Select(next)).WithContext(result);
     }
 
 """);
@@ -89,8 +91,8 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
     {
         sb.Append($$"""
 
-    // Task Overloads (Input Task, Func Task) for {{type}}
-    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<{{type}}>> resultTask, Func<TValue, Task<Result<TValue2>>> next)
+    [OverloadResolutionPriority(1)]
+    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<{{type}}>> resultTask, Func<TValue, Task<Result<TValue2>>> next, bool parallel = true)
     {
         var result = await resultTask;
         if (result.IsFailure)
@@ -98,7 +100,7 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(result.Errors);
         }
 
-        var mappedResults = await Task.WhenAll(result.Value!.Select(next));
+        var mappedResults = parallel ? await Task.WhenAll(result.Value.Select(next)) : (await result.Value.Select(next).ExecuteSequentially()).ToArray();
         var errors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
         if (errors.Count is not 0)
@@ -106,10 +108,11 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(errors);
         }
 
-        return Result.Success(mappedResults.Select(x => x.Value!)).WithContext(result);
+        return Result.Success(mappedResults.Select(x => x.Value)).WithContext(result);
     }
 
-    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<{{type}}>> resultTask, Func<TValue, Task<TValue2>> next)
+    [OverloadResolutionPriority(1)]
+    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<{{type}}>> resultTask, Func<TValue, Task<TValue2>> next, bool parallel = true)
     {
         var result = await resultTask;
         if (result.IsFailure)
@@ -117,7 +120,7 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(result.Errors);
         }
 
-        var mappedValues = await Task.WhenAll(result.Value!.Select(next));
+        var mappedValues = parallel ? await Task.WhenAll(result.Value.Select(next)) : (await result.Value.Select(next).ExecuteSequentially()).ToArray();
         return Result.Success(mappedValues.AsEnumerable()).WithContext(result);
     }
 
@@ -128,7 +131,6 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
     {
         sb.Append($$"""
 
-    // Task Left Overloads (Input Task, Func Sync) for {{type}}
     public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Task<Result<{{type}}>> resultTask, Func<TValue, Result<TValue2>> next)
     {
         var result = await resultTask;
@@ -148,15 +150,15 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
     {
         sb.Append($$"""
 
-    // Task Right Overloads (Input Sync, Func Task) for {{type}}
-    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Result<{{type}}> result, Func<TValue, Task<Result<TValue2>>> next)
+    [OverloadResolutionPriority(1)]
+    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Result<{{type}}> result, Func<TValue, Task<Result<TValue2>>> next, bool parallel = true)
     {
         if (result.IsFailure)
         {
             return Result<IEnumerable<TValue2>>.Failure(result.Errors);
         }
 
-        var mappedResults = await Task.WhenAll(result.Value!.Select(next));
+        var mappedResults = parallel ? await Task.WhenAll(result.Value.Select(next)) : (await result.Value.Select(next).ExecuteSequentially()).ToArray();
         var errors = mappedResults.Where(x => x.IsFailure).SelectMany(x => x.Errors).ToList();
 
         if (errors.Count is not 0)
@@ -164,17 +166,18 @@ public class ValueResultExtensionMapAllGenerator : IIncrementalGenerator
             return Result<IEnumerable<TValue2>>.Failure(errors);
         }
 
-        return Result.Success(mappedResults.Select(x => x.Value!)).WithContext(result);
+        return Result.Success(mappedResults.Select(x => x.Value)).WithContext(result);
     }
 
-    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Result<{{type}}> result, Func<TValue, Task<TValue2>> next)
+    [OverloadResolutionPriority(1)]
+    public static async Task<Result<IEnumerable<TValue2>>> MapAll<TValue, TValue2>(this Result<{{type}}> result, Func<TValue, Task<TValue2>> next, bool parallel = true)
     {
         if (result.IsFailure)
         {
             return Result<IEnumerable<TValue2>>.Failure(result.Errors);
         }
 
-        var mappedValues = await Task.WhenAll(result.Value!.Select(next));
+        var mappedValues = parallel ? await Task.WhenAll(result.Value.Select(next)) : (await result.Value.Select(next).ExecuteSequentially()).ToArray();
         return Result.Success(mappedValues.AsEnumerable()).WithContext(result);
     }
 
