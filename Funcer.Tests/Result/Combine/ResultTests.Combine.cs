@@ -1,5 +1,3 @@
-using Funcer.Tests.Common;
-
 namespace Funcer.Tests.Result.Combine;
 
 using Result = Funcer.Result;
