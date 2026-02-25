@@ -61,9 +61,11 @@ public static class TestFunc
             {
                 public static Action<Types.Beta> Nothing => _ => { };
                 public static Func<Types.Beta, Types.Alpha> Alpha1 => _ => TestValues.Alpha1;
+                public static Func<Types.Beta, Types.Alpha> Alpha2 => _ => TestValues.Alpha2;
                 public static class Success
                 {
                     public static Func<Types.Beta, Result<Types.Alpha>> Alpha1 => _ => TestResult.Alpha.Success.V1;
+                    public static Func<Types.Beta, Result<Types.Alpha>> Alpha2=> _ => TestResult.Alpha.Success.V2;
                 }
                 public static class Failure
                 {

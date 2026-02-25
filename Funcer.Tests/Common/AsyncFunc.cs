@@ -41,11 +41,15 @@ public static class AsyncFunc
                 public static class Success
                 {
                     public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(TestResult.Success);
+                    public static Func<Types.Alpha, Task<Result<Types.Alpha>>> Alpha1 => _ => Task.FromResult(TestResult.Alpha.Success.V1);
+                    public static Func<Types.Alpha, Task<Result<Types.Alpha>>> Alpha2=> _ => Task.FromResult(TestResult.Alpha.Success.V2);
                     public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta1 => _ => Task.FromResult(TestResult.Beta.Success.V1);
+                    public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta2 => _ => Task.FromResult(TestResult.Beta.Success.V2);
                 }
                 public static class Failure
                 {
                     public static Func<Types.Alpha, Task<Result>> Empty => _ => Task.FromResult(TestResult.Failure);
+                    public static Func<Types.Alpha, Task<Result<Types.Alpha>>> Alpha => _ => Task.FromResult(TestResult.Alpha.Failure);
                     public static Func<Types.Alpha, Task<Result<Types.Beta>>> Beta => _ => Task.FromResult(TestResult.Beta.Failure);
                 }
                 
@@ -63,9 +67,11 @@ public static class AsyncFunc
             {
                 public static Func<Types.Beta, Task> Nothing => _ => Task.CompletedTask;
                 public static Func<Types.Beta, Task<Types.Alpha>> Alpha1 => _ => Task.FromResult(TestValues.Alpha1);
+                public static Func<Types.Beta, Task<Types.Alpha>> Alpha2 => _ => Task.FromResult(TestValues.Alpha2);
                 public static class Success
                 {
                     public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha1 => _ => Task.FromResult(TestResult.Alpha.Success.V1);
+                    public static Func<Types.Beta, Task<Result<Types.Alpha>>> Alpha2 => _ => Task.FromResult(TestResult.Alpha.Success.V2);
                 }
                 public static class Failure
                 {

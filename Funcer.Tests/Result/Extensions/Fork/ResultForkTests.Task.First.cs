@@ -4,7 +4,7 @@ namespace Funcer.Tests.Result.Extensions.Fork;
 
 using Result = Funcer.Result;
 
-public class ResultForkTests_Task_Mixed
+public class ResultForkTests_Task_First
 {
     // Test data for bool condition with mixed mappers (onTrue async, onFalse sync)
     public static TheoryData<Result, bool, Func<Task<Types.Alpha>>, Func<Types.Alpha>, Types.Alpha, Action<Result<Types.Alpha>, Types.Alpha>> TestData_BoolCondition_AsyncTrueSyncFalse => new()
